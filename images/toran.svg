@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 72" width="160" height="72">
+  <title>Marigold toran</title>
+  <!-- A seamlessly repeating strand: the string starts and ends at the same
+       height so tiles join without a visible seam. -->
+  <defs>
+    <g id="marigold">
+      <circle r="7.5" fill="#e79a2e"/>
+      <circle r="7.5" fill="none" stroke="#c97d1c" stroke-width="0.8"/>
+      <g fill="#f3b757">
+        <circle cx="0" cy="-5.4" r="2.6"/><circle cx="3.8" cy="-3.8" r="2.6"/>
+        <circle cx="5.4" cy="0" r="2.6"/><circle cx="3.8" cy="3.8" r="2.6"/>
+        <circle cx="0" cy="5.4" r="2.6"/><circle cx="-3.8" cy="3.8" r="2.6"/>
+        <circle cx="-5.4" cy="0" r="2.6"/><circle cx="-3.8" cy="-3.8" r="2.6"/>
+      </g>
+      <circle r="2.2" fill="#b96c14"/>
+    </g>
+
+    <g id="leaf">
+      <path d="M0 0 C 7 -5, 16 -3, 20 0 C 16 3, 7 5, 0 0 Z" fill="#8ea472"/>
+      <path d="M2 0 H18" stroke="#6f855a" stroke-width="0.6" fill="none"/>
+    </g>
+  </defs>
+
+  <!-- The string -->
+  <path d="M0 8 Q80 28 160 8" fill="none" stroke="#b8873f" stroke-width="1.4"/>
+
+  <!-- Hanging strands of alternating length -->
+  <g stroke="#b8873f" stroke-width="1" fill="none">
+    <path d="M16 12 V30"/><path d="M46 18 V46"/><path d="M80 22 V58"/>
+    <path d="M114 18 V44"/><path d="M144 12 V28"/>
+  </g>
+
+  <use href="#leaf" transform="translate(22 14) rotate(28) scale(0.7)"/>
+  <use href="#leaf" transform="translate(138 14) rotate(152) scale(0.7)"/>
+  <use href="#leaf" transform="translate(86 26) rotate(38) scale(0.8)"/>
+
+  <use href="#marigold" transform="translate(16 34)"/>
+  <use href="#marigold" transform="translate(16 46) scale(0.78)"/>
+
+  <use href="#marigold" transform="translate(46 50)"/>
+  <use href="#marigold" transform="translate(46 62) scale(0.76)"/>
+
+  <use href="#marigold" transform="translate(80 62)"/>
+
+  <use href="#marigold" transform="translate(114 48)"/>
+  <use href="#marigold" transform="translate(114 60) scale(0.76)"/>
+
+  <use href="#marigold" transform="translate(144 32)"/>
+  <use href="#marigold" transform="translate(144 44) scale(0.78)"/>
+</svg>

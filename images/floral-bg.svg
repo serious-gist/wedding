@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+  <title>Soft floral backdrop</title>
+  <defs>
+    <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fdf4ea"/>
+      <stop offset="0.45" stop-color="#f7e3d9"/>
+      <stop offset="1" stop-color="#efd3c8"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="0.5" cy="0.46" r="0.4">
+      <stop offset="0" stop-color="#fffaf3" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#fffaf3" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- A single bloom: six petals around a champagne centre. -->
+    <g id="bloom">
+      <g fill="currentColor">
+        <ellipse rx="34" ry="17" transform="rotate(0)"/>
+        <ellipse rx="34" ry="17" transform="rotate(30)"/>
+        <ellipse rx="34" ry="17" transform="rotate(60)"/>
+        <ellipse rx="34" ry="17" transform="rotate(90)"/>
+        <ellipse rx="34" ry="17" transform="rotate(120)"/>
+        <ellipse rx="34" ry="17" transform="rotate(150)"/>
+      </g>
+      <circle r="12" fill="#e3c184"/>
+      <circle r="5" fill="#c9a05a" fill-opacity="0.7"/>
+    </g>
+
+    <!-- A small bud, for filling gaps. -->
+    <g id="bud">
+      <g fill="currentColor">
+        <ellipse rx="17" ry="9" transform="rotate(20)"/>
+        <ellipse rx="17" ry="9" transform="rotate(80)"/>
+        <ellipse rx="17" ry="9" transform="rotate(140)"/>
+      </g>
+      <circle r="5" fill="#e3c184"/>
+    </g>
+
+    <g id="leaf">
+      <path d="M0 0 C 26 -20, 62 -14, 78 0 C 62 14, 26 20, 0 0 Z" fill="currentColor"/>
+    </g>
+  </defs>
+
+  <rect width="1400" height="900" fill="url(#wash)"/>
+
+  <!-- Foliage, laid down first so the blooms sit on top. -->
+  <g opacity="0.55">
+    <use href="#leaf" color="#b6c3a6" transform="translate(90 120) rotate(-25) scale(1.3)"/>
+    <use href="#leaf" color="#a9b899" transform="translate(150 250) rotate(35) scale(1.1)"/>
+    <use href="#leaf" color="#c1cbb1" transform="translate(40 420) rotate(-8) scale(1.5)"/>
+    <use href="#leaf" color="#b6c3a6" transform="translate(120 640) rotate(58) scale(1.2)"/>
+    <use href="#leaf" color="#aebd9e" transform="translate(260 800) rotate(-40) scale(1.35)"/>
+    <use href="#leaf" color="#c1cbb1" transform="translate(1290 90) rotate(150) scale(1.4)"/>
+    <use href="#leaf" color="#b6c3a6" transform="translate(1210 240) rotate(205) scale(1.15)"/>
+    <use href="#leaf" color="#a9b899" transform="translate(1330 470) rotate(168) scale(1.3)"/>
+    <use href="#leaf" color="#c1cbb1" transform="translate(1240 690) rotate(128) scale(1.25)"/>
+    <use href="#leaf" color="#b6c3a6" transform="translate(1020 850) rotate(196) scale(1.2)"/>
+    <use href="#leaf" color="#aebd9e" transform="translate(620 40) rotate(-70) scale(1.1)"/>
+    <use href="#leaf" color="#c1cbb1" transform="translate(760 870) rotate(96) scale(1.15)"/>
+  </g>
+
+  <!-- Blooms arranged in irregular clusters rather than a grid, with a wide
+       spread of sizes so the blur reads as depth of field. Distant blooms are
+       small and pale; a few large foreground blooms break the frame edges. -->
+
+  <!-- Distant layer: small, pale, low contrast. -->
+  <g opacity="0.6">
+    <use href="#bud"   color="#f7d5cc" transform="translate(352 96) rotate(24) scale(0.72)"/>
+    <use href="#bloom" color="#f8dbd1" transform="translate(596 214) rotate(-15) scale(0.6)"/>
+    <use href="#bud"   color="#f6d0c6" transform="translate(842 132) rotate(52) scale(0.66)"/>
+    <use href="#bloom" color="#f9e0d5" transform="translate(1046 268) rotate(8) scale(0.58)"/>
+    <use href="#bud"   color="#f7d8ce" transform="translate(214 402) rotate(-38) scale(0.7)"/>
+    <use href="#bloom" color="#f8dcd2" transform="translate(742 470) rotate(31) scale(0.55)"/>
+    <use href="#bud"   color="#f6d3ca" transform="translate(1188 592) rotate(-22) scale(0.68)"/>
+    <use href="#bloom" color="#f9e2d8" transform="translate(462 664) rotate(45) scale(0.62)"/>
+    <use href="#bud"   color="#f7d6cd" transform="translate(958 742) rotate(-9) scale(0.66)"/>
+    <use href="#bloom" color="#f8ddd3" transform="translate(126 726) rotate(18) scale(0.58)"/>
+  </g>
+
+  <!-- Mid layer: the body of the bouquet, clustered. -->
+  <g opacity="0.92">
+    <use href="#bloom" color="#eba7a1" transform="translate(96 104) rotate(12) scale(1.35)"/>
+    <use href="#bud"   color="#f2bdb6" transform="translate(178 46) rotate(-28) scale(1.1)"/>
+    <use href="#bloom" color="#f4c5bb" transform="translate(38 214) rotate(41) scale(1.0)"/>
+
+    <use href="#bloom" color="#e8a49d" transform="translate(452 58) rotate(-19) scale(1.2)"/>
+    <use href="#bud"   color="#f3c2ba" transform="translate(534 138) rotate(33) scale(0.95)"/>
+
+    <use href="#bloom" color="#eeb2aa" transform="translate(768 62) rotate(27) scale(1.45)"/>
+    <use href="#bud"   color="#f5cbc1" transform="translate(690 168) rotate(-11) scale(1.05)"/>
+
+    <use href="#bloom" color="#e6a099" transform="translate(1148 84) rotate(-35) scale(1.3)"/>
+    <use href="#bloom" color="#f4c8be" transform="translate(1268 172) rotate(16) scale(1.05)"/>
+    <use href="#bud"   color="#f1bab3" transform="translate(1338 62) rotate(49) scale(1.15)"/>
+
+    <use href="#bloom" color="#e9a49c" transform="translate(62 486) rotate(22) scale(1.4)"/>
+    <use href="#bud"   color="#f4c6bd" transform="translate(166 566) rotate(-42) scale(1.0)"/>
+
+    <use href="#bloom" color="#efb5ac" transform="translate(346 428) rotate(-7) scale(1.25)"/>
+    <use href="#bud"   color="#f6cec5" transform="translate(276 336) rotate(37) scale(0.9)"/>
+
+    <use href="#bloom" color="#f2bcb2" transform="translate(628 578) rotate(44) scale(1.15)"/>
+    <use href="#bud"   color="#f5cbc2" transform="translate(546 512) rotate(-25) scale(0.88)"/>
+
+    <use href="#bloom" color="#eeb3aa" transform="translate(986 452) rotate(-16) scale(1.3)"/>
+    <use href="#bud"   color="#f3c1b9" transform="translate(1064 542) rotate(29) scale(1.0)"/>
+
+    <use href="#bloom" color="#e7a29b" transform="translate(1312 396) rotate(38) scale(1.35)"/>
+    <use href="#bud"   color="#f4c7be" transform="translate(1218 322) rotate(-31) scale(0.95)"/>
+
+    <use href="#bloom" color="#e9a59e" transform="translate(174 806) rotate(-13) scale(1.4)"/>
+    <use href="#bud"   color="#f2bfb7" transform="translate(276 736) rotate(46) scale(1.05)"/>
+
+    <use href="#bloom" color="#efb7ae" transform="translate(552 848) rotate(21) scale(1.2)"/>
+    <use href="#bud"   color="#f6d0c7" transform="translate(648 780) rotate(-36) scale(0.92)"/>
+
+    <use href="#bloom" color="#e6a19a" transform="translate(886 806) rotate(34) scale(1.35)"/>
+    <use href="#bud"   color="#f5cbc2" transform="translate(792 878) rotate(-8) scale(1.0)"/>
+
+    <use href="#bloom" color="#edaea6" transform="translate(1256 838) rotate(-27) scale(1.3)"/>
+    <use href="#bud"   color="#f3c4bc" transform="translate(1148 776) rotate(15) scale(0.98)"/>
+  </g>
+
+  <!-- Foreground: oversized blooms that spill off the edges. -->
+  <g opacity="0.85">
+    <use href="#bloom" color="#e59a94" transform="translate(-30 330) rotate(18) scale(2.3)"/>
+    <use href="#bloom" color="#e8a29b" transform="translate(1420 640) rotate(-24) scale(2.5)"/>
+    <use href="#bloom" color="#e79f98" transform="translate(430 -40) rotate(37) scale(2.0)"/>
+    <use href="#bloom" color="#eaa59e" transform="translate(1010 940) rotate(-12) scale(2.2)"/>
+  </g>
+
+  <!-- A few soft out-of-focus highlights. -->
+  <g opacity="0.4">
+    <circle cx="300" cy="560" r="46" fill="#fff6ec"/>
+    <circle cx="1120" cy="300" r="58" fill="#fff2e4"/>
+    <circle cx="520" cy="180" r="34" fill="#ffeede"/>
+    <circle cx="960" cy="660" r="42" fill="#fff5ea"/>
+  </g>
+
+  <!-- Centre glow keeps the invitation legible. -->
+  <rect width="1400" height="900" fill="url(#glow)"/>
+</svg>
