@@ -142,38 +142,38 @@ local copy is always kept as a fallback if the request fails.
 
 ## Deploying
 
-The site is static, so any host works. These are the steps for GitHub + Vercel
-under the name **pooja-weds-nagesh**.
+The site is static — no build step, no framework.
 
-**1. Create the GitHub repo and push**
+**GitHub: done.** The code lives at `github.com/serious-gist/wedding` and
+`main` is pushed. Keep pushing as you make changes.
 
-Create an empty repo named `pooja-weds-nagesh` at <https://github.com/new>
-(no README, no .gitignore — this project already has them), then:
+**Vercel:** the project should be named **pooja-weds-nagesh**. The GitHub repo
+is named `wedding`, so Vercel will suggest "wedding" as the project name —
+you have to change that field, or the URL will be wrong.
 
-```sh
-cd c:/Users/shara/repos/Wedding
-git remote add origin https://github.com/<your-username>/pooja-weds-nagesh.git
-git push -u origin main
-```
+Dashboard (easiest):
 
-**2. Deploy on Vercel**
-
-Easiest is the dashboard: <https://vercel.com/new> → import the
-`pooja-weds-nagesh` repo → **Framework Preset: Other**, leave build command and
-output directory empty (it is plain static files) → Deploy. Every later
-`git push` redeploys automatically.
+1. <https://vercel.com/new> → import `serious-gist/wedding`
+2. **Set Project Name to `pooja-weds-nagesh`** (it defaults to the repo name)
+3. Framework Preset: **Other**; leave build command and output directory empty
+4. Deploy
 
 Or from the terminal:
 
 ```sh
 npm i -g vercel
 vercel login
+vercel link --project pooja-weds-nagesh --yes
 vercel --prod
 ```
 
-The site lands at `https://pooja-weds-nagesh.vercel.app`. Once you know the final
-URL, update `og:url` and the `<link rel="canonical">` in `index.html` — they
-still point at `example.com`, so link previews will be wrong until you do.
+Every later `git push` redeploys automatically.
+
+The site lands at `https://pooja-weds-nagesh.vercel.app` — assuming that
+subdomain is free. Vercel names are global, so if it is taken you will get a
+suffixed URL. `og:url`, `og:image` and the canonical link in `index.html` are
+already set to `pooja-weds-nagesh.vercel.app`; if your final URL differs,
+update those three lines or link previews will point at the wrong place.
 
 **Before you share the link, note that the site is public.** Anyone with the
 address can see the couple's names, photos, venue and the ceremony schedule.
