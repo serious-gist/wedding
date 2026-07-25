@@ -9,10 +9,9 @@
   that repeats horizontally; the string starts and ends at the same height so
   tiles join without a visible seam.
 
-## Photos — MISSING, need re-adding
+## Photos
 
-The gallery expects these six files. They were lost when the working folder was
-wiped, and they only ever existed on this machine — re-copy them from WhatsApp:
+The gallery uses these six, in this order:
 
 ```
 IMG-20260705-WA0023.jpg   portrait   1066 × 1600
@@ -23,10 +22,10 @@ IMG-20260705-WA0027.jpg   portrait   1066 × 1600
 IMG-20260705-WA0028.jpg   portrait   1066 × 1600
 ```
 
-Until they are back the gallery shows soft gradient placeholders, so the site
-still works — it just has no photos.
+If a file is ever missing the gallery falls back to generated gradient
+placeholders, so the page never looks broken.
 
-If you use different filenames, edit the `src` values in the gallery section of
+To swap or add a photo, edit the `src` values in the gallery section of
 `index.html` and set each `<img>`'s `width` and `height` to the new file's real
 pixel dimensions. Those attributes reserve the masonry tile's shape while the
 image loads — a wrong ratio makes the layout jump.

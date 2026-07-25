@@ -19,13 +19,12 @@ images/toran.svg      marigold garland along the top of the invitation
 vercel.json           hosting config (clean URLs, cache headers)
 ```
 
-## ⚠️ The photos are missing
+## ⚠️ Back up to GitHub
 
-The six gallery photos were lost when the working folder was wiped and are not
-recoverable from this machine — **re-copy them from WhatsApp** into `images/`.
-See [images/README.md](images/README.md) for the exact filenames and sizes.
-Until then the gallery shows gradient placeholders and the rest of the site
-works normally.
+This project has already been emptied off local disk once — working tree and
+git objects both. Everything was rebuilt, but the only real protection is an
+off-machine copy. **Push to GitHub before doing anything else** (see
+[Deploying](#deploying)), and keep pushing as you make changes.
 
 ## Language
 
