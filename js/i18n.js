@@ -105,7 +105,6 @@ window.I18N = {
     'events.weddingWhen': 'Saturday, 12 December 2026',
     'events.weddingTime': '4:30 PM sharp',
     'events.weddingText': 'The moment we have been waiting for, followed by dinner on the main lawn.',
-    'events.venueNote': 'All ceremonies are held at 36 Gun Lawns, Waluj.',
 
     'story.title': 'Our Story',
     'story.sub': 'Three moments that changed everything',
@@ -267,7 +266,6 @@ window.I18N = {
     'events.weddingWhen': 'शनिवार, १२ डिसेंबर २०२६',
     'events.weddingTime': 'सायं. ४:३० वाजता',
     'events.weddingText': 'ज्या क्षणाची आम्ही वाट पाहत होतो तो क्षण, त्यानंतर मुख्य लॉनवर भोजन.',
-    'events.venueNote': 'सर्व विधी ३६ गन लॉन्स, वाळूज येथे होतील.',
 
     'story.title': 'आमची कहाणी',
     'story.sub': 'सारं काही बदलणारे तीन क्षण',

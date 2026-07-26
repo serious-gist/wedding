@@ -74,7 +74,7 @@
 
 /* The shloka is Sanskrit and already uses the Devanagari face in both
    languages — only the surrounding copy needs the Marathi treatment. */
-:root[data-lang="mr"] :is(.event__text, .events__note, .shloka__meaning, .check) {
+:root[data-lang="mr"] :is(.event__text, .shloka__meaning, .check) {
   font-size: 1rem;
   line-height: 1.85;
 }
@@ -367,13 +367,22 @@ h1, h2, h3 {
 }
 
 /* ---------- Envelope ---------- */
+/* The stage owns the entrance animation; `floatIn` fills forwards, so an
+   animated transform here would permanently outrank the pointer tilt. */
+.envelope-stage {
+  width: min(88vw, 340px);
+  perspective: 1400px;
+  animation: floatIn 1.4s 0.3s var(--ease) both;
+}
+
 .envelope {
   position: relative;
-  width: min(88vw, 340px);
+  width: 100%;
   aspect-ratio: 3 / 2;
   perspective: 1400px;
   transform-style: preserve-3d;
-  animation: floatIn 1.4s 0.3s var(--ease) both;
+  transform: rotateX(var(--env-x, 0deg)) rotateY(var(--env-y, 0deg));
+  transition: transform 0.5s var(--ease);
 }
 
 .envelope__shadow {
@@ -555,6 +564,7 @@ h1, h2, h3 {
 }
 
 .topnav {
+  position: relative;      /* offset parent for the sliding indicator */
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
@@ -580,7 +590,22 @@ h1, h2, h3 {
   border-bottom: 1px solid transparent;
   transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
 }
-.topnav a:hover, .topnav a.is-active { color: var(--gold); border-bottom-color: var(--champagne); }
+.topnav a:hover { color: var(--gold); border-bottom-color: var(--champagne); }
+.topnav a.is-active { color: var(--gold); }
+/* The sliding indicator replaces the static underline — but only once JS has
+   actually placed it. */
+.topnav:not(.has-ink) a.is-active { border-bottom-color: var(--champagne); }
+
+.topnav__ink {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--champagne) 18%, var(--gold) 50%, var(--champagne) 82%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.55s var(--ease), width 0.55s var(--ease), opacity 0.4s var(--ease);
+}
+.topnav__ink.is-on { opacity: 1; }
 
 .section {
   position: relative;
@@ -686,6 +711,8 @@ h1, h2, h3 {
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 .card {
+  position: relative;
+  overflow: hidden;
   padding: 2rem 1.5rem;
   text-align: center;
   transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
@@ -735,10 +762,14 @@ h1, h2, h3 {
   background: linear-gradient(transparent, var(--gold-soft), transparent);
 }
 .countdown__num {
+  position: relative;
   display: block;
+  /* The old value rolls out of the top while the new one rolls in from
+     below, so the clip has to be tight to the digits. */
+  overflow: hidden;
   font-family: var(--serif);
   font-size: clamp(1.9rem, 1.1rem + 3.4vw, 3.3rem);
-  line-height: 1;
+  line-height: 1.16;
   color: var(--gold);
   /* Cormorant defaults to old-style figures, which sit unevenly in a row of
      counters — lining figures keep the digits on one baseline. */
@@ -770,12 +801,22 @@ h1, h2, h3 {
   max-width: 900px;
   position: relative;
 }
-.timeline::before {
+.timeline::before,
+.timeline::after {
   content: "";
   position: absolute;
-  top: 0; bottom: 0; left: 11px;
+  top: 0; left: 11px;
   width: 1px;
+}
+.timeline::before {
+  bottom: 0;
   background: linear-gradient(transparent, var(--gold-soft) 8%, var(--gold-soft) 92%, transparent);
+}
+/* Fills as the reader travels down the story. */
+.timeline::after {
+  height: var(--fill, 0%);
+  background: linear-gradient(180deg, var(--blush-deep), var(--champagne) 60%, var(--marigold));
+  box-shadow: 0 0 8px rgba(201, 166, 107, 0.55);
 }
 .timeline__item {
   position: relative;
@@ -804,7 +845,7 @@ h1, h2, h3 {
 .timeline__body p:last-child { margin: 0; color: var(--ink-soft); font-size: 0.94rem; }
 
 @media (min-width: 800px) {
-  .timeline::before { left: 50%; }
+  .timeline::before, .timeline::after { left: 50%; }
   .timeline__item { width: 50%; padding-left: 0; padding-right: 3rem; }
   .timeline__item:nth-child(even) { margin-left: 50%; padding-right: 0; padding-left: 3rem; }
   .timeline__dot { left: auto; right: -7px; }
@@ -930,14 +971,6 @@ h1, h2, h3 {
   border-color: rgba(201, 166, 107, 0.5);
 }
 .event--primary h3 { color: var(--gold-deep); }
-
-.events__note {
-  margin-top: 2rem;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.05rem;
-  color: var(--ink-soft);
-}
 
 /* ---------- Venue ---------- */
 .map {
@@ -1440,6 +1473,8 @@ h1, h2, h3 {
 @media (min-width: 460px) { .langgate__choices { grid-template-columns: 1fr 1fr; } }
 
 .langgate__btn {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -1457,6 +1492,7 @@ h1, h2, h3 {
   background: #fff;
   box-shadow: var(--shadow-md);
 }
+.langgate__btn > span { position: relative; z-index: 1; }
 .langgate__btn-main {
   font-family: var(--serif);
   font-size: 1.5rem;
@@ -1661,19 +1697,214 @@ h1, h2, h3 {
   .section__title.is-in { color: transparent; -webkit-text-fill-color: transparent; }
 }
 
-/* Countdown digits pulse as they change. */
-.countdown__num.is-ticking { animation: tick 0.45s var(--ease); }
-@keyframes tick {
-  0%   { transform: translateY(0); opacity: 1; }
-  40%  { transform: translateY(-0.16em); opacity: 0.35; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
 /* Cards tilt very slightly toward the pointer. */
 [data-tilt] {
   transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(var(--tilt-lift, 0));
   transition: transform 0.4s var(--ease), box-shadow 0.5s var(--ease);
   will-change: transform;
+}
+
+/* Words of the invitation line and the quote arrive one at a time. */
+.word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.45em);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.reveal.is-in .word { opacity: 1; transform: none; }
+
+/* ---------- Hero: diya light ---------- */
+.hero__diya {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(260px 260px at var(--gx, 50%) var(--gy, 42%),
+    rgba(255, 208, 138, 0.5), rgba(255, 172, 84, 0.16) 46%, transparent 72%);
+  mix-blend-mode: screen;
+  transition: opacity 0.8s var(--ease);
+}
+.hero.has-pointer .hero__diya { opacity: 1; }
+
+/* A slow gold glint travelling across the wax seal while it is still closed. */
+.envelope__seal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(115deg, transparent 34%, rgba(255, 255, 255, 0.6) 50%, transparent 66%);
+  background-size: 260% 100%;
+  animation: sealShine 4.5s 1.6s ease-in-out infinite;
+}
+.envelope.is-open .envelope__seal::after { animation: none; }
+@keyframes sealShine {
+  0%, 62%, 100% { background-position: 150% 0; }
+  86%           { background-position: -50% 0; }
+}
+
+/* ---------- Countdown roll ---------- */
+.countdown__digits { display: block; }
+.countdown__digits--out {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  animation: rollOut 0.5s var(--ease) forwards;
+}
+.countdown__digits--in { animation: rollIn 0.5s var(--ease); }
+@keyframes rollOut {
+  to { transform: translateY(-105%); opacity: 0; }
+}
+@keyframes rollIn {
+  from { transform: translateY(105%); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* A very slow warm drift behind the clock. */
+.section--countdown::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, rgba(231, 154, 46, 0.16), transparent),
+    radial-gradient(closest-side, rgba(232, 200, 196, 0.22), transparent);
+  background-repeat: no-repeat;
+  background-size: 46% 46%, 52% 52%;
+  background-position: 22% 30%, 78% 66%;
+  animation: aura 26s linear infinite;
+}
+.section--countdown .wrap { position: relative; z-index: 1; }
+@keyframes aura { to { transform: rotate(360deg); } }
+
+/* ---------- Timeline dots ---------- */
+.timeline__dot {
+  transform: scale(0.5);
+  opacity: 0;
+  transition: transform 0.6s 0.15s var(--ease), opacity 0.5s 0.15s var(--ease),
+              box-shadow 0.6s var(--ease);
+}
+.timeline__item.is-in .timeline__dot {
+  transform: none;
+  opacity: 1;
+  box-shadow: 0 0 0 4px rgba(232, 200, 196, 0.4), 0 0 14px rgba(201, 166, 107, 0.55);
+}
+
+/* ---------- Rangoli ---------- */
+.rangoli-slot { pointer-events: none; }
+
+.rangoli-slot--watermark {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: min(78vw, 620px);
+  transform: translate(-50%, -50%);
+  opacity: 0.28;      /* it sits behind the names — a watermark, not artwork */
+}
+.rangoli-slot--band {
+  display: grid;
+  place-items: center;
+  width: min(100% - 2.5rem, 200px);
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 2.5rem) 0;
+}
+
+.rangoli { display: block; width: 100%; height: auto; overflow: visible; }
+.rangoli * {
+  fill: none;
+  stroke: var(--champagne);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.rangoli__petals path { stroke: var(--gold); }
+.rangoli__petals--outer path { stroke: var(--blush-deep); }
+.rangoli__ring { opacity: 0.6; }
+/* 16 evenly spaced dots, the way a kolam is pegged out before it is filled. */
+.rangoli__dots {
+  stroke-dasharray: 0.0015 0.0610;
+  stroke-width: 3.4;
+  stroke: var(--marigold);
+  opacity: 0;
+  transition: opacity 0.9s 0.9s var(--ease);
+}
+.rangoli__seed { fill: var(--marigold); stroke: none; opacity: 0; }
+
+.rangoli.is-drawn * { animation: draw 1.6s var(--ease) forwards; }
+.rangoli.is-drawn .rangoli__dots { opacity: 1; animation: none; }
+.rangoli.is-drawn .rangoli__seed { animation: popIn 0.7s 1.5s var(--ease) forwards; }
+.rangoli.is-drawn .rangoli__petals path { animation-delay: 0.45s; }
+.rangoli.is-drawn .rangoli__petals--outer path { animation-delay: 0.9s; }
+.rangoli.is-drawn .rangoli__core { animation-delay: 1.3s; }
+
+/* The band copy rotates once, very slowly, like a mandala. */
+.rangoli-slot--band .rangoli.is-drawn { animation: rangoliTurn 90s 2s linear infinite; }
+@keyframes rangoliTurn { to { transform: rotate(360deg); } }
+
+/* ---------- Pointer sheen on glass cards ---------- */
+[data-tilt] { position: relative; overflow: hidden; }
+[data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(200px 200px at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.6), rgba(255, 236, 205, 0.2) 45%, transparent 70%);
+  /* Soft-light brightens the glass without laying a veil over the text —
+     a plain white overlay at this size washes the copy out. */
+  mix-blend-mode: soft-light;
+  transition: opacity 0.45s var(--ease);
+}
+[data-tilt]:hover::after { opacity: 1; }
+
+/* ---------- Button ripple ---------- */
+.ripple {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 245, 225, 0.75), rgba(201, 166, 107, 0.28) 60%, transparent 72%);
+  transform: scale(0);
+  opacity: 0.9;
+  animation: ripple 0.7s var(--ease) forwards;
+}
+@keyframes ripple {
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* ---------- Lightbox photo morph (View Transitions) ---------- */
+.lightbox.is-vt,
+.lightbox.is-vt .lightbox__figure img { transition: none; }
+
+::view-transition-group(photo-morph) { animation-duration: 0.5s; }
+::view-transition-old(photo-morph),
+::view-transition-new(photo-morph) {
+  height: 100%;
+  animation-duration: 0.5s;
+  mix-blend-mode: normal;
+  object-fit: cover;
+}
+::view-transition-image-pair(photo-morph) { isolation: none; }
+
+/* ---------- Scroll-driven gallery drift ---------- */
+/* Progressive: only where the browser can do it natively, so there is no
+   scroll listener and no jank. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .masonry__item {
+      animation: photoDrift linear both;
+      animation-timeline: view();
+      animation-range: entry 10% exit 90%;
+    }
+    @keyframes photoDrift {
+      from { transform: translateY(14px); }
+      to   { transform: translateY(-14px); }
+    }
+  }
 }
 
 /* ============================================================
@@ -1691,11 +1922,16 @@ h1, h2, h3 {
 
   /* Show the finished state of anything that would otherwise start hidden
      and only become visible through an animation. */
-  .letter { opacity: 1; transform: none; }
+  .letter, .word { opacity: 1; transform: none; }
   .ganesh__line path, .ganesh__halo { stroke-dashoffset: 0; }
   .ganesh__halo--outer, .ganesh__dots circle { opacity: 1; }
+  .rangoli * { stroke-dashoffset: 0; opacity: 1; }
+  .rangoli__ring { opacity: 0.6; }
+  .timeline__dot { opacity: 1; transform: none; }
   .toran { animation: none; }
   .langgate__glow { animation: none; }
+  .hero__diya, .section--countdown::before, .envelope__seal::after { display: none; }
+  .rangoli-slot--band .rangoli.is-drawn { animation: none; }
   .section__title.is-in {
     animation: none;
     color: var(--ink);
@@ -1713,6 +1949,10 @@ h1, h2, h3 {
   .confetti, .toast, .map, .langgate { display: none !important; }
   .invitation { opacity: 1 !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
+  .letter, .word { opacity: 1 !important; transform: none !important; }
   .ganesh__line path, .ganesh__halo { stroke-dashoffset: 0 !important; }
+  .rangoli * { stroke-dashoffset: 0 !important; }
+  .rangoli-slot--watermark { display: none !important; }
+  .timeline__dot { opacity: 1 !important; transform: none !important; }
   body { background: #fff; }
 }

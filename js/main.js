@@ -124,12 +124,40 @@
     el.appendChild(frag);
   }
 
+  /* Split text into per-word spans so a line arrives a word at a time.
+
+     Unlike splitLetters this is safe in both scripts: Devanagari separates
+     words with ordinary spaces, and nothing inside a word is touched. */
+  function splitWords(el) {
+    var parts = el.textContent.split(/(\s+)/);
+    var frag = document.createDocumentFragment();
+    var i = 0;
+
+    parts.forEach(function (part) {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        frag.appendChild(document.createTextNode(part));
+        return;
+      }
+      var span = document.createElement('span');
+      span.className = 'word';
+      span.textContent = part;
+      span.style.transitionDelay = (0.12 + i * 0.06).toFixed(3) + 's';
+      frag.appendChild(span);
+      i++;
+    });
+
+    el.textContent = '';
+    el.appendChild(frag);
+  }
+
   function applyTranslations(root) {
     var scope = root || document;
 
     $$('[data-i18n]', scope).forEach(function (el) {
       el.textContent = t(el.dataset.i18n);
       if (el.hasAttribute('data-letters')) splitLetters(el);
+      else if (el.hasAttribute('data-words')) splitWords(el);
     });
     $$('[data-i18n-html]', scope).forEach(function (el) {
       el.innerHTML = t(el.dataset.i18nHtml);
@@ -161,7 +189,7 @@
     // Buttons whose label depends on both language and device / state.
     setRevealLabel();
     refreshMusicLabel();
-    if (typeof onLangChange === 'function') onLangChange();
+    langHooks.forEach(function (fn) { fn(); });
 
     $$('.langswitch__btn').forEach(function (btn) {
       btn.setAttribute('aria-pressed', btn.dataset.lang === code ? 'true' : 'false');
@@ -228,8 +256,10 @@
     }
   }
 
-  // Hooks assigned by sections that render text at runtime.
-  var onLangChange = null;
+  // Hooks registered by sections that render text at runtime, or whose
+  // layout depends on the length of translated labels.
+  var langHooks = [];
+  function onLang(fn) { langHooks.push(fn); }
   var refreshMusicLabel = function () {};
 
   function toast(message) {
@@ -303,8 +333,31 @@
         phase: Math.random() * Math.PI * 2,
         alpha: 0.35 + Math.random() * 0.45,
         color: kind.color,
-        shape: kind.shape
+        shape: kind.shape,
+        vx: 0,
+        vy: 0,
+        temp: false
       };
+    }
+
+    /* Pushpavrishti — a shower of flowers thrown up from the envelope as it
+       opens. These carry an extra velocity that decays into the ambient
+       fall, and are discarded rather than recycled once they drop away. */
+    function burst(originX, originY, count) {
+      for (var i = 0; i < count; i++) {
+        var p = make(true);
+        var angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.4;
+        var power = 4 + Math.random() * 9;
+        p.x = originX + (Math.random() - 0.5) * 40;
+        p.y = originY + (Math.random() - 0.5) * 24;
+        p.vx = Math.cos(angle) * power;
+        p.vy = Math.sin(angle) * power;
+        p.size = 7 + Math.random() * 13;
+        p.spin = (Math.random() - 0.5) * 0.06;
+        p.alpha = 0.55 + Math.random() * 0.45;
+        p.temp = true;
+        petals.push(p);
+      }
     }
 
     function drawPetal(p) {
@@ -349,8 +402,21 @@
         p.phase += 0.012 * dt;
         p.x += (p.drift + Math.sin(p.phase) * p.sway * 0.4) * dt;
         p.angle += p.spin * dt;
-        if (p.y - p.size > h) petals[i] = make(false);
-        else if (p.x < -40) p.x = w + 30;
+
+        if (p.vx || p.vy) {
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          var drag = Math.pow(0.955, dt);
+          p.vx *= drag;
+          p.vy = p.vy * drag + 0.16 * dt;      // gravity pulls it back into the fall
+          if (Math.abs(p.vx) < 0.05) p.vx = 0;
+          if (Math.abs(p.vy) < 0.05) p.vy = 0;
+        }
+
+        if (p.y - p.size > h) {
+          if (p.temp) { petals.splice(i, 1); i--; continue; }
+          petals[i] = make(false);
+        } else if (p.x < -40) p.x = w + 30;
         else if (p.x > w + 40) p.x = -30;
         drawPetal(p);
       }
@@ -363,6 +429,11 @@
         resize();
         seed();
         raf = requestAnimationFrame(frame);
+      },
+      burst: function (clientX, clientY, count) {
+        if (reducedMotion || raf === null) return;
+        var box = canvas.getBoundingClientRect();
+        burst(clientX - box.left, clientY - box.top, count || 60);
       },
       stop: function () {
         if (raf !== null) cancelAnimationFrame(raf);
@@ -536,6 +607,14 @@
 
       var delay = reducedMotion ? 0 : 1500;
 
+      // Flowers thrown from the envelope as the card rises out of it.
+      if (!reducedMotion) {
+        setTimeout(function () {
+          var box = envelope.getBoundingClientRect();
+          petals.burst(box.left + box.width / 2, box.top + box.height * 0.42, 70);
+        }, 360);
+      }
+
       setTimeout(function () {
         hero.classList.add('is-leaving');
       }, delay);
@@ -577,21 +656,30 @@
     var pad = function (n) { return digits(n < 10 ? '0' + n : String(n)); };
 
     // Only animate a unit when its value actually changes, so the seconds
-    // pulse each tick while the days sit still.
+    // roll each tick while the days sit still. The old value leaves through
+    // the top of the clipped box as the new one arrives from below.
     function put(el, value) {
-      if (el.textContent === value) return;
-      el.textContent = value;
-      if (reducedMotion) return;
-      el.classList.remove('is-ticking');
-      void el.offsetWidth;              // restart the animation
-      el.classList.add('is-ticking');
+      var slot = $('.countdown__digits', el);
+      if (!slot || slot.textContent === value) return;
+
+      if (reducedMotion) { slot.textContent = value; return; }
+
+      var out = slot.cloneNode(true);
+      out.className = 'countdown__digits countdown__digits--out';
+      el.appendChild(out);
+      setTimeout(function () { out.remove(); }, 520);
+
+      slot.textContent = value;
+      slot.classList.remove('countdown__digits--in');
+      void slot.offsetWidth;            // restart the animation
+      slot.classList.add('countdown__digits--in');
     }
 
     function tick() {
       var diff = CONFIG.weddingDate.getTime() - Date.now();
 
       if (diff <= 0) {
-        days.textContent = hours.textContent = mins.textContent = secs.textContent = digits('00');
+        [days, hours, mins, secs].forEach(function (el) { put(el, digits('00')); });
         note.textContent = t('countdown.arrived');
         clearInterval(timer);
         return;
@@ -608,7 +696,7 @@
     var timer = setInterval(tick, 1000);
 
     // Redraw immediately on language change so digits switch script at once.
-    onLangChange = tick;
+    onLang(tick);
   }
 
   /* ============================================================
@@ -637,8 +725,25 @@
   }
 
   function setupNavAndScroll() {
+    var nav = $('#topnav');
     var links = $$('.topnav a');
+    var ink = $('.topnav__ink');
     var toTop = $('#toTop');
+
+    // A single gold rule that slides between sections rather than four
+    // separate underlines blinking on and off.
+    function moveInk() {
+      if (!ink || !nav) return;
+      var active = $('.topnav a.is-active');
+      if (!active) { ink.classList.remove('is-on'); return; }
+      ink.style.width = active.offsetWidth + 'px';
+      ink.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+      ink.classList.add('is-on');
+      nav.classList.add('has-ink');
+    }
+    window.addEventListener('resize', moveInk);
+    // Marathi labels are a different width, so the rule has to be re-measured.
+    onLang(moveInk);
 
     if ('IntersectionObserver' in window && links.length) {
       var spy = new IntersectionObserver(function (entries) {
@@ -648,6 +753,7 @@
           links.forEach(function (a) {
             a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
           });
+          moveInk();
         });
       }, { rootMargin: '-45% 0px -50% 0px' });
 
@@ -677,21 +783,61 @@
   /* ============================================================
      6b · Ganesh draw-on, pointer tilt, reading progress
      ============================================================ */
-  function setupGanesh() {
-    var art = $('#ganeshArt');
-    if (!art) return;
+  /* Line art that draws itself the first time it scrolls into view. */
+  function drawOnView(el, threshold) {
+    if (!el) return;
 
     if (reducedMotion || !('IntersectionObserver' in window)) {
-      art.classList.add('is-drawn');
+      el.classList.add('is-drawn');
       return;
     }
 
     var io = new IntersectionObserver(function (entries) {
       if (!entries[0].isIntersecting) return;
-      art.classList.add('is-drawn');
+      el.classList.add('is-drawn');
       io.disconnect();
-    }, { threshold: 0.3 });
-    io.observe(art);
+    }, { threshold: threshold });
+    io.observe(el);
+  }
+
+  function setupGanesh() {
+    drawOnView($('#ganeshArt'), 0.3);
+  }
+
+  /* The rangoli is written once in the markup; the band copy below the RSVP
+     is a clone, so the artwork only has to be maintained in one place. */
+  function setupRangoli() {
+    var source = $('.rangoli-slot--watermark .rangoli');
+    var band = $('#rangoliBand');
+
+    if (source && band && !band.firstElementChild) {
+      band.appendChild(source.cloneNode(true));
+    }
+
+    $$('.rangoli').forEach(function (art) { drawOnView(art, 0.25); });
+  }
+
+  /* The story line fills in behind the reader as they travel down it. */
+  function setupTimeline() {
+    var timeline = $('.timeline');
+    if (!timeline || reducedMotion) return;
+
+    var ticking = false;
+    function update() {
+      var box = timeline.getBoundingClientRect();
+      var anchor = window.innerHeight * 0.62;
+      var pct = box.height > 0 ? (anchor - box.top) / box.height : 0;
+      timeline.style.setProperty('--fill', (Math.max(0, Math.min(1, pct)) * 100).toFixed(1) + '%');
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   }
 
   function setupTilt() {
@@ -704,12 +850,38 @@
         var dy = (e.clientY - box.top) / box.height - 0.5;
         el.style.setProperty('--tilt-y', (dx * 7).toFixed(2) + 'deg');
         el.style.setProperty('--tilt-x', (-dy * 7).toFixed(2) + 'deg');
+        // A specular highlight that tracks the pointer across the glass.
+        el.style.setProperty('--mx', ((dx + 0.5) * 100).toFixed(1) + '%');
+        el.style.setProperty('--my', ((dy + 0.5) * 100).toFixed(1) + '%');
       });
       el.addEventListener('pointerleave', function () {
         el.style.setProperty('--tilt-x', '0deg');
         el.style.setProperty('--tilt-y', '0deg');
       });
     });
+  }
+
+  /* A gold ripple spreading from wherever the guest actually pressed. */
+  function setupRipples() {
+    if (reducedMotion) return;
+
+    document.addEventListener('pointerdown', function (e) {
+      // Only buttons whose label sits in an element of its own — the ripple
+      // is a positioned box, so it would paint over a bare text node.
+      var target = e.target.closest && e.target.closest('.btn, .langgate__btn');
+      if (!target) return;
+
+      var box = target.getBoundingClientRect();
+      var size = Math.max(box.width, box.height) * 2.2;
+      var ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - box.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - box.top - size / 2) + 'px';
+
+      target.appendChild(ripple);
+      setTimeout(function () { ripple.remove(); }, 720);
+    }, { passive: true });
   }
 
   function setupProgress() {
@@ -757,13 +929,46 @@
       requestAnimationFrame(update);
     }, { passive: true });
 
-    // Gentle pointer parallax on the hero backdrop (desktop only).
-    if (bg && window.matchMedia('(hover: hover)').matches) {
-      window.addEventListener('pointermove', function (e) {
-        var dx = (e.clientX / window.innerWidth - 0.5) * 18;
-        var dy = (e.clientY / window.innerHeight - 0.5) * 18;
-        bg.style.transform = 'scale(1.08) translate(' + dx + 'px,' + dy + 'px)';
+    // Gentle pointer parallax on the hero backdrop, plus the lamp light and
+    // the envelope's tilt — all driven from one throttled handler (desktop).
+    var hero = $('#hero');
+    if (hero && window.matchMedia('(hover: hover)').matches) {
+      var envelope = $('#envelope');
+      var pending = false;
+      var px = 0, py = 0;
+
+      function paint() {
+        pending = false;
+        var dx = px / window.innerWidth - 0.5;
+        var dy = py / window.innerHeight - 0.5;
+
+        if (bg) bg.style.transform = 'scale(1.08) translate(' + (dx * 18) + 'px,' + (dy * 18) + 'px)';
+
+        hero.style.setProperty('--gx', ((dx + 0.5) * 100).toFixed(1) + '%');
+        hero.style.setProperty('--gy', ((dy + 0.5) * 100).toFixed(1) + '%');
+
+        if (envelope) {
+          envelope.style.setProperty('--env-y', (dx * 12).toFixed(2) + 'deg');
+          envelope.style.setProperty('--env-x', (-dy * 9).toFixed(2) + 'deg');
+        }
+      }
+
+      hero.addEventListener('pointermove', function (e) {
+        px = e.clientX;
+        py = e.clientY;
+        hero.classList.add('has-pointer');
+        if (pending) return;
+        pending = true;
+        requestAnimationFrame(paint);
       }, { passive: true });
+
+      hero.addEventListener('pointerleave', function () {
+        hero.classList.remove('has-pointer');
+        if (envelope) {
+          envelope.style.setProperty('--env-x', '0deg');
+          envelope.style.setProperty('--env-y', '0deg');
+        }
+      });
     }
   }
 
@@ -827,21 +1032,58 @@
       caption.textContent = buttons[current].dataset.caption || '';
     }
 
+    /* Morph the thumbnail into the full-size photo (and back) where the
+       browser supports it. The same view-transition-name is handed from the
+       old element to the new one inside the callback, which is what makes
+       the two snapshots animate as one moving photo.
+
+       The lightbox's own opacity transitions are suppressed for the
+       duration — otherwise the "after" snapshot would be captured while
+       the dialog was still fading in, i.e. still transparent. */
+    function morph(from, to, apply) {
+      if (reducedMotion || !document.startViewTransition || !from || !to) {
+        apply(false);
+        return;
+      }
+
+      function clear() {
+        from.style.viewTransitionName = '';
+        to.style.viewTransitionName = '';
+        box.classList.remove('is-vt');
+      }
+
+      box.classList.add('is-vt');
+      from.style.viewTransitionName = 'photo-morph';
+
+      var transition = document.startViewTransition(function () {
+        from.style.viewTransitionName = '';
+        to.style.viewTransitionName = 'photo-morph';
+        apply(true);
+      });
+      transition.finished.then(clear, clear);
+    }
+
     function openBox(index) {
       lastFocus = document.activeElement;
-      box.hidden = false;
-      show(index);
-      void box.offsetHeight;
-      box.classList.add('is-open');
-      document.body.classList.add('is-locked');
-      $('#lbClose').focus();
+      morph($('img', buttons[index]), boxImg, function () {
+        box.hidden = false;
+        show(index);
+        void box.offsetHeight;
+        box.classList.add('is-open');
+        document.body.classList.add('is-locked');
+        $('#lbClose').focus();
+      });
     }
 
     function closeBox() {
-      box.classList.remove('is-open');
-      document.body.classList.remove('is-locked');
-      setTimeout(function () { box.hidden = true; }, 350);
-      if (lastFocus) lastFocus.focus();
+      morph(boxImg, $('img', buttons[current]), function (morphed) {
+        box.classList.remove('is-open');
+        // Without a morph the dialog still needs its own fade out.
+        if (morphed) box.hidden = true;
+        else setTimeout(function () { box.hidden = true; }, 350);
+        document.body.classList.remove('is-locked');
+        if (lastFocus) lastFocus.focus();
+      });
     }
 
     buttons.forEach(function (btn, i) {
@@ -941,18 +1183,54 @@
     var pieces = [];
     var w = window.innerWidth, h = window.innerHeight;
 
-    for (var i = 0; i < 130; i++) {
-      pieces.push({
-        x: w * (0.2 + Math.random() * 0.6),
-        y: h * 0.42 + (Math.random() - 0.5) * 60,
-        vx: (Math.random() - 0.5) * 9,
-        vy: -7 - Math.random() * 9,
-        size: 5 + Math.random() * 8,
+    // Flower petals rather than paper — the same shapes as the cover, so the
+    // celebration reads as one idea from the first screen to the last.
+    function piece(from) {
+      var thrown = from === 'burst';
+      return {
+        x: thrown ? w * (0.2 + Math.random() * 0.6) : Math.random() * w,
+        y: thrown ? h * 0.42 + (Math.random() - 0.5) * 60 : -40 - Math.random() * h * 0.6,
+        vx: thrown ? (Math.random() - 0.5) * 9 : (Math.random() - 0.5) * 1.6,
+        vy: thrown ? -7 - Math.random() * 9 : 1.5 + Math.random() * 2.5,
+        gravity: thrown ? 0.24 : 0.02,
+        size: 6 + Math.random() * 9,
         angle: Math.random() * Math.PI,
-        spin: (Math.random() - 0.5) * 0.24,
+        spin: (Math.random() - 0.5) * 0.18,
+        sway: 0.6 + Math.random() * 1.4,
+        phase: Math.random() * Math.PI * 2,
+        marigold: Math.random() < 0.35,
         color: palette[(Math.random() * palette.length) | 0],
         life: 1
-      });
+      };
+    }
+
+    for (var i = 0; i < 110; i++) pieces.push(piece('burst'));
+    for (var j = 0; j < 70; j++) pieces.push(piece('shower'));
+
+    function draw(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+
+      if (p.marigold) {
+        var r = p.size * 0.34;
+        for (var k = 0; k < 7; k++) {
+          var a = (k / 7) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.arc(Math.cos(a) * r, Math.sin(a) * r, p.size * 0.26, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        var s = p.size;
+        ctx.beginPath();
+        ctx.moveTo(0, -s / 2);
+        ctx.bezierCurveTo(s / 2, -s / 2, s / 2, s / 2, 0, s / 2);
+        ctx.bezierCurveTo(-s / 2, s / 2, -s / 2, -s / 2, 0, -s / 2);
+        ctx.fill();
+      }
+      ctx.restore();
     }
 
     var started = performance.now();
@@ -961,25 +1239,18 @@
       ctx.clearRect(0, 0, w, h);
 
       pieces.forEach(function (p) {
-        p.vy += 0.24;                 // gravity
-        p.vx *= 0.992;                // drag
-        p.x += p.vx;
+        p.vy += p.gravity;
+        p.vx *= 0.992;                          // drag
+        p.phase += 0.04;
+        p.x += p.vx + Math.sin(p.phase) * p.sway * 0.35;
         p.y += p.vy;
         p.angle += p.spin;
-        p.life = Math.max(0, 1 - elapsed / 4200);
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.angle);
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        // Hold full opacity while the shower is still arriving, then fade.
+        p.life = Math.max(0, Math.min(1, (5200 - elapsed) / 1600));
+        draw(p);
       });
 
-      if (elapsed < 4400) requestAnimationFrame(frame);
+      if (elapsed < 5200) requestAnimationFrame(frame);
       else {
         ctx.clearRect(0, 0, w, h);
         canvas.classList.remove('is-active');
@@ -1168,7 +1439,10 @@
     window.addEventListener('resize', setRevealLabel);
 
     var canvas = $('#petals');
-    var petals = canvas ? Petals(canvas) : { start: function () {}, stop: function () {}, resize: function () {}, running: function () { return false; } };
+    var petals = canvas ? Petals(canvas) : {
+      start: function () {}, stop: function () {}, resize: function () {},
+      burst: function () {}, running: function () { return false; }
+    };
     petals.start();
 
     window.addEventListener('resize', function () { petals.resize(); });
@@ -1185,7 +1459,10 @@
     setupRsvp();
     setupPhotoFolder();
     setupGanesh();
+    setupRangoli();
+    setupTimeline();
     setupTilt();
+    setupRipples();
     setupProgress();
 
     // Every section has registered its language hooks by now, so this single

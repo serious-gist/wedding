@@ -43,7 +43,8 @@
     .reveal { opacity: 1 !important; transform: none !important; }
     .envelope { animation: none !important; }
     .ganesh__line path, .ganesh__halo { stroke-dashoffset: 0 !important; }
-    .letter { opacity: 1 !important; transform: none !important; }
+    .rangoli * { stroke-dashoffset: 0 !important; opacity: 1 !important; }
+    .letter, .word { opacity: 1 !important; transform: none !important; }
   </style>
 </noscript>
 
@@ -117,6 +118,8 @@
 <header class="hero" id="hero">
   <div class="hero__bg" aria-hidden="true"></div>
   <div class="hero__overlay" aria-hidden="true"></div>
+  <!-- Warm lamp light that follows the pointer, like a diya carried past. -->
+  <div class="hero__diya" aria-hidden="true"></div>
   <canvas class="petals" id="petals" aria-hidden="true"></canvas>
 
   <div class="langswitch langswitch--hero" role="group" data-i18n-aria-label="a11y.language" aria-label="Choose language">
@@ -127,7 +130,9 @@
   <div class="hero__inner">
     <p class="hero__eyebrow" data-i18n="hero.eyebrow">Together with their families</p>
 
-    <!-- Envelope -->
+    <!-- Envelope. The stage carries the entrance animation so the envelope
+         itself is free to tilt toward the pointer. -->
+    <div class="envelope-stage">
     <div class="envelope" id="envelope">
       <div class="envelope__shadow" aria-hidden="true"></div>
 
@@ -160,6 +165,7 @@
       <div class="envelope__flap" aria-hidden="true"></div>
       <span class="envelope__seal" aria-hidden="true">P&amp;N</span>
     </div>
+    </div>
 
     <button class="btn btn--reveal" id="revealBtn" type="button" aria-controls="invitation">
       <span class="btn__label" id="revealBtnLabel">Click to Reveal</span>
@@ -190,6 +196,7 @@
       <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
       <a href="#venue" data-i18n="nav.venue">Venue</a>
       <a href="#rsvp" data-i18n="nav.rsvp">RSVP</a>
+      <span class="topnav__ink" aria-hidden="true"></span>
     </nav>
 
     <div class="langswitch langswitch--nav" role="group" data-i18n-aria-label="a11y.language" aria-label="Choose language">
@@ -271,8 +278,43 @@
     <span class="corner corner--tl" aria-hidden="true"></span>
     <span class="corner corner--br" aria-hidden="true"></span>
 
+    <!-- Rangoli. Drawn line by line as it comes into view, the way one is
+         drawn on the threshold on the morning of a wedding. This is the only
+         copy in the markup; main.js clones it into the band below the RSVP. -->
+    <div class="rangoli-slot rangoli-slot--watermark" aria-hidden="true">
+      <svg class="rangoli" viewBox="0 0 200 200" focusable="false">
+        <circle class="rangoli__ring" cx="100" cy="100" r="97" pathLength="1"/>
+        <circle class="rangoli__dots" cx="100" cy="100" r="58" pathLength="1"/>
+
+        <g class="rangoli__petals rangoli__petals--outer">
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(22.5 100 100)"/>
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(67.5 100 100)"/>
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(112.5 100 100)"/>
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(157.5 100 100)"/>
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(202.5 100 100)"/>
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(247.5 100 100)"/>
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(292.5 100 100)"/>
+          <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" pathLength="1" transform="rotate(337.5 100 100)"/>
+        </g>
+
+        <g class="rangoli__petals">
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1"/>
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1" transform="rotate(45 100 100)"/>
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1" transform="rotate(90 100 100)"/>
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1" transform="rotate(135 100 100)"/>
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1" transform="rotate(180 100 100)"/>
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1" transform="rotate(225 100 100)"/>
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1" transform="rotate(270 100 100)"/>
+          <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" pathLength="1" transform="rotate(315 100 100)"/>
+        </g>
+
+        <circle class="rangoli__core" cx="100" cy="100" r="12" pathLength="1"/>
+        <circle class="rangoli__seed" cx="100" cy="100" r="4.5"/>
+      </svg>
+    </div>
+
     <div class="wrap">
-      <p class="script reveal" data-i18n="couple.intro">We invite you to celebrate our wedding</p>
+      <p class="script reveal" data-words data-i18n="couple.intro">We invite you to celebrate our wedding</p>
 
       <h1 class="couple__names reveal">
         <span class="couple__name" data-letters data-i18n="couple.bride">Pooja</span>
@@ -297,7 +339,7 @@
       </div>
 
       <blockquote class="quote reveal">
-        <p data-i18n="couple.quote">“And suddenly all the love songs were about you.”</p>
+        <p data-words data-i18n="couple.quote">“And suddenly all the love songs were about you.”</p>
         <cite data-i18n="couple.quoteCite">— Every day since we met</cite>
       </blockquote>
 
@@ -358,10 +400,10 @@
       <p class="section__sub reveal" data-i18n="countdown.sub">Until we say “I do”</p>
 
       <div class="countdown glass reveal" id="clock" role="timer" aria-live="off">
-        <div class="countdown__unit"><span class="countdown__num" id="cdDays">--</span><span class="countdown__lbl" data-i18n="countdown.days">Days</span></div>
-        <div class="countdown__unit"><span class="countdown__num" id="cdHours">--</span><span class="countdown__lbl" data-i18n="countdown.hours">Hours</span></div>
-        <div class="countdown__unit"><span class="countdown__num" id="cdMins">--</span><span class="countdown__lbl" data-i18n="countdown.minutes">Minutes</span></div>
-        <div class="countdown__unit"><span class="countdown__num" id="cdSecs">--</span><span class="countdown__lbl" data-i18n="countdown.seconds">Seconds</span></div>
+        <div class="countdown__unit"><span class="countdown__num" id="cdDays"><span class="countdown__digits">--</span></span><span class="countdown__lbl" data-i18n="countdown.days">Days</span></div>
+        <div class="countdown__unit"><span class="countdown__num" id="cdHours"><span class="countdown__digits">--</span></span><span class="countdown__lbl" data-i18n="countdown.hours">Hours</span></div>
+        <div class="countdown__unit"><span class="countdown__num" id="cdMins"><span class="countdown__digits">--</span></span><span class="countdown__lbl" data-i18n="countdown.minutes">Minutes</span></div>
+        <div class="countdown__unit"><span class="countdown__num" id="cdSecs"><span class="countdown__digits">--</span></span><span class="countdown__lbl" data-i18n="countdown.seconds">Seconds</span></div>
       </div>
       <p class="countdown__note" id="clockNote"></p>
     </div>
@@ -429,8 +471,6 @@
           <p class="event__text" data-i18n="events.weddingText">The moment we have been waiting for, followed by dinner on the main lawn.</p>
         </li>
       </ul>
-
-      <p class="events__note center reveal" data-i18n="events.venueNote">All ceremonies are held at 36 Gun Lawns, Waluj.</p>
     </div>
   </section>
 
@@ -604,6 +644,10 @@
       </form>
     </div>
   </section>
+
+  <!-- A moment of pause between the RSVP and the photo folder. Filled by
+       main.js with a clone of the rangoli above. -->
+  <div class="rangoli-slot rangoli-slot--band" id="rangoliBand" aria-hidden="true"></div>
 
   <!-- ---------- Shared photo folder ---------- -->
   <section class="section" id="photos">
