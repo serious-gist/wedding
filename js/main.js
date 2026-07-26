@@ -12,9 +12,12 @@
      CONFIG — edit this block to personalise the invitation
      ============================================================ */
   var CONFIG = {
-    // Wedding date & time. Month is 0-indexed (11 = December).
-    // Saturday, 12 December 2026, ceremony at 4:30 PM.
-    weddingDate: new Date(2026, 11, 12, 16, 30, 0),
+    // Saturday, 12 December 2026, ceremony at 4:30 PM IST.
+    // Written with the +05:30 offset rather than as local components: this is
+    // one absolute moment, so the countdown and the calendar file agree for a
+    // guest reading from anywhere in the world.
+    weddingDate: new Date('2026-12-12T16:30:00+05:30'),
+    weddingEnd: new Date('2026-12-12T23:00:00+05:30'),
 
     // Venue used for the embedded map and the "Open in Google Maps" button.
     venueQuery: '36 Gun Lawns, Gut No. 118, Highway, opp. Southcity, near AS Club Bridge, ' +
@@ -791,6 +794,72 @@
   }
 
   /* ============================================================
+     5b · Add to calendar
+     ============================================================ */
+  function icsStamp(date) {
+    // ICS wants UTC as YYYYMMDDTHHMMSSZ, with no punctuation.
+    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  }
+
+  function setupCalendar() {
+    var ics = $('#calIcs');
+    var google = $('#calGoogle');
+    if (!ics && !google) return;
+
+    var start = CONFIG.weddingDate;
+    var end = CONFIG.weddingEnd;
+
+    function title() { return t('calendar.event'); }
+
+    if (google) {
+      // Rebuilt on language change so the event lands in the guest's language.
+      var setGoogle = function () {
+        google.href = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+          '&text=' + encodeURIComponent(title()) +
+          '&dates=' + icsStamp(start) + '/' + icsStamp(end) +
+          '&location=' + encodeURIComponent(CONFIG.venueQuery) +
+          '&details=' + encodeURIComponent(t('calendar.details'));
+      };
+      setGoogle();
+      onLang(setGoogle);
+    }
+
+    if (ics) {
+      ics.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // RFC 5545 requires CRLF line endings — Outlook rejects bare LF.
+        var lines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Pooja and Nagesh//Wedding//EN',
+          'BEGIN:VEVENT',
+          'UID:wedding-2026-12-12@pooja-weds-nagesh',
+          'DTSTAMP:' + icsStamp(new Date()),
+          'DTSTART:' + icsStamp(start),
+          'DTEND:' + icsStamp(end),
+          'SUMMARY:' + title(),
+          'DESCRIPTION:' + t('calendar.details'),
+          'LOCATION:' + CONFIG.venueQuery.replace(/,/g, '\\,'),
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('\r\n');
+
+        var url = URL.createObjectURL(new Blob([lines], { type: 'text/calendar' }));
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'pooja-nagesh-wedding.ics';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+
+        toast(t('calendar.saved'));
+      });
+    }
+  }
+
+  /* ============================================================
      6 · Scroll reveal + active nav link + back to top
      ============================================================ */
   var revealObserver = null;
@@ -1187,6 +1256,32 @@
     $('#lbNext').addEventListener('click', function () { show(current + 1); });
     box.addEventListener('click', function (e) { if (e.target === box) closeBox(); });
 
+    /* Swipe between photos. Most guests are on a phone, where the two arrow
+       buttons are a small target and swiping is the expected gesture. A
+       mostly-vertical drag is left alone so the page can still be scrolled. */
+    (function () {
+      var startX = 0, startY = 0, tracking = false;
+
+      box.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) { tracking = false; return; }
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        tracking = true;
+      }, { passive: true });
+
+      box.addEventListener('touchend', function (e) {
+        if (!tracking) return;
+        tracking = false;
+
+        var touch = e.changedTouches[0];
+        var dx = touch.clientX - startX;
+        var dy = touch.clientY - startY;
+
+        if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
+        show(dx < 0 ? current + 1 : current - 1);
+      }, { passive: true });
+    })();
+
     document.addEventListener('keydown', function (e) {
       if (box.hidden) return;
       if (e.key === 'Escape') closeBox();
@@ -1553,6 +1648,7 @@
 
     setupReveal(petals, Music());
     setupCountdown();
+    setupCalendar();
     setupNavAndScroll();
     setupParallax();
     setupGallery();

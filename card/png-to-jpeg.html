@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>png → jpeg</title>
+</head>
+<body>
+<!-- ============================================================
+     A converter, not a page anyone looks at.
+
+     Headless Chrome can only screenshot to PNG, which is the wrong
+     format for a photograph — the share card comes out around 600 KB,
+     and WhatsApp stops fetching preview images well before that.
+
+     So build.mjs loads this with ?src=<the png>, and it re-encodes the
+     image as JPEG on a canvas and leaves the data URI in the DOM.
+     build.mjs reads it back with --dump-dom and writes the bytes.
+     Needs --allow-file-access-from-files, or the canvas is tainted by
+     the file:// image and toDataURL throws.
+     ============================================================ -->
+<pre id="out"></pre>
+<script>
+  var params = new URLSearchParams(location.search);
+  var quality = parseFloat(params.get('q') || '0.86');
+  var out = document.getElementById('out');
+
+  var img = new Image();
+
+  img.onload = function () {
+    var canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+
+    var ctx = canvas.getContext('2d');
+    // JPEG has no alpha; paint the invitation's ivory behind it so any
+    // transparency flattens to the right colour rather than to black.
+    ctx.fillStyle = '#fdfaf5';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+
+    try {
+      out.textContent = canvas.toDataURL('image/jpeg', quality);
+    } catch (err) {
+      out.textContent = 'ERROR: ' + err.message;
+    }
+  };
+
+  img.onerror = function () { out.textContent = 'ERROR: could not load ' + img.src; };
+  img.src = params.get('src');
+</script>
+</body>
+</html>

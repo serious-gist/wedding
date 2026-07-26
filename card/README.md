@@ -9,7 +9,10 @@ website's palette and motifs.
 | `fonts.css` | Generated. Tiro Devanagari Marathi + Cormorant Garamond embedded as data URIs, so the card renders identically offline. |
 | `pooja-nagesh-invitation.png` | 1080 × 1527 — **send this on WhatsApp.** |
 | `pooja-nagesh-invitation.pdf` | A5 portrait, single page — **give this to a printer.** |
-| `build.mjs` | Renders the two outputs from the HTML via headless Chrome. |
+| `share-card.html` | Source for the link preview image. |
+| `../images/og-cover.jpg` | 1200 × 630 — the `og:image`. What WhatsApp shows when someone pastes the site link. |
+| `png-to-jpeg.html` | A converter, not a page. Chrome can only screenshot PNG, which is far too heavy for a photo; this re-encodes to JPEG on a canvas. |
+| `build.mjs` | Renders all three outputs from the HTML via headless Chrome. |
 
 ## Editing
 

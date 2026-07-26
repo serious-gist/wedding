@@ -83,6 +83,12 @@ window.I18N = {
     'countdown.seconds': 'Seconds',
     'countdown.arrived': 'Today is the day — we are married!',
 
+    'calendar.add': 'Add to calendar',
+    'calendar.google': 'Google Calendar',
+    'calendar.event': 'Wedding of Pooja & Nagesh',
+    'calendar.details': 'Ceremony begins at 4:30 PM. Full invitation: https://pooja-weds-nagesh.vercel.app/',
+    'calendar.saved': 'Calendar file downloaded',
+
     'events.title': 'Ceremonies',
     'events.sub': 'We would love to have you at every one of them',
     'events.engName': 'Engagement',
@@ -247,6 +253,12 @@ window.I18N = {
     'countdown.minutes': 'मिनिटे',
     'countdown.seconds': 'सेकंद',
     'countdown.arrived': 'आजचा दिवस उजाडला — आम्ही विवाहबद्ध झालो!',
+
+    'calendar.add': 'कॅलेंडरमध्ये जोडा',
+    'calendar.google': 'गूगल कॅलेंडर',
+    'calendar.event': 'पूजा व नागेश यांचा विवाह सोहळा',
+    'calendar.details': 'विवाह मुहूर्त सायं. ४:३० वाजता. संपूर्ण निमंत्रण: https://pooja-weds-nagesh.vercel.app/',
+    'calendar.saved': 'कॅलेंडर फाइल डाउनलोड झाली',
 
     'events.title': 'विवाह विधी',
     'events.sub': 'प्रत्येक विधीस आपण उपस्थित असावे, अशी मनापासून इच्छा',

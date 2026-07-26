@@ -306,18 +306,44 @@ h1, h2, h3 {
   text-align: center;
 }
 
-/* Out-of-focus floral photography look: a real floral illustration held
-   just out of focus, over a warm wash. */
+/* The couple, held just out of focus behind the envelope. The blur is light
+   enough that they are recognisable but not competing with the type on top.
+   The floral illustration is layered underneath as a fallback, so a missing
+   or slow photo still leaves a finished-looking cover.
+   `center 26%` keeps both faces in frame when a tall phone viewport crops
+   this landscape photo. */
 .hero__bg {
   position: absolute;
-  inset: -10%;
+  /* Just enough overscan to hide the blurred edges and the pointer parallax.
+     The old -10% threw away a tenth of the frame — which, with a photograph
+     rather than an abstract pattern, cut the tops of their heads off. */
+  inset: -4%;
   z-index: -3;
-  background-image: url("../images/floral-bg.svg");
-  background-size: cover;
-  background-position: center;
-  filter: blur(13px) saturate(126%);
+  background-image:
+    url("../images/IMG-20260705-WA0024.jpg"),
+    url("../images/floral-bg.svg");
+  background-size: cover, cover;
+  background-position: center 26%, center;
+  filter: blur(5px) saturate(112%);
   transform: scale(1.08);
   will-change: transform;
+}
+
+/* Art direction: cropping the landscape photo to a tall phone screen loses
+   one of them entirely, so portrait viewports get a portrait photo instead.
+   Only the matching rule's image is ever downloaded. */
+@media (max-aspect-ratio: 4 / 5) {
+  .hero__bg {
+    background-image:
+      url("../images/IMG-20260705-WA0025.jpg"),
+      url("../images/floral-bg.svg");
+    /* Oversized on purpose. Under `cover` this portrait photo is
+       height-constrained on a phone, which makes the vertical position a
+       no-op; scaling past 100% gives the crop somewhere to move, so their
+       faces can be lifted clear of the envelope. */
+    background-size: auto 125%, cover;
+    background-position: center 70%, center;
+  }
 }
 
 /* Dark, warm vignette — keeps the white type readable over the flowers. */
@@ -325,9 +351,11 @@ h1, h2, h3 {
   position: absolute;
   inset: 0;
   z-index: -2;
+  /* Heavier than it would need to be over the floral illustration — a
+     photograph carries far more detail for the white type to fight. */
   background:
-    radial-gradient(58% 50% at 50% 46%, rgba(58, 38, 32, 0.34), rgba(58, 38, 32, 0.08) 76%),
-    linear-gradient(to bottom, rgba(58, 38, 32, 0.2), rgba(58, 38, 32, 0.04) 45%, rgba(58, 38, 32, 0.26));
+    radial-gradient(58% 50% at 50% 46%, rgba(48, 31, 26, 0.52), rgba(48, 31, 26, 0.2) 76%),
+    linear-gradient(to bottom, rgba(48, 31, 26, 0.42), rgba(48, 31, 26, 0.2) 45%, rgba(48, 31, 26, 0.5));
 }
 
 .petals {
@@ -786,6 +814,15 @@ h1, h2, h3 {
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+.calendar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.8rem 0 0;
+}
+.calendar .btn { padding-inline: 1.9rem; }
+
 .countdown__note {
   text-align: center;
   margin-top: 1.4rem;

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pooja &amp; Nagesh — share card</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+/* ============================================================
+   The Open Graph image — what WhatsApp, Facebook and iMessage show
+   when someone pastes the invitation link.
+
+   Rendered by build.mjs to ../images/og-cover.png at 1200 × 630,
+   the ratio every one of those services crops to.
+
+   Keep the type well inside the frame: WhatsApp trims the edges of
+   a preview thumbnail, and a name clipped in half is worse than a
+   little empty space.
+   ============================================================ */
+
+:root {
+  --ivory:      #fdfaf5;
+  --cream:      #f7f1e8;
+  --champagne:  #c9a66b;
+  --gold:       #b28c4d;
+  --gold-deep:  #8f6c33;
+  --gold-soft:  #e2cda4;
+  --blush-deep: #d59a95;
+  --ink:        #3b302b;
+  --ink-soft:   #6d5d55;
+  --ink-faint:  #9c8b81;
+
+  --mr:    "Tiro Devanagari Marathi", "Nirmala UI", serif;
+  --latin: "Cormorant Garamond", Garamond, serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 1200px;
+  height: 630px;
+  overflow: hidden;
+  display: flex;
+  font-family: var(--latin);
+  color: var(--ink);
+  background: var(--ivory);
+}
+
+/* ---------- left: the couple ---------- */
+.photo {
+  flex: 0 0 452px;
+  position: relative;
+  background-image: url("../images/IMG-20260705-WA0024.jpg");
+  background-size: cover;
+  background-position: center 22%;   /* keeps both faces in a portrait crop */
+}
+/* A warm wash so the photo belongs to the same palette as the panel. */
+.photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(59, 48, 43, 0.18), transparent 40%, rgba(253, 250, 245, 0.9)),
+    linear-gradient(180deg, rgba(201, 166, 107, 0.12), rgba(213, 154, 149, 0.14));
+}
+
+/* ---------- right: the words ---------- */
+.panel {
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 54px 64px;
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(231, 154, 46, 0.10), transparent 70%),
+    linear-gradient(170deg, var(--ivory), var(--cream));
+}
+.rule-line {
+  position: absolute;
+  top: 30px; bottom: 30px; right: 30px; left: 0;
+  border: 1px solid var(--champagne);
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+  opacity: 0.6;
+}
+
+.om {
+  font-family: var(--mr);
+  font-size: 20px;
+  color: var(--gold-deep);
+  margin-bottom: 14px;
+}
+
+.eyebrow {
+  font-family: var(--latin);
+  font-size: 17px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.names {
+  margin: 14px 0 6px;
+  font-size: 96px;
+  line-height: 1.06;
+  color: var(--ink);
+}
+.names span { color: var(--champagne); font-style: italic; font-size: 0.55em; }
+
+/* Devanagari must not be letter-spaced — it would split the conjuncts. */
+.names-mr {
+  font-family: var(--mr);
+  font-size: 30px;
+  line-height: 1.5;
+  color: var(--gold);
+}
+
+.flower { width: 40px; height: 40px; margin: 20px 0 18px; }
+
+.date {
+  font-family: var(--latin);
+  font-size: 30px;
+  letter-spacing: 0.12em;
+  color: var(--gold-deep);
+}
+.venue {
+  margin-top: 8px;
+  font-family: var(--latin);
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+</style>
+</head>
+
+<body>
+  <div class="photo"></div>
+
+  <div class="panel">
+    <span class="rule-line"></span>
+
+    <p class="om">॥ श्री गणेशाय नमः ॥</p>
+    <p class="eyebrow">You are invited</p>
+
+    <h1 class="names">Pooja <span>&amp;</span> Nagesh</h1>
+    <p class="names-mr">पूजा आणि नागेश</p>
+
+    <svg class="flower" viewBox="0 0 40 40" aria-hidden="true">
+      <g fill="#e8c8c4" stroke="#d59a95" stroke-width=".9">
+        <ellipse cx="20" cy="20" rx="5" ry="11"/>
+        <ellipse cx="20" cy="20" rx="11" ry="5"/>
+        <ellipse cx="20" cy="20" rx="5" ry="11" transform="rotate(45 20 20)"/>
+        <ellipse cx="20" cy="20" rx="5" ry="11" transform="rotate(-45 20 20)"/>
+      </g>
+      <circle cx="20" cy="20" r="3.4" fill="#c9a66b"/>
+    </svg>
+
+    <p class="date">12 · 12 · 2026</p>
+    <p class="venue">36 Gun Lawns, Waluj<br>Chhatrapati Sambhajinagar</p>
+  </div>
+</body>
+</html>
