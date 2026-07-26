@@ -310,6 +310,19 @@
       { color: 'rgba(226,205,164,', shape: 'marigold' }
     ];
 
+    /* Akshata — whole rice grains coloured with haldi and kunku, thrown over
+       the couple on "शुभमंगल सावधान". Plain rice, turmeric and vermilion,
+       with a few petals carried along in the same handful. */
+    var AKSHATA = [
+      { color: 'rgba(255,252,246,', shape: 'grain' },
+      { color: 'rgba(250,244,230,', shape: 'grain' },
+      { color: 'rgba(229,177,37,',  shape: 'grain' },
+      { color: 'rgba(242,217,138,', shape: 'grain' },
+      { color: 'rgba(180,35,42,',   shape: 'grain' },
+      { color: 'rgba(212,105,107,', shape: 'grain' },
+      { color: 'rgba(232,200,196,', shape: 'petal' }
+    ];
+
     function resize() {
       w = canvas.clientWidth;
       h = canvas.clientHeight;
@@ -345,14 +358,19 @@
       };
     }
 
-    /* Pushpavrishti — a shower of flowers thrown up from the envelope as it
-       opens. These carry an extra velocity that decays into the ambient
-       fall, and are discarded rather than recycled once they drop away. */
+    /* The akshata thrown as the antarpat comes down. These carry an extra
+       velocity that decays into the ambient fall, and are discarded rather
+       than recycled once they drop away. */
     function burst(originX, originY, count) {
       for (var i = 0; i < count; i++) {
         var p = make(true);
-        var angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.4;
-        var power = 4 + Math.random() * 9;
+        var kind = AKSHATA[(Math.random() * AKSHATA.length) | 0];
+        p.color = kind.color;
+        p.shape = kind.shape;
+
+        // Rice is thrown, not dropped: a wider, faster spread than a petal.
+        var angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.8;
+        var power = 5 + Math.random() * 11;
         p.x = originX + (Math.random() - 0.5) * 40;
         p.y = originY + (Math.random() - 0.5) * 24;
         p.vx = Math.cos(angle) * power;
@@ -373,7 +391,12 @@
       ctx.globalAlpha = p.alpha;
       ctx.fillStyle = p.color + '1)';
 
-      if (p.shape === 'marigold') {
+      if (p.shape === 'grain') {
+        // A rice grain: a short, blunt-ended ellipse.
+        ctx.beginPath();
+        ctx.ellipse(0, 0, s * 0.19, s * 0.42, 0, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (p.shape === 'marigold') {
         // A ring of small blobs reads as a marigold once it is in motion.
         var r = s * 0.34;
         for (var i = 0; i < 7; i++) {
@@ -541,6 +564,45 @@
       reed2.stop(when + duration + 0.1);
     }
 
+    /* Chaughada — the kettledrums that answer the shehnai. The pair is
+       called सनई-चौघडा for a reason: the reed alone is only half of it.
+
+       A drum is a pitched thud: a sine whose frequency collapses fast, plus
+       a short noise transient for the stick hitting the skin. */
+    function drum(freq, when, gainValue) {
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq * 2.4, when);
+      osc.frequency.exponentialRampToValueAtTime(freq, when + 0.08);
+
+      gain.gain.setValueAtTime(gainValue, when);
+      gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.42);
+
+      osc.connect(gain).connect(master);
+      osc.start(when);
+      osc.stop(when + 0.45);
+
+      // The stick.
+      var noise = audioCtx.createBufferSource();
+      var buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
+      var data = buffer.getChannelData(0);
+      for (var i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+      }
+      noise.buffer = buffer;
+
+      var band = audioCtx.createBiquadFilter();
+      band.type = 'bandpass';
+      band.frequency.value = 1800;
+      var noiseGain = audioCtx.createGain();
+      noiseGain.gain.value = gainValue * 0.35;
+
+      noise.connect(band).connect(noiseGain).connect(master);
+      noise.start(when);
+    }
+
     // Tanpura-ish drone on Sa and Pa, held under everything.
     function startDrone() {
       [SA / 2, (SA / 2) * 1.5, SA].forEach(function (freq, i) {
@@ -592,6 +654,15 @@
         var notes = PHRASES[phrase % PHRASES.length];
         var at = audioCtx.currentTime + 0.1;
         var total = 0;
+
+        // The chaughada keeps the beat under the whole phrase: a low stroke
+        // on the one, a higher answering stroke on the third.
+        var beats = 0;
+        notes.forEach(function (note) { beats += note[1]; });
+        for (var b = 0; b < beats; b++) {
+          if (b % 4 === 0) drum(74, at + b * BEAT, 0.16);
+          else if (b % 4 === 2) drum(112, at + b * BEAT, 0.09);
+        }
 
         notes.forEach(function (note) {
           var degree = note[0];
@@ -667,7 +738,7 @@
      ============================================================ */
   function setupReveal(petals, music) {
     var hero = $('#hero');
-    var envelope = $('#envelope');
+    var antarpat = $('#antarpat');
     var button = $('#revealBtn');
     var invitation = $('#invitation');
     var musicBtn = $('#musicBtn');
@@ -695,16 +766,16 @@
       opened = true;
 
       button.disabled = true;
-      envelope.classList.add('is-open');
+      antarpat.classList.add('is-open');
       music.start();
       musicBtn.hidden = false;
 
       var delay = reducedMotion ? 0 : 1500;
 
-      // Flowers thrown from the envelope as the card rises out of it.
+      // Akshata thrown as the cloth comes down — the moment of savadhan.
       if (!reducedMotion) {
         setTimeout(function () {
-          var box = envelope.getBoundingClientRect();
+          var box = antarpat.getBoundingClientRect();
           petals.burst(box.left + box.width / 2, box.top + box.height * 0.42, 70);
         }, 360);
       }
@@ -1090,10 +1161,10 @@
     }, { passive: true });
 
     // Gentle pointer parallax on the hero backdrop, plus the lamp light and
-    // the envelope's tilt — all driven from one throttled handler (desktop).
+    // the antarpat's tilt — all driven from one throttled handler (desktop).
     var hero = $('#hero');
     if (hero && window.matchMedia('(hover: hover)').matches) {
-      var envelope = $('#envelope');
+      var antarpat = $('#antarpat');
       var pending = false;
       var px = 0, py = 0;
 
@@ -1107,9 +1178,9 @@
         hero.style.setProperty('--gx', ((dx + 0.5) * 100).toFixed(1) + '%');
         hero.style.setProperty('--gy', ((dy + 0.5) * 100).toFixed(1) + '%');
 
-        if (envelope) {
-          envelope.style.setProperty('--env-y', (dx * 12).toFixed(2) + 'deg');
-          envelope.style.setProperty('--env-x', (-dy * 9).toFixed(2) + 'deg');
+        if (antarpat) {
+          antarpat.style.setProperty('--env-y', (dx * 12).toFixed(2) + 'deg');
+          antarpat.style.setProperty('--env-x', (-dy * 9).toFixed(2) + 'deg');
         }
       }
 
@@ -1121,13 +1192,13 @@
         requestAnimationFrame(paint);
       }, { passive: true });
 
-      // Settle back to the resting state: light centred, envelope square on.
+      // Settle back to the resting state: light centred, cloth square on.
       hero.addEventListener('pointerleave', function () {
         hero.style.setProperty('--gx', '50%');
         hero.style.setProperty('--gy', '44%');
-        if (envelope) {
-          envelope.style.setProperty('--env-x', '0deg');
-          envelope.style.setProperty('--env-y', '0deg');
+        if (antarpat) {
+          antarpat.style.setProperty('--env-x', '0deg');
+          antarpat.style.setProperty('--env-y', '0deg');
         }
       });
     }
@@ -1366,7 +1437,9 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     canvas.classList.add('is-active');
 
-    var palette = ['#e8c8c4', '#d59a95', '#c9a66b', '#e2cda4', '#e79a2e', '#fdfaf5'];
+        // Akshata again, so the RSVP celebration matches the reveal.
+    var GRAINS = ['#fffcf6', '#faf4e6', '#e5b125', '#f2d98a', '#b4232a', '#d4696b'];
+    var PETALS = ['#e8c8c4', '#d59a95', '#e79a2e', '#f3b757'];
     var pieces = [];
     var w = window.innerWidth, h = window.innerHeight;
 
@@ -1374,6 +1447,7 @@
     // celebration reads as one idea from the first screen to the last.
     function piece(from) {
       var thrown = from === 'burst';
+      var grain = Math.random() < 0.72;
       return {
         x: thrown ? w * (0.2 + Math.random() * 0.6) : Math.random() * w,
         y: thrown ? h * 0.42 + (Math.random() - 0.5) * 60 : -40 - Math.random() * h * 0.6,
@@ -1385,8 +1459,11 @@
         spin: (Math.random() - 0.5) * 0.18,
         sway: 0.6 + Math.random() * 1.4,
         phase: Math.random() * Math.PI * 2,
-        marigold: Math.random() < 0.35,
-        color: palette[(Math.random() * palette.length) | 0],
+        // Mostly rice, with a scattering of flowers through it.
+        grain: grain,
+        color: grain
+          ? GRAINS[(Math.random() * GRAINS.length) | 0]
+          : PETALS[(Math.random() * PETALS.length) | 0],
         life: 1
       };
     }
@@ -1401,14 +1478,10 @@
       ctx.globalAlpha = p.life;
       ctx.fillStyle = p.color;
 
-      if (p.marigold) {
-        var r = p.size * 0.34;
-        for (var k = 0; k < 7; k++) {
-          var a = (k / 7) * Math.PI * 2;
-          ctx.beginPath();
-          ctx.arc(Math.cos(a) * r, Math.sin(a) * r, p.size * 0.26, 0, Math.PI * 2);
-          ctx.fill();
-        }
+      if (p.grain) {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size * 0.19, p.size * 0.42, 0, 0, Math.PI * 2);
+        ctx.fill();
       } else {
         var s = p.size;
         ctx.beginPath();

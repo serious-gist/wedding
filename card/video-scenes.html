@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="utf-8">
+<title>Invitation video — scenes</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+/* ============================================================
+   Source frames for the WhatsApp invitation video.
+
+   Each .scene is one 1080 × 1920 still. build-video.mjs screenshots
+   them one at a time (?scene=N) and ffmpeg does the motion — the
+   crossfades and the slow push-in — because rendering 500 individual
+   animation frames through Chrome would take a quarter of an hour.
+   ============================================================ */
+
+:root {
+  --ivory:      #fdfaf5;
+  --cream:      #f7f1e8;
+  --champagne:  #c9a66b;
+  --gold:       #b28c4d;
+  --gold-deep:  #8f6c33;
+  --gold-soft:  #e2cda4;
+  --blush-deep: #d59a95;
+  --haldi:      #e5b125;
+  --haldi-soft: #f2d98a;
+  --kunku:      #b4232a;
+  --ink:        #3b302b;
+  --ink-soft:   #6d5d55;
+  --ink-faint:  #9c8b81;
+
+  --mr:    "Tiro Devanagari Marathi", "Nirmala UI", serif;
+  --latin: "Cormorant Garamond", Garamond, serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  font-family: var(--mr);
+  color: var(--ink);
+  background: var(--ivory);
+}
+
+/* Only the requested scene is rendered; build-video.mjs sets the class. */
+.scene { display: none; }
+.scene.is-shown { display: flex; }
+
+.scene {
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 150px 110px;
+  gap: 26px;
+  background:
+    radial-gradient(70% 40% at 50% 0%, rgba(231, 154, 46, 0.12), transparent 70%),
+    radial-gradient(60% 40% at 50% 100%, rgba(232, 200, 196, 0.20), transparent 70%),
+    linear-gradient(170deg, var(--ivory), var(--cream));
+}
+
+/* zari frame, on every scene */
+.frame {
+  position: absolute;
+  inset: 46px;
+  border: 3px solid var(--champagne);
+  border-radius: 10px;
+  pointer-events: none;
+}
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1.5px solid var(--gold-soft);
+  border-radius: 6px;
+}
+
+.om     { font-size: 40px; color: var(--gold-deep); }
+.big    { font-size: 132px; line-height: 1.16; color: var(--gold); }
+.name   { font-size: 150px; line-height: 1.2; color: var(--ink); }
+.prefix { font-size: 40px; color: var(--blush-deep); word-spacing: 0.2em; }
+.label  { font-size: 40px; color: var(--ink-faint); word-spacing: 0.7em; }
+.line   { font-size: 62px; line-height: 1.5; color: var(--gold-deep); }
+.sub    { font-size: 48px; line-height: 1.6; color: var(--ink); }
+.small  { font-size: 38px; line-height: 1.7; color: var(--ink-soft); }
+.latin  { font-family: var(--latin); letter-spacing: 0.1em; }
+
+.rule {
+  width: 320px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+}
+
+/* the couple, in a soft-edged oval */
+.photo {
+  width: 620px;
+  height: 780px;
+  border-radius: 320px / 380px;
+  background-size: cover;
+  border: 5px solid var(--gold-soft);
+  box-shadow: 0 30px 70px -30px rgba(90, 66, 50, 0.5);
+}
+.photo--a { background-image: url("../images/IMG-20260705-WA0025.jpg"); background-position: center 24%; }
+.photo--b { background-image: url("../images/IMG-20260705-WA0024.jpg"); background-position: center 26%; }
+
+.ganesh  { width: 420px; height: auto; }
+.rangoli { width: 520px; height: auto; }
+.swastik { width: 170px; height: 170px; color: var(--kunku); }
+
+/* ceremony rows */
+.rows { width: 100%; display: flex; flex-direction: column; gap: 30px; margin-top: 12px; }
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding-bottom: 22px;
+  border-bottom: 2px dotted rgba(201, 166, 107, 0.55);
+  font-size: 40px;
+}
+.row:last-child { border-bottom: 0; }
+.row b { flex: 0 0 250px; text-align: left; font-weight: 400; color: var(--gold-deep); }
+.row span { flex: 1 1 auto; text-align: right; color: var(--ink-soft); }
+.row span em { display: block; font-style: normal; font-size: 34px; color: var(--blush-deep); }
+
+.qr {
+  width: 300px; height: 300px;
+  padding: 16px;
+  background: #fff;
+  border: 3px solid var(--gold-soft);
+  border-radius: 14px;
+}
+.qr canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+</style>
+</head>
+
+<body>
+
+<!-- 1 · invocation -->
+<div class="scene" data-scene="1">
+  <span class="frame"></span>
+  <p class="om">॥ श्री गणेशाय नमः ॥</p>
+  <svg class="ganesh" viewBox="0 0 240 270" fill="none" stroke="#b28c4d" stroke-width="3"
+       stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="120" cy="132" r="102" stroke="#c9a66b" stroke-width="1.8" opacity=".55"/>
+    <path d="M92 78 C96 58 108 40 120 28 C132 40 144 58 148 78"/>
+    <path d="M107 76 C109 63 114 53 120 46 C126 53 131 63 133 76"/>
+    <path d="M88 78 Q120 88 152 78"/><path d="M88 86 Q120 96 152 86"/>
+    <path d="M90 90 C86 110 88 128 96 142"/><path d="M150 90 C154 110 152 128 144 142"/>
+    <path d="M90 94 C62 88 42 104 44 126 C46 148 68 156 92 144"/>
+    <path d="M90 106 C70 102 58 114 60 128 C62 142 76 146 90 138"/>
+    <path d="M150 94 C178 88 198 104 196 126 C194 148 172 156 148 144"/>
+    <path d="M150 106 C170 102 182 114 180 128 C178 142 164 146 150 138"/>
+    <path d="M100 114 C104 108 112 108 116 114"/><path d="M124 114 C128 108 136 108 140 114"/>
+    <path d="M117 94 L116 106"/><path d="M120 92 L120 106"/><path d="M123 94 L124 106"/>
+    <path d="M98 142 C92 152 90 162 94 170"/><path d="M142 142 C148 152 150 162 146 170"/>
+    <path d="M110 124 C100 154 98 180 112 192 C128 205 152 198 154 178 C155 166 145 159 136 163"/>
+    <path d="M129 124 C124 150 122 172 130 181 C138 190 148 186 147 177 C146 171 140 169 137 173"/>
+    <path d="M120 206 C112 216 112 228 120 236 C128 228 128 216 120 206Z"/>
+    <path d="M116 210 C104 210 94 218 92 228 C104 234 116 226 119 216"/>
+    <path d="M124 210 C136 210 146 218 148 228 C136 234 124 226 121 216"/>
+    <path d="M110 218 C94 218 78 226 76 236 C92 242 108 232 114 222"/>
+    <path d="M130 218 C146 218 162 226 164 236 C148 242 132 232 126 222"/>
+    <circle cx="120" cy="24" r="5" fill="#e79a2e" stroke="none"/>
+  </svg>
+  <p class="small">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br>निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
+</div>
+
+<!-- 2 · shubhavivah -->
+<div class="scene" data-scene="2">
+  <span class="frame"></span>
+  <svg class="swastik" viewBox="0 0 64 64" fill="none">
+    <g stroke="currentColor" stroke-width="4" stroke-linecap="square">
+      <path d="M32 12V52"/><path d="M12 32H52"/><path d="M32 12H48"/>
+      <path d="M52 32V48"/><path d="M32 52H16"/><path d="M12 32V16"/>
+    </g>
+    <g fill="currentColor"><circle cx="22" cy="22" r="2.2"/><circle cx="42" cy="42" r="2.2"/></g>
+  </svg>
+  <h1 class="big">शुभविवाह</h1>
+  <span class="rule"></span>
+  <p class="label">आग्रहाचे निमंत्रण</p>
+</div>
+
+<!-- 3 · the bride -->
+<div class="scene" data-scene="3">
+  <span class="frame"></span>
+  <div class="photo photo--a"></div>
+  <p class="prefix">चि. सौ. कां.</p>
+  <p class="name">पूजा</p>
+</div>
+
+<!-- 4 · the groom -->
+<div class="scene" data-scene="4">
+  <span class="frame"></span>
+  <div class="photo photo--b"></div>
+  <p class="prefix">चि.</p>
+  <p class="name">नागेश</p>
+</div>
+
+<!-- 5 · the muhurt -->
+<div class="scene" data-scene="5">
+  <span class="frame"></span>
+  <p class="label">विवाह सोहळा</p>
+  <p class="line">शनिवार<br>१२ डिसेंबर २०२६</p>
+  <span class="rule"></span>
+  <p class="sub">सायं. ४:३० वाजता</p>
+</div>
+
+<!-- 6 · the other ceremonies -->
+<div class="scene" data-scene="6">
+  <span class="frame"></span>
+  <p class="label">इतर विधी</p>
+  <div class="rows">
+    <div class="row"><b>साखरपुडा</b><span>तारीख नंतर कळवली जाईल<em>स्थळ नंतर कळवले जाईल</em></span></div>
+    <div class="row"><b>मेहंदी</b><span>गुरुवार, १० डिसेंबर<em>सायं. ५:०० · राहत्या घरी</em></span></div>
+    <div class="row"><b>हळद</b><span>शुक्रवार, ११ डिसेंबर<em>स. १०:०० · राहत्या घरी</em></span></div>
+  </div>
+</div>
+
+<!-- 7 · the venue -->
+<div class="scene" data-scene="7">
+  <span class="frame"></span>
+  <p class="label">विवाह स्थळ</p>
+  <p class="line">३६ गन लॉन्स</p>
+  <!-- Non-breaking spaces: without them "महानगर २," wraps and leaves the
+       numeral stranded on a line of its own. -->
+  <p class="sub">गट क्र.&nbsp;११८, हायवे, साऊथसिटीसमोर,<br>
+    ए.&nbsp;एस. क्लब ब्रिजजवळ,<br>
+    सिडको वाळूज महानगर&nbsp;२, वाळूज,<br>
+    छत्रपती संभाजीनगर&nbsp;४३११३६</p>
+</div>
+
+<!-- 8 · the ask, and where to find everything -->
+<div class="scene" data-scene="8">
+  <span class="frame"></span>
+  <svg class="rangoli" viewBox="0 0 200 200" fill="none" stroke="#c9a66b" stroke-width="1.6" stroke-linecap="round">
+    <circle cx="100" cy="100" r="97" opacity=".5"/>
+    <circle cx="100" cy="100" r="58" stroke="#e79a2e" stroke-width="3.4" stroke-dasharray="0.3 12.2" opacity=".8"/>
+    <g stroke="#d59a95">
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(22.5 100 100)"/>
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(67.5 100 100)"/>
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(112.5 100 100)"/>
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(157.5 100 100)"/>
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(202.5 100 100)"/>
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(247.5 100 100)"/>
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(292.5 100 100)"/>
+      <path d="M100 36 C88 27 87 15 100 8 C113 15 112 27 100 36Z" transform="rotate(337.5 100 100)"/>
+    </g>
+    <g stroke="#b28c4d">
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z"/>
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" transform="rotate(45 100 100)"/>
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" transform="rotate(90 100 100)"/>
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" transform="rotate(135 100 100)"/>
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" transform="rotate(180 100 100)"/>
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" transform="rotate(225 100 100)"/>
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" transform="rotate(270 100 100)"/>
+      <path d="M100 100 C88 84 88 62 100 50 C112 62 112 84 100 100Z" transform="rotate(315 100 100)"/>
+    </g>
+    <circle cx="100" cy="100" r="12"/><circle cx="100" cy="100" r="4.5" fill="#e79a2e" stroke="none"/>
+  </svg>
+  <p class="sub">आपल्या उपस्थितीने हा सोहळा<br>अधिक आनंददायी होईल.</p>
+  <p class="line">समस्त परिवार व आप्तेष्ट</p>
+  <div class="qr"><canvas id="qr" width="300" height="300"></canvas></div>
+  <p class="small latin">pooja-weds-nagesh.vercel.app</p>
+</div>
+
+<script src="../js/qr.js"></script>
+<script>
+  (function () {
+    var SCALE = 12;
+    var small = window.QR.render(document.createElement('canvas'),
+      'https://pooja-weds-nagesh.vercel.app/',
+      { dark: '#3b302b', light: '#ffffff', margin: 2 });
+    var big = document.getElementById('qr');
+    big.width = big.height = small.width * SCALE;
+    var ctx = big.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(small, 0, 0, big.width, big.height);
+
+    // Show only the scene the build script asked for.
+    var want = new URLSearchParams(location.search).get('scene') || '1';
+    var el = document.querySelector('.scene[data-scene="' + want + '"]');
+    if (el) el.classList.add('is-shown');
+  })();
+</script>
+</body>
+</html>

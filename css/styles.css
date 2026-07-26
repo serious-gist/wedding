@@ -16,6 +16,16 @@
   --marigold:     #e79a2e;
   --marigold-lt:  #f3b757;
   --leaf:         #8ea472;
+
+  /* Haldi and kunku — the turmeric and vermilion of a Maharashtrian
+     ceremony. Used as accents against the champagne, which on its own
+     reads as a generic Indian wedding rather than a Marathi one. */
+  --haldi:        #e5b125;
+  --haldi-soft:   #f2d98a;
+  --kunku:        #b4232a;
+  --kunku-soft:   #d4696b;
+  /* Warli figures are painted in rice paste on a cow-dung-and-earth wall. */
+  --warli-earth:  #9c4a2f;
   --ink:          #3b302b;
   --ink-soft:     #6d5d55;
   --ink-faint:    #9c8b81;
@@ -61,7 +71,7 @@
    letter-spacing pulls apart the conjuncts and the connecting headline —
    so both are switched off wherever the Latin design applies them. */
 :root[data-lang="mr"] :is(
-  .btn, .topnav a, .hero__eyebrow, .envelope__card-text, .envelope__card-date,
+  .btn, .topnav a, .hero__eyebrow, .antarpat__date,
   .section__sub, .card h3, .couple__date, .quote cite, .countdown__lbl,
   .timeline__when, .field label, .field__opt,
   .share__label, .share__qr-note, .copy, .footer__made, .skip-link,
@@ -97,7 +107,7 @@
    in Devanagari at the same size, so those all move up a step. */
 :root[data-lang="mr"] :is(
   .countdown__lbl, .hero__eyebrow, .quote cite, .couple__date,
-  .timeline__when, .share__qr-note, .footer__made, .envelope__card-text,
+  .timeline__when, .share__qr-note, .footer__made, .antarpat__date,
   .copy, .field__opt
 ) {
   font-size: 0.86rem;
@@ -232,6 +242,136 @@ h1, h2, h3 {
   box-shadow: var(--shadow-md);
 }
 
+/* ---------- Warli varat ---------- */
+.varat {
+  overflow: hidden;          /* the procession walks in from off-stage */
+  padding: clamp(1rem, 3vw, 2rem) 0;
+  background: linear-gradient(180deg, transparent, rgba(156, 74, 47, 0.05), transparent);
+}
+.varat__art {
+  display: block;
+  width: min(100% - 2.5rem, 720px);
+  height: auto;
+  margin-inline: auto;
+}
+
+/* Warli is painted in rice paste on an earth-red wall — here the wall is
+   ivory, so the figures take the earth colour instead of the paste. */
+.varat__fig :is(path, circle, ellipse) {
+  fill: none;
+  stroke: var(--warli-earth);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.varat__fig circle { fill: var(--warli-earth); }
+.varat__fig path { fill: none; }
+.varat__dhol { fill: rgba(156, 74, 47, 0.16) !important; }
+.varat__tarpa { stroke-width: 2.4; }
+.varat__mark { stroke: var(--kunku); fill: var(--kunku); }
+.varat__fig--couple :is(path, circle) { stroke: var(--kunku); }
+.varat__fig--couple circle { fill: var(--kunku); }
+
+.varat__ground {
+  fill: none;
+  stroke: var(--warli-earth);
+  stroke-width: 1.6;
+  stroke-dasharray: 3 7;
+  opacity: 0.5;
+}
+
+/* The whole procession walks in together. */
+.varat__figures {
+  transform: translateX(30%);
+  opacity: 0;
+  transition: transform 1.6s var(--ease), opacity 0.8s var(--ease);
+}
+.varat__art.is-in .varat__figures { transform: none; opacity: 1; }
+
+/* ---------- Mundavalya ---------- */
+.mundavalya {
+  display: block;
+  width: min(70%, 300px);
+  height: auto;
+  margin: 0 auto 1.2rem;
+  overflow: visible;
+}
+.mundavalya__string path {
+  fill: none;
+  stroke: var(--gold-soft);
+  stroke-width: 1;
+}
+.mundavalya__pearls circle {
+  fill: #fffdf8;
+  stroke: var(--champagne);
+  stroke-width: 0.8;
+  /* Each pearl drops into place in turn, so the strands appear to be tied on. */
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
+}
+.mundavalya.is-in .mundavalya__pearls circle { opacity: 1; transform: none; }
+.mundavalya__pearls circle:nth-child(n+1)  { transition-delay: 0.05s; }
+.mundavalya__pearls circle:nth-child(n+5)  { transition-delay: 0.18s; }
+.mundavalya__pearls circle:nth-child(n+9)  { transition-delay: 0.3s; }
+.mundavalya__pearls circle:nth-child(n+13) { transition-delay: 0.42s; }
+.mundavalya__pearls circle:nth-child(n+17) { transition-delay: 0.54s; }
+
+.mundavalya__tie {
+  fill: var(--haldi);
+  stroke: var(--gold-deep);
+  stroke-width: 0.8;
+  opacity: 0;
+  transition: opacity 0.5s 0.7s var(--ease);
+}
+.mundavalya.is-in .mundavalya__tie { opacity: 1; }
+
+/* ---------- Paithani border ---------- */
+.paithani { margin: 1.8rem auto 2.2rem; max-width: 420px; }
+.paithani svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+.paithani__zari path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+/* The thin inner lines are the zari thread catching the light. */
+/* The dotted inner lines are the zari thread catching the light. These need
+   !important because the draw-on rule below sets a dasharray on every path,
+   and the dotted pattern is what makes this read as thread rather than rule. */
+.paithani__weave {
+  stroke: var(--haldi) !important;
+  stroke-width: 2.2 !important;
+  stroke-dasharray: 1 5 !important;
+  stroke-dashoffset: 0 !important;
+  opacity: 0.85;
+}
+
+.paithani__lotus path,
+.paithani__mor path,
+.paithani__centre ellipse {
+  fill: none;
+  stroke: var(--champagne);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.paithani__mor path { stroke: var(--gold-deep); }
+.paithani__centre ellipse { stroke: var(--kunku-soft); }
+.paithani__seed { fill: var(--kunku); stroke: none; }
+
+/* Woven in as the border scrolls into view, thread by thread. */
+.paithani :is(path, ellipse) {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  transition: stroke-dashoffset 1.4s var(--ease);
+}
+.paithani__weave { transition: none; }
+.paithani.is-in :is(path, ellipse) { stroke-dashoffset: 0; }
+.paithani__seed { transition: opacity 0.5s 1s var(--ease); opacity: 0; }
+.paithani.is-in .paithani__seed { opacity: 1; }
+
 .divider { margin: 1.6rem auto 2rem; max-width: 260px; }
 .divider svg { width: 100%; height: auto; display: block; }
 .divider svg path { fill: none; stroke: var(--gold-soft); stroke-width: 1.1; }
@@ -239,6 +379,16 @@ h1, h2, h3 {
 .divider svg .leaf-fill { fill: none; stroke: var(--gold-soft); stroke-width: 1.1; }
 .divider svg .dot-fill { fill: var(--champagne); stroke: none; }
 .divider--light svg path { stroke: rgba(226, 205, 164, 0.75); }
+
+/* Nath — the Maharashtrian nose ring, as the footer's closing mark. */
+.nath path {
+  fill: none;
+  stroke: var(--champagne);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.nath__pearl { fill: var(--blush); stroke: none; }
+.nath__pearl--gold { fill: var(--haldi); }
 
 /* ============================================================
    BUTTONS
@@ -306,7 +456,7 @@ h1, h2, h3 {
   text-align: center;
 }
 
-/* The couple, held just out of focus behind the envelope. The blur is light
+/* The couple, held just out of focus behind the antarpat. The blur is light
    enough that they are recognisable but not competing with the type on top.
    The floral illustration is layered underneath as a fallback, so a missing
    or slow photo still leaves a finished-looking cover.
@@ -340,7 +490,7 @@ h1, h2, h3 {
     /* Oversized on purpose. Under `cover` this portrait photo is
        height-constrained on a phone, which makes the vertical position a
        no-op; scaling past 100% gives the crop somewhere to move, so their
-       faces can be lifted clear of the envelope. */
+       faces can be lifted clear of the cloth. */
     background-size: auto 125%, cover;
     background-position: center 70%, center;
   }
@@ -396,143 +546,140 @@ h1, h2, h3 {
   animation: fadeUp 1.2s 0.9s var(--ease) both;
 }
 
-/* ---------- Envelope ---------- */
+/* ---------- Antarpat (अंतरपाट) ---------- */
 /* The stage owns the entrance animation; `floatIn` fills forwards, so an
-   animated transform here would permanently outrank the pointer tilt. */
-.envelope-stage {
-  width: min(88vw, 340px);
+   animated transform on the cloth itself would outrank the pointer tilt. */
+.antarpat-stage {
+  width: min(88vw, 360px);
   perspective: 1400px;
   animation: floatIn 1.4s 0.3s var(--ease) both;
 }
 
-.envelope {
+.antarpat {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 2;
-  perspective: 1400px;
   transform-style: preserve-3d;
   transform: rotateX(var(--env-x, 0deg)) rotateY(var(--env-y, 0deg));
   transition: transform 0.5s var(--ease);
 }
 
-.envelope__shadow {
+/* The rod the cloth hangs from, held by two relatives out of frame. */
+.antarpat__rod {
   position: absolute;
-  left: 8%; right: 8%; bottom: -9%;
-  height: 14px;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(59, 48, 43, 0.32), transparent 72%);
-  filter: blur(5px);
-  transition: opacity 0.8s var(--ease);
+  top: 0; left: -6%; right: -6%;
+  height: 5px;
+  z-index: 4;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold-deep));
+  box-shadow: 0 2px 6px rgba(59, 48, 43, 0.4);
+  transition: opacity 0.5s 0.5s var(--ease);
 }
 
-.envelope__back,
-.envelope__front,
-.envelope__flap {
+/* ---- the cloth itself ---- */
+.antarpat__cloth {
   position: absolute;
-  inset: 0;
-  border-radius: 10px;
-}
-
-.envelope__back {
-  background: linear-gradient(155deg, #f6ece0, #e8d6c2);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Front pocket: the V-shaped body that covers the card's lower half */
-.envelope__front {
+  inset: 4px 0 0;
   z-index: 3;
-  background: linear-gradient(165deg, #f9f1e7, #eddcc8);
-  border: 1px solid rgba(201, 166, 107, 0.5);
-  clip-path: polygon(0 0, 50% 46%, 100% 0, 100% 100%, 0 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-/* The wax seal sits on top of the flap and breaks away as it opens. */
-.envelope__seal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 6;
-  display: grid;
-  place-items: center;
-  width: 3.1rem; height: 3.1rem;
-  border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, var(--blush), var(--blush-deep) 70%);
-  color: #fff;
-  font-family: var(--serif);
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  box-shadow: 0 4px 14px rgba(160, 96, 92, 0.4), inset 0 -2px 6px rgba(120, 60, 58, 0.35);
-  transform: translate(-50%, -50%);
-  transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
-}
-
-/* Flap: hinged at the top, rotates back on reveal */
-.envelope__flap {
-  z-index: 5;
-  transform-origin: top center;
-  background: linear-gradient(180deg, #fdf6ec, #f0e0cd);
-  border: 1px solid rgba(201, 166, 107, 0.5);
-  clip-path: polygon(0 0, 100% 0, 50% 62%);
-  transition: transform 0.9s var(--ease), z-index 0s 0.45s;
-}
-
-.envelope__card {
-  position: absolute;
-  left: 6%; right: 6%;
-  top: 8%;
-  height: 84%;
-  z-index: 2;
-  border-radius: 8px;
-  background: linear-gradient(170deg, #fffdf9, #fbf3e8);
-  border: 1px solid rgba(201, 166, 107, 0.45);
-  box-shadow: 0 10px 30px -12px rgba(90, 66, 50, 0.5);
-  display: grid;
-  place-items: center;
-  transition: transform 1.05s 0.35s var(--ease), opacity 0.5s var(--ease);
-}
-
-.envelope__card-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  border-radius: 2px 2px 6px 6px;
+  color: var(--kunku);
+  transform-origin: top center;
+  /* Silk: a warm cream with a soft sheen running across it. */
+  background:
+    linear-gradient(104deg, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0) 66%),
+    linear-gradient(168deg, #fffdf8, #f6e9d6 60%, #efdcc2);
+  background-size: 260% 100%, 100% 100%;
+  background-position: 150% 0, 0 0;
+  box-shadow: var(--shadow-lg), inset 0 -18px 30px -20px rgba(140, 104, 60, 0.5);
+  animation: clothShine 5s 1.4s ease-in-out infinite;
+  transition: transform 1s var(--ease), opacity 0.6s 0.45s var(--ease);
+}
+
+/* Zari borders, woven in gold thread top and bottom. */
+.antarpat__zari {
+  position: absolute;
+  left: 0; right: 0;
+  height: 16px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--gold) 0 4px, var(--gold-soft) 4px 8px, var(--haldi) 8px 12px, var(--gold-soft) 12px 16px);
+  opacity: 0.85;
+}
+.antarpat__zari--top { top: 0; box-shadow: 0 1px 0 rgba(140, 104, 60, 0.35); }
+.antarpat__zari--bottom { bottom: 0; box-shadow: 0 -1px 0 rgba(140, 104, 60, 0.35); }
+
+.antarpat__motif {
+  width: 84px; height: 84px;
+  color: var(--kunku);
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+}
+
+.antarpat__label {
+  font-family: var(--serif-mr);
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  color: var(--kunku);
+}
+
+/* ---- what the cloth is hiding ---- */
+.antarpat__behind {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 10px;
+  background: radial-gradient(70% 70% at 50% 45%, rgba(255, 250, 240, 0.22), transparent 72%);
   opacity: 0;
-  transition: opacity 0.6s 0.75s var(--ease);
+  transition: opacity 0.7s 0.35s var(--ease);
 }
-
-.envelope__monogram {
-  font-family: var(--serif);
-  font-size: 1.7rem;
-  color: var(--gold);
-  letter-spacing: 0.08em;
+.antarpat__monogram {
+  font-family: var(--serif-mr);
+  font-size: 2.1rem;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(59, 48, 43, 0.6);
 }
-.envelope__card-rule { width: 46px; height: 1px; background: var(--gold-soft); }
-.envelope__card-text {
-  font-size: 0.62rem;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
+.antarpat__monogram span { color: var(--haldi-soft); }
+.antarpat__rule {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--haldi-soft), transparent);
 }
-.envelope__card-date {
-  font-family: var(--serif);
+.antarpat__savadhan {
+  font-family: var(--serif-mr);
   font-size: 0.95rem;
-  color: var(--ink-soft);
+  color: var(--haldi-soft);
+  text-shadow: 0 1px 12px rgba(59, 48, 43, 0.7);
+}
+.antarpat__date {
+  font-family: var(--serif);
+  font-size: 0.9rem;
   letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.85);
 }
 
-/* Envelope Ganesh — small, on the invitation card inside the envelope. */
-.envelope__ganesh {
-  width: 32px; height: 32px;
-  color: var(--gold);
-  margin-bottom: 0.15rem;
+@keyframes clothShine {
+  0%, 55%, 100% { background-position: 150% 0, 0 0; }
+  80%           { background-position: -50% 0, 0 0; }
 }
 
-/* Reveal states */
-.envelope.is-open .envelope__flap { transform: rotateX(-180deg); z-index: 1; }
-.envelope.is-open .envelope__seal { opacity: 0; transform: translate(-50%, -140%) scale(0.5) rotate(24deg); }
-.envelope.is-open .envelope__card { transform: translateY(-58%) scale(1.06); }
-.envelope.is-open .envelope__card-inner { opacity: 1; }
-.envelope.is-open .envelope__shadow { opacity: 0.35; }
+/* Reveal: the cloth is lowered away, as it is at the muhurt. */
+.antarpat.is-open .antarpat__cloth {
+  animation: none;
+  transform: translateY(112%) rotateX(14deg);
+  opacity: 0;
+}
+.antarpat.is-open .antarpat__rod { opacity: 0; }
+.antarpat.is-open .antarpat__behind { opacity: 1; }
 
 .hero.is-leaving { opacity: 0; transition: opacity 0.85s var(--ease); }
 .hero.is-leaving .hero__inner { animation: heroOut 0.9s var(--ease) forwards; }
@@ -1777,7 +1924,7 @@ h1, h2, h3 {
 @property --gy { syntax: "<percentage>"; inherits: true; initial-value: 44%; }
 .hero { transition: --gx 0.28s linear, --gy 0.28s linear; }
 
-/* Always lit, so there is a warm pool of light behind the envelope from the
+/* Always lit, so there is a warm pool of light behind the antarpat from the
    moment the cover loads; the pointer only carries it around. `screen` is
    what makes it read as light rather than a wash — where it is unsupported
    the declaration is dropped and normal compositing still looks right. */
@@ -1795,22 +1942,6 @@ h1, h2, h3 {
 @keyframes diyaBreathe {
   0%, 100% { opacity: 0.82; }
   50%      { opacity: 1; }
-}
-
-/* A slow gold glint travelling across the wax seal while it is still closed. */
-.envelope__seal::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: linear-gradient(115deg, transparent 34%, rgba(255, 255, 255, 0.6) 50%, transparent 66%);
-  background-size: 260% 100%;
-  animation: sealShine 4.5s 1.6s ease-in-out infinite;
-}
-.envelope.is-open .envelope__seal::after { animation: none; }
-@keyframes sealShine {
-  0%, 62%, 100% { background-position: 150% 0; }
-  86%           { background-position: -50% 0; }
 }
 
 /* ---------- Countdown roll ---------- */
@@ -2000,7 +2131,7 @@ h1, h2, h3 {
   .timeline__dot { opacity: 1; transform: none; }
   .toran { animation: none; }
   .langgate__glow { animation: none; }
-  .hero__diya, .section--countdown::before, .envelope__seal::after { display: none; }
+  .hero__diya, .section--countdown::before { display: none; }
   .rangoli-slot--band .rangoli.is-drawn { animation: none; }
   .section__title.is-in {
     animation: none;

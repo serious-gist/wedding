@@ -21,7 +21,9 @@
 <meta name="twitter:title" content="Pooja &amp; Nagesh — Wedding Invitation">
 <meta name="twitter:description" content="Join us as we say “I do” — 12 December 2026, 36 Gun Lawns, Chhatrapati Sambhajinagar.">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%89%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<!-- The nath — the Maharashtrian nose ring. Drawn bold and open so the
+     shape still reads at 16px, where a finer ornament would turn to mush. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M66 18C34 18 16 44 26 68c8 20 40 24 52 6' fill='none' stroke='%23b28c4d' stroke-width='11' stroke-linecap='round'/%3E%3Ccircle cx='30' cy='78' r='7' fill='%23d59a95'/%3E%3Ccircle cx='52' cy='86' r='6' fill='%23e5b125'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +35,7 @@
 <!-- ?v= is a cache buster. css/ and js/ are served with max-age=3600
      (see vercel.json), so without it a guest can load fresh HTML against an
      hour-old stylesheet. Bump it whenever these files change. -->
-<link rel="stylesheet" href="css/styles.css?v=6">
+<link rel="stylesheet" href="css/styles.css?v=7">
 
 <!-- Without JavaScript there is no language picker and no reveal, so show
      English and the full invitation straight away. -->
@@ -44,7 +46,7 @@
     .invitation[hidden] { display: block !important; }
     .invitation { opacity: 1 !important; }
     .reveal { opacity: 1 !important; transform: none !important; }
-    .envelope { animation: none !important; }
+    .antarpat-stage, .antarpat__cloth { animation: none !important; }
     .ganesh__line path, .ganesh__halo { stroke-dashoffset: 0 !important; }
     .rangoli * { stroke-dashoffset: 0 !important; opacity: 1 !important; }
     .letter, .word { opacity: 1 !important; transform: none !important; }
@@ -133,40 +135,50 @@
   <div class="hero__inner">
     <p class="hero__eyebrow" data-i18n="hero.eyebrow">Together with their families</p>
 
-    <!-- Envelope. The stage carries the entrance animation so the envelope
-         itself is free to tilt toward the pointer. -->
-    <div class="envelope-stage">
-    <div class="envelope" id="envelope">
-      <div class="envelope__shadow" aria-hidden="true"></div>
+    <!-- ANTARPAT (अंतरपाट) — the cloth held between bride and groom, lowered
+         at the muhurt as the mangalashtakas end on "शुभमंगल सावधान". It is
+         the reveal gesture of a Maharashtrian wedding, so it is the reveal
+         gesture of this invitation.
 
-      <div class="envelope__card" aria-hidden="true">
-        <div class="envelope__card-inner">
-          <svg class="envelope__ganesh" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 15 C18 11 21 7 24 4 C27 7 30 11 31 15"/>
-              <path d="M16 15 Q24 18 32 15"/>
-              <path d="M17 18 C15 24 16 29 19 32"/>
-              <path d="M31 18 C33 24 32 29 29 32"/>
-              <path d="M17 18 C11 17 7 21 8 26 C9 30 14 32 19 29"/>
-              <path d="M31 18 C37 17 41 21 40 26 C39 30 34 32 29 29"/>
-              <path d="M20 23 C21 21 23 21 24 23"/>
-              <path d="M25 23 C26 21 28 21 29 23"/>
-              <path d="M21 26 C19 33 19 40 23 43 C28 46 34 43 34 38 C34 35 31 33 29 34"/>
-              <path d="M27 26 C26 32 26 37 28 39"/>
-            </g>
-            <circle cx="24" cy="3" r="1.8" fill="currentColor"/>
-          </svg>
-          <span class="envelope__monogram">P &amp; N</span>
-          <span class="envelope__card-rule"></span>
-          <span class="envelope__card-text" data-i18n="hero.card.title">Wedding Invitation</span>
-          <span class="envelope__card-date" data-i18n="hero.card.date">12 · 12 · 2026</span>
-        </div>
+         The stage carries the entrance animation so the cloth itself is free
+         to tilt toward the pointer. -->
+    <div class="antarpat-stage">
+    <div class="antarpat" id="antarpat">
+
+      <!-- What the cloth is hiding. -->
+      <div class="antarpat__behind" aria-hidden="true">
+        <span class="antarpat__monogram">प<span>&amp;</span>ना</span>
+        <span class="antarpat__rule"></span>
+        <span class="antarpat__savadhan" lang="mr">॥ शुभमंगल सावधान ॥</span>
+        <span class="antarpat__date" data-i18n="hero.card.date">12 · 12 · 2026</span>
       </div>
 
-      <div class="envelope__back" aria-hidden="true"></div>
-      <div class="envelope__front" aria-hidden="true"></div>
-      <div class="envelope__flap" aria-hidden="true"></div>
-      <span class="envelope__seal" aria-hidden="true">P&amp;N</span>
+      <!-- The cloth, held on a rod, with a zari border and a swastik. -->
+      <div class="antarpat__rod" aria-hidden="true"></div>
+      <div class="antarpat__cloth" aria-hidden="true">
+        <span class="antarpat__zari antarpat__zari--top"></span>
+        <span class="antarpat__zari antarpat__zari--bottom"></span>
+
+        <!-- Swastik. The arms turn clockwise: top to the right, right down,
+             bottom to the left, left up. Getting that wrong is not a
+             stylistic slip — it is a different symbol. -->
+        <svg class="antarpat__motif" viewBox="0 0 64 64" fill="none" focusable="false">
+          <g stroke="currentColor" stroke-width="4" stroke-linecap="square">
+            <path d="M32 12V52"/>
+            <path d="M12 32H52"/>
+            <path d="M32 12H48"/>
+            <path d="M52 32V48"/>
+            <path d="M32 52H16"/>
+            <path d="M12 32V16"/>
+          </g>
+          <!-- the four dots of kunku placed in the quadrants -->
+          <g fill="currentColor">
+            <circle cx="22" cy="22" r="2.2"/><circle cx="42" cy="42" r="2.2"/>
+          </g>
+        </svg>
+
+        <span class="antarpat__label" lang="mr">शुभविवाह</span>
+      </div>
     </div>
     </div>
 
@@ -321,6 +333,32 @@
     </div>
 
     <div class="wrap">
+      <!-- MUNDAVALYA (मुंडावळ्या) — the strands of pearls tied across the
+           forehead of the bride and groom. Nothing reads as Maharashtrian
+           faster, so it hangs above their names. -->
+      <svg class="mundavalya reveal" viewBox="0 0 260 54" aria-hidden="true" focusable="false">
+        <g class="mundavalya__string">
+          <path d="M18 4C18 26 44 44 78 44"/>
+          <path d="M242 4C242 26 216 44 182 44"/>
+          <path d="M78 44h104"/>
+        </g>
+        <g class="mundavalya__pearls">
+          <circle cx="20" cy="10" r="3"/><circle cx="22" cy="19" r="3"/>
+          <circle cx="27" cy="27" r="3"/><circle cx="35" cy="34" r="3"/>
+          <circle cx="45" cy="39" r="3"/><circle cx="56" cy="42" r="3"/>
+          <circle cx="68" cy="44" r="3"/><circle cx="80" cy="44" r="3"/>
+          <circle cx="240" cy="10" r="3"/><circle cx="238" cy="19" r="3"/>
+          <circle cx="233" cy="27" r="3"/><circle cx="225" cy="34" r="3"/>
+          <circle cx="215" cy="39" r="3"/><circle cx="204" cy="42" r="3"/>
+          <circle cx="192" cy="44" r="3"/><circle cx="180" cy="44" r="3"/>
+          <circle cx="94" cy="44" r="3"/><circle cx="108" cy="44" r="3"/>
+          <circle cx="122" cy="44" r="3"/><circle cx="138" cy="44" r="3"/>
+          <circle cx="152" cy="44" r="3"/><circle cx="166" cy="44" r="3"/>
+        </g>
+        <!-- the gold bindi where the two strands meet -->
+        <circle class="mundavalya__tie" cx="130" cy="44" r="5.5"/>
+      </svg>
+
       <p class="script reveal" data-words data-i18n="couple.intro">We invite you to celebrate our wedding</p>
 
       <h1 class="couple__names reveal">
@@ -329,19 +367,58 @@
         <span class="couple__name" data-letters data-i18n="couple.groom">Nagesh</span>
       </h1>
 
-      <div class="divider reveal" aria-hidden="true">
-        <svg viewBox="0 0 240 24" role="presentation" focusable="false">
-          <path d="M6 12h84" />
-          <path d="M150 12h84" />
-          <ellipse cx="100" cy="12" rx="8" ry="3.4" class="leaf-fill" transform="rotate(-18 100 12)" />
-          <ellipse cx="140" cy="12" rx="8" ry="3.4" class="leaf-fill" transform="rotate(18 140 12)" />
-          <g class="petal-fill">
-            <ellipse cx="120" cy="12" rx="4" ry="8.5" />
-            <ellipse cx="120" cy="12" rx="8.5" ry="4" />
-            <ellipse cx="120" cy="12" rx="4" ry="8.5" transform="rotate(45 120 12)" />
-            <ellipse cx="120" cy="12" rx="4" ry="8.5" transform="rotate(-45 120 12)" />
+      <!-- PAITHANI border. Paithan, where the weave comes from, is about 50 km
+           from the venue — so the most local ornament available is also the
+           most beautiful one. The motifs are the two the border is known for:
+           the peacock (मोर) and the lotus, between bands of zari. -->
+      <div class="paithani reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 46" role="presentation" focusable="false" preserveAspectRatio="xMidYMid meet">
+          <!-- zari bands -->
+          <g class="paithani__zari">
+            <path d="M4 8h312M4 38h312"/>
+            <path class="paithani__weave" d="M4 12h312M4 34h312"/>
           </g>
-          <circle cx="120" cy="12" r="2.6" class="dot-fill" />
+
+          <!-- lotus at each end -->
+          <g class="paithani__lotus">
+            <path d="M40 23c-6-5-6-12 0-17 6 5 6 12 0 17Z"/>
+            <path d="M40 23c-8-2-13 2-14 8 8 2 13-2 14-8Z"/>
+            <path d="M40 23c8-2 13 2 14 8-8 2-13-2-14-8Z"/>
+            <circle cx="40" cy="23" r="2.4" class="paithani__seed"/>
+          </g>
+          <g class="paithani__lotus" transform="translate(240 0)">
+            <path d="M40 23c-6-5-6-12 0-17 6 5 6 12 0 17Z"/>
+            <path d="M40 23c-8-2-13 2-14 8 8 2 13-2 14-8Z"/>
+            <path d="M40 23c8-2 13 2 14 8-8 2-13-2-14-8Z"/>
+            <circle cx="40" cy="23" r="2.4" class="paithani__seed"/>
+          </g>
+
+          <!-- facing peacocks -->
+          <g class="paithani__mor">
+            <path d="M126 32c-7 0-12-5-12-11 0-5 4-9 9-9 3 0 5 1 6 3"/>
+            <path d="M129 15c2-2 5-2 6 1 1 2 0 4-2 5l-4 1"/>
+            <path d="M131 16l4-5"/>
+            <path d="M114 26c-8 1-14 6-16 13 9 1 16-4 18-11"/>
+            <path d="M116 30c-6 4-9 10-9 16 7-2 12-8 12-15"/>
+            <circle cx="132" cy="18" r="1.2" class="paithani__seed"/>
+          </g>
+          <g class="paithani__mor" transform="translate(320 0) scale(-1 1)">
+            <path d="M126 32c-7 0-12-5-12-11 0-5 4-9 9-9 3 0 5 1 6 3"/>
+            <path d="M129 15c2-2 5-2 6 1 1 2 0 4-2 5l-4 1"/>
+            <path d="M131 16l4-5"/>
+            <path d="M114 26c-8 1-14 6-16 13 9 1 16-4 18-11"/>
+            <path d="M116 30c-6 4-9 10-9 16 7-2 12-8 12-15"/>
+            <circle cx="132" cy="18" r="1.2" class="paithani__seed"/>
+          </g>
+
+          <!-- centre flower -->
+          <g class="paithani__centre">
+            <ellipse cx="160" cy="23" rx="4" ry="9"/>
+            <ellipse cx="160" cy="23" rx="9" ry="4"/>
+            <ellipse cx="160" cy="23" rx="4" ry="9" transform="rotate(45 160 23)"/>
+            <ellipse cx="160" cy="23" rx="4" ry="9" transform="rotate(-45 160 23)"/>
+            <circle cx="160" cy="23" r="2.8" class="paithani__seed"/>
+          </g>
         </svg>
       </div>
 
@@ -528,6 +605,64 @@
     </div>
   </section>
 
+  <!-- WARLI VARAT (वरात) — Maharashtra's own folk painting: rice paste on an
+       earth wall, people built from two triangles and a circle. This is the
+       wedding procession — dhol, tarpa, the couple, and the family dancing
+       behind. It walks in from the right as you reach it. -->
+  <div class="varat" aria-hidden="true">
+    <svg class="varat__art reveal" viewBox="0 0 480 120" focusable="false">
+      <!-- ground -->
+      <path class="varat__ground" d="M0 104h480"/>
+
+      <g class="varat__figures">
+        <!-- dhol player -->
+        <g class="varat__fig">
+          <circle cx="34" cy="34" r="8"/>
+          <path d="M34 42l-13 20 13 20 13-20-13-20Z"/>
+          <path d="M34 82l-9 22M34 82l9 22"/>
+          <path d="M21 58l-11 8M47 58l11 8"/>
+          <ellipse class="varat__dhol" cx="34" cy="66" rx="16" ry="9"/>
+        </g>
+
+        <!-- tarpa (the horn) player -->
+        <g class="varat__fig" transform="translate(84 0)">
+          <circle cx="34" cy="30" r="8"/>
+          <path d="M34 38l-12 20 12 20 12-20-12-20Z"/>
+          <path d="M34 78l-9 26M34 78l9 26"/>
+          <path d="M22 54l-14-6M46 54l16-14"/>
+          <path class="varat__tarpa" d="M62 40c8-4 14 0 12 8-2 6-9 8-13 4"/>
+        </g>
+
+        <!-- the couple, hand in hand -->
+        <g class="varat__fig varat__fig--couple" transform="translate(186 0)">
+          <circle cx="30" cy="32" r="8"/>
+          <path d="M30 40l-12 20 12 20 12-20-12-20Z"/>
+          <path d="M30 80l-9 24M30 80l9 24"/>
+          <path d="M18 56l-12 8M42 56l24 4"/>
+          <circle cx="90" cy="32" r="8"/>
+          <path d="M90 40l-12 20 12 20 12-20-12-20Z"/>
+          <path d="M90 80l-9 24M90 80l9 24"/>
+          <path d="M78 56l-12 4M102 56l12 8"/>
+          <!-- her hair knot and his pheta -->
+          <circle class="varat__mark" cx="98" cy="26" r="4"/>
+          <path class="varat__mark" d="M22 26q8-8 16 0"/>
+        </g>
+
+        <!-- family dancing behind, arms linked -->
+        <g class="varat__fig" transform="translate(330 0)">
+          <circle cx="30" cy="34" r="8"/>
+          <path d="M30 42l-12 20 12 20 12-20-12-20Z"/>
+          <path d="M30 82l-9 22M30 82l9 22"/>
+          <path d="M18 58l-14-10M42 58l24-8"/>
+          <circle cx="90" cy="34" r="8"/>
+          <path d="M90 42l-12 20 12 20 12-20-12-20Z"/>
+          <path d="M90 82l-9 22M90 82l9 22"/>
+          <path d="M78 58l-12-8M102 58l14-10"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
   <!-- ---------- Gallery ---------- -->
   <section class="section section--tint" id="gallery">
     <div class="wrap">
@@ -704,14 +839,16 @@
   <!-- ---------- Footer ---------- -->
   <footer class="footer">
     <div class="wrap">
+      <!-- The nath again, closing the invitation as it opened the tab. -->
       <div class="divider divider--light" aria-hidden="true">
-        <svg viewBox="0 0 240 24" role="presentation" focusable="false">
-          <path d="M6 12h90" /><path d="M144 12h90" />
-          <g class="petal-fill">
-            <ellipse cx="120" cy="12" rx="3.4" ry="7.5" />
-            <ellipse cx="120" cy="12" rx="7.5" ry="3.4" />
+        <svg viewBox="0 0 240 34" role="presentation" focusable="false">
+          <path d="M6 17h86" /><path d="M148 17h86" />
+          <g class="nath">
+            <path d="M129 6c-13 0-21 10-17 20 3 8 16 10 21 3"/>
+            <circle cx="115" cy="27" r="2.6" class="nath__pearl"/>
+            <circle cx="124" cy="30" r="2.2" class="nath__pearl nath__pearl--gold"/>
+            <circle cx="133" cy="28" r="1.9" class="nath__pearl"/>
           </g>
-          <circle cx="120" cy="12" r="2.4" class="dot-fill" />
         </svg>
       </div>
       <p class="footer__thanks" data-i18n="footer.thanks">Thank you for being part of our story.</p>
@@ -747,8 +884,8 @@
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/i18n.js?v=6" defer></script>
-<script src="js/qr.js?v=6" defer></script>
-<script src="js/main.js?v=6" defer></script>
+<script src="js/i18n.js?v=7" defer></script>
+<script src="js/qr.js?v=7" defer></script>
+<script src="js/main.js?v=7" defer></script>
 </body>
 </html>
