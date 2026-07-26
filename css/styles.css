@@ -74,6 +74,8 @@
 
 /* The shloka is Sanskrit and already uses the Devanagari face in both
    languages — only the surrounding copy needs the Marathi treatment. */
+:root[data-lang="mr"] .event__where { font-style: normal; font-size: 0.95rem; }
+
 :root[data-lang="mr"] :is(.event__text, .shloka__meaning, .check) {
   font-size: 1rem;
   line-height: 1.85;
@@ -959,6 +961,19 @@ h1, h2, h3 {
   text-transform: uppercase;
   color: var(--blush-deep);
 }
+/* Each ceremony now has its own venue — the two at home, the wedding at the
+   lawns, the engagement not yet decided — so it is stated per card. */
+.event__where {
+  margin: 0 0 0.8rem;
+  /* The engagement card has no time line yet, so the venue follows the date
+     directly and needs the gap the time line would have provided. */
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--gold-deep);
+}
+.event__when + .event__where { margin-top: 0.35rem; }
+
 .event__text {
   margin: 0;
   font-size: 0.9rem;
@@ -1087,6 +1102,10 @@ h1, h2, h3 {
   accent-color: var(--gold);
   cursor: pointer;
 }
+/* The fieldset is a flex row, so the error has to claim a line of its own. */
+.field--check .field__error { flex: 1 0 100%; }
+.field--check.has-error .check { border-color: var(--blush-deep); }
+
 .check:has(input:checked) {
   background: rgba(201, 166, 107, 0.14);
   border-color: var(--champagne);

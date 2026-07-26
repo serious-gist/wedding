@@ -203,6 +203,13 @@ body {
 .events li:last-child { border-bottom: 0; }
 .events .ev { flex: 0 0 7em; text-align: left; color: var(--gold-deep); }
 .events .dt { flex: 1 1 auto; text-align: right; color: var(--ink-soft); }
+/* Each ceremony's own venue, on its own line under the date. */
+.events .dt em {
+  display: block;
+  font-style: normal;
+  font-size: 0.88em;
+  color: var(--blush-deep);
+}
 
 /* ---------- venue ---------- */
 .venue-label {
@@ -406,12 +413,12 @@ body {
   </div>
 
   <ul class="events">
-    <li><span class="ev">साखरपुडा</span><span class="dt">गुरुवार, १० डिसेंबर २०२६ · स. ११:०० वा.</span></li>
-    <li><span class="ev">मेहंदी</span><span class="dt">गुरुवार, १० डिसेंबर २०२६ · सायं. ५:०० वा.</span></li>
-    <li><span class="ev">हळद</span><span class="dt">शुक्रवार, ११ डिसेंबर २०२६ · स. १०:०० वा.</span></li>
+    <li><span class="ev">साखरपुडा</span><span class="dt">तारीख नंतर कळवली जाईल<em>स्थळ नंतर कळवले जाईल</em></span></li>
+    <li><span class="ev">मेहंदी</span><span class="dt">गुरुवार, १० डिसेंबर २०२६ · सायं. ५:०० वा.<em>राहत्या घरी</em></span></li>
+    <li><span class="ev">हळद</span><span class="dt">शुक्रवार, ११ डिसेंबर २०२६ · स. १०:०० वा.<em>राहत्या घरी</em></span></li>
   </ul>
 
-  <p class="venue-label">स्थळ</p>
+  <p class="venue-label">विवाह स्थळ</p>
   <p class="venue">
     ३६ गन लॉन्स, गट क्र. ११८, हायवे, साऊथसिटीसमोर,
     ए. एस. क्लब ब्रिजजवळ, सिडको वाळूज महानगर २,

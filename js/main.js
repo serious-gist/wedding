@@ -28,8 +28,10 @@
     // the section falls back to showing just the link.
     photoDriveUrl: 'https://drive.google.com/drive/folders/REPLACE-WITH-FOLDER-ID',
 
-    // Optional: drop an mp3 at this path for background music.
-    // If the file is missing, a soft generative ambience is synthesised instead.
+    // Optional: drop an mp3 you have the rights to at this path and it will
+    // be used as the background music. If the file is missing, a shehnai
+    // mangalvadya piece is synthesised instead — see Music() below for why
+    // it is synthesised rather than a recording.
     musicSrc: 'audio/ambience.mp3',
 
     // Optional: a form endpoint (Formspree, Getform, your own API…).
@@ -460,31 +462,98 @@
     var muted = false;
     var started = false;
 
-    // Soft, slow arpeggio over a warm pad — used when no mp3 is available.
-    var CHORDS = [
-      [261.63, 329.63, 392.00, 493.88],  // Cmaj7
-      [220.00, 261.63, 329.63, 415.30],  // Am(maj-ish)
-      [174.61, 220.00, 261.63, 329.63],  // Fmaj7
-      [196.00, 246.94, 293.66, 392.00]   // G
+    /* ------------------------------------------------------------
+       Mangalvadya — the shehnai piece that plays when no audio file
+       is present.
+
+       This is synthesised rather than a recording on purpose: every
+       well-known Marathi wedding song is under copyright, and one
+       cannot be shipped in a public repository. So the melody here is
+       an original phrase written in the Yaman idiom — the bright,
+       auspicious evening raga a shehnai player would open with at a
+       Maharashtrian wedding — over a tanpura drone.
+
+       To use a real song instead, drop a file you have the rights to
+       at CONFIG.musicSrc and it takes priority automatically.
+       ------------------------------------------------------------ */
+
+    var SA = 261.63;                     // C4, the tonic
+
+    // Yaman: S R G M(tivra) P D N S'. Just intonation, so it rings.
+    var YAMAN = [1, 9 / 8, 5 / 4, 45 / 32, 3 / 2, 27 / 16, 15 / 8, 2];
+
+    // [scale degree, beats]. -1 rests. Four phrases, each resolving home.
+    var PHRASES = [
+      [[0, 2], [1, 1], [2, 1], [3, 2], [2, 2], [-1, 1]],
+      [[4, 2], [3, 1], [2, 1], [1, 2], [0, 3], [-1, 1]],
+      [[4, 1], [5, 1], [6, 2], [7, 3], [6, 2], [-1, 1]],
+      [[6, 1], [5, 1], [4, 2], [3, 1], [2, 1], [1, 1], [0, 3]]
     ];
 
-    function synthNote(freq, when, duration, gainValue) {
-      var osc = audioCtx.createOscillator();
-      var gain = audioCtx.createGain();
-      var filter = audioCtx.createBiquadFilter();
+    var BEAT = 0.52;                     // seconds — an unhurried tempo
 
-      osc.type = 'triangle';
-      osc.frequency.value = freq;
-      filter.type = 'lowpass';
-      filter.frequency.value = 1600;
+    /* A shehnai is a double-reed pipe: bright, nasal, and never quite
+       steady. Two detuned saws through a resonant band-pass get the reed;
+       the vibrato and the slow attack get the breath. */
+    function shehnai(freq, when, duration, gainValue) {
+      var reed = audioCtx.createOscillator();
+      var reed2 = audioCtx.createOscillator();
+      var vibrato = audioCtx.createOscillator();
+      var vibratoDepth = audioCtx.createGain();
+      var body = audioCtx.createBiquadFilter();
+      var tame = audioCtx.createBiquadFilter();
+      var gain = audioCtx.createGain();
+
+      reed.type = 'sawtooth';
+      reed.frequency.value = freq;
+      reed2.type = 'sawtooth';
+      reed2.frequency.value = freq * 1.006;      // a slow beat between the two
+
+      vibrato.frequency.value = 5.4;
+      vibratoDepth.gain.value = freq * 0.011;
+      vibrato.connect(vibratoDepth);
+      vibratoDepth.connect(reed.frequency);
+      vibratoDepth.connect(reed2.frequency);
+
+      body.type = 'bandpass';                    // the reed's formant
+      body.frequency.value = freq * 2.4;
+      body.Q.value = 3.2;
+      tame.type = 'lowpass';                     // keep it soft on speakers
+      tame.frequency.value = 2600;
 
       gain.gain.setValueAtTime(0.0001, when);
-      gain.gain.exponentialRampToValueAtTime(gainValue, when + 0.35);
+      gain.gain.exponentialRampToValueAtTime(gainValue, when + 0.12);
+      gain.gain.setValueAtTime(gainValue, when + duration * 0.6);
       gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
 
-      osc.connect(filter).connect(gain).connect(master);
-      osc.start(when);
-      osc.stop(when + duration + 0.1);
+      reed.connect(body);
+      reed2.connect(body);
+      body.connect(tame).connect(gain).connect(master);
+
+      vibrato.start(when);
+      reed.start(when);
+      reed2.start(when);
+      vibrato.stop(when + duration + 0.1);
+      reed.stop(when + duration + 0.1);
+      reed2.stop(when + duration + 0.1);
+    }
+
+    // Tanpura-ish drone on Sa and Pa, held under everything.
+    function startDrone() {
+      [SA / 2, (SA / 2) * 1.5, SA].forEach(function (freq, i) {
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        var soft = audioCtx.createBiquadFilter();
+
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+        soft.type = 'lowpass';
+        soft.frequency.value = 900;
+        gain.gain.value = i === 2 ? 0.018 : 0.035;
+
+        osc.connect(soft).connect(gain).connect(master);
+        osc.start();
+      });
     }
 
     function startSynth() {
@@ -510,17 +579,39 @@
 
       master.gain.linearRampToValueAtTime(0.16, audioCtx.currentTime + 3);
 
-      var step = 0;
-      function schedule() {
-        var chord = CHORDS[Math.floor(step / 4) % CHORDS.length];
-        var note = chord[step % 4];
-        var time = audioCtx.currentTime + 0.05;
-        synthNote(note, time, 3.2, 0.09);
-        if (step % 4 === 0) synthNote(note / 2, time, 5.5, 0.05);   // bass shadow
-        step++;
+      startDrone();
+
+      /* One phrase is queued at a time, a phrase ahead of the playhead, so
+         the notes land on an exact clock rather than on setInterval drift. */
+      var phrase = 0;
+
+      function queuePhrase() {
+        var notes = PHRASES[phrase % PHRASES.length];
+        var at = audioCtx.currentTime + 0.1;
+        var total = 0;
+
+        notes.forEach(function (note) {
+          var degree = note[0];
+          var span = note[1] * BEAT;
+          if (degree >= 0) {
+            // The third phrase is the one that climbs, so it plays an
+            // octave up before the fourth walks back down to Sa.
+            var octave = phrase % PHRASES.length === 2 ? 2 : 1;
+            shehnai(SA * YAMAN[degree] * octave, at + total, span * 0.92, 0.075);
+          }
+          total += span;
+        });
+
+        phrase++;
+        return total;
       }
-      schedule();
-      timer = setInterval(schedule, 1450);
+
+      // Re-arm after each phrase, plus a breath between them.
+      (function loop() {
+        var span = queuePhrase();
+        timer = setTimeout(loop, (span + BEAT) * 1000);
+      })();
+
       return true;
     }
 
@@ -1302,6 +1393,14 @@
         var guestsBad = !(n >= 1 && n <= 10);
         setError(guests, guestsBad);
         if (guestsBad) ok = false;
+
+        // Nothing is ticked by default, so an attending guest who ticks
+        // nothing would tell us they are coming to no ceremony at all.
+        var chosen = $$('input[name="events"]:checked', form).length;
+        var eventsMsg = $('[data-error-for="eventsField"]', form);
+        eventsField.classList.toggle('has-error', chosen === 0);
+        if (eventsMsg) eventsMsg.hidden = chosen > 0;
+        if (chosen === 0) ok = false;
       } else {
         setError(guests, false);
       }

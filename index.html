@@ -33,7 +33,7 @@
 <!-- ?v= is a cache buster. css/ and js/ are served with max-age=3600
      (see vercel.json), so without it a guest can load fresh HTML against an
      hour-old stylesheet. Bump it whenever these files change. -->
-<link rel="stylesheet" href="css/styles.css?v=4">
+<link rel="stylesheet" href="css/styles.css?v=5">
 
 <!-- Without JavaScript there is no language picker and no reveal, so show
      English and the full invitation straight away. -->
@@ -432,8 +432,10 @@
           </svg>
           <p class="event__native" data-i18n="events.engNative">साखरपुडा</p>
           <h3 data-i18n="events.engName">Engagement</h3>
-          <p class="event__when" data-i18n="events.engWhen">Thursday, 10 December 2026</p>
-          <p class="event__time" data-i18n="events.engTime">11:00 AM onwards</p>
+          <!-- Date and venue are still being decided, so this card carries no
+               time line at all rather than an empty one. -->
+          <p class="event__when" data-i18n="events.engWhen">Date to be announced</p>
+          <p class="event__where" data-i18n="events.engWhere">Venue to be announced</p>
           <p class="event__text" data-i18n="events.engText">The rings, the sweets and the first of many celebrations together.</p>
         </li>
 
@@ -447,6 +449,7 @@
           <h3 data-i18n="events.mehendiName">Mehendi</h3>
           <p class="event__when" data-i18n="events.mehendiWhen">Thursday, 10 December 2026</p>
           <p class="event__time" data-i18n="events.mehendiTime">5:00 PM onwards</p>
+          <p class="event__where" data-i18n="events.mehendiWhere">At our home</p>
           <p class="event__text" data-i18n="events.mehendiText">Henna, music and an afternoon of laughter with the women of both families.</p>
         </li>
 
@@ -460,6 +463,7 @@
           <h3 data-i18n="events.haldiName">Haldi</h3>
           <p class="event__when" data-i18n="events.haldiWhen">Friday, 11 December 2026</p>
           <p class="event__time" data-i18n="events.haldiTime">10:00 AM onwards</p>
+          <p class="event__where" data-i18n="events.haldiWhere">At our home</p>
           <p class="event__text" data-i18n="events.haldiText">Turmeric, blessings and a great deal of mess. Please wear something you don’t mind staining yellow.</p>
         </li>
 
@@ -475,6 +479,7 @@
           <h3 data-i18n="events.weddingName">Wedding</h3>
           <p class="event__when" data-i18n="events.weddingWhen">Saturday, 12 December 2026</p>
           <p class="event__time" data-i18n="events.weddingTime">4:30 PM sharp</p>
+          <p class="event__where" data-i18n="events.weddingWhere">36 Gun Lawns, Waluj</p>
           <p class="event__text" data-i18n="events.weddingText">The moment we have been waiting for, followed by dinner on the main lawn.</p>
         </li>
       </ul>
@@ -629,14 +634,16 @@
 
         <fieldset class="field field--check" id="eventsField">
           <legend data-i18n="rsvp.events">Which ceremonies will you join?</legend>
-          <label class="check"><input type="checkbox" name="events" value="engagement" checked>
+          <label class="check"><input type="checkbox" name="events" value="engagement">
             <span data-i18n="events.engName">Engagement</span></label>
-          <label class="check"><input type="checkbox" name="events" value="mehendi" checked>
+          <label class="check"><input type="checkbox" name="events" value="mehendi">
             <span data-i18n="events.mehendiName">Mehendi</span></label>
-          <label class="check"><input type="checkbox" name="events" value="haldi" checked>
+          <label class="check"><input type="checkbox" name="events" value="haldi">
             <span data-i18n="events.haldiName">Haldi</span></label>
-          <label class="check"><input type="checkbox" name="events" value="wedding" checked>
+          <label class="check"><input type="checkbox" name="events" value="wedding">
             <span data-i18n="events.weddingName">Wedding</span></label>
+          <p class="field__error" data-error-for="eventsField" data-i18n="rsvp.eventsError" hidden>
+            Please choose at least one ceremony.</p>
         </fieldset>
 
         <div class="field">
@@ -733,8 +740,8 @@
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/i18n.js?v=4" defer></script>
-<script src="js/qr.js?v=4" defer></script>
-<script src="js/main.js?v=4" defer></script>
+<script src="js/i18n.js?v=5" defer></script>
+<script src="js/qr.js?v=5" defer></script>
+<script src="js/main.js?v=5" defer></script>
 </body>
 </html>
