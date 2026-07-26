@@ -956,14 +956,15 @@
       hero.addEventListener('pointermove', function (e) {
         px = e.clientX;
         py = e.clientY;
-        hero.classList.add('has-pointer');
         if (pending) return;
         pending = true;
         requestAnimationFrame(paint);
       }, { passive: true });
 
+      // Settle back to the resting state: light centred, envelope square on.
       hero.addEventListener('pointerleave', function () {
-        hero.classList.remove('has-pointer');
+        hero.style.setProperty('--gx', '50%');
+        hero.style.setProperty('--gy', '44%');
         if (envelope) {
           envelope.style.setProperty('--env-x', '0deg');
           envelope.style.setProperty('--env-y', '0deg');
