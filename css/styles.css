@@ -603,13 +603,22 @@ h1, h2, h3 {
   box-shadow: 0 10px 24px -12px rgba(50, 20, 22, 0.55);
   transition: transform 0.9s 0.45s var(--ease);
 }
+/* Full names, not initials, so the card says the same thing as the seal.
+   --serif resolves to the Devanagari face in Marathi, so this follows the
+   guest's language without a second rule. */
 .envelope__card-mono {
-  font-family: var(--serif-mr);
-  font-size: 1.7rem;
-  line-height: 1.2;
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 5.6vw, 1.55rem);
+  line-height: 1.25;
+  white-space: nowrap;
   color: var(--kunku);
 }
-.envelope__card-mono span { color: var(--gold); }
+/* Scoped to the ampersand — a bare `span` here would gild the names too. */
+.envelope__card-amp {
+  color: var(--gold);
+  font-style: italic;
+  margin: 0 0.3em;
+}
 .envelope__card-rule {
   width: 60px; height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
