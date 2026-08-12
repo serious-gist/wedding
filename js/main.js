@@ -1,5 +1,5 @@
 /* ============================================================
-   Pooja & Nagesh — Wedding Invitation
+   Pooja & Sagar — Wedding Invitation
    Vanilla JS, no dependencies. Progressive enhancement:
    without JS the invitation is still readable (see the no-JS
    fallback in index.html).
@@ -358,7 +358,7 @@
       };
     }
 
-    /* The akshata thrown as the antarpat comes down. These carry an extra
+    /* The akshata thrown as the seal breaks. These carry an extra
        velocity that decays into the ambient fall, and are discarded rather
        than recycled once they drop away. */
     function burst(originX, originY, count) {
@@ -738,7 +738,7 @@
      ============================================================ */
   function setupReveal(petals, music) {
     var hero = $('#hero');
-    var antarpat = $('#antarpat');
+    var envelope = $('#envelope');
     var button = $('#revealBtn');
     var invitation = $('#invitation');
     var musicBtn = $('#musicBtn');
@@ -766,18 +766,23 @@
       opened = true;
 
       button.disabled = true;
-      antarpat.classList.add('is-open');
+      envelope.classList.add('is-open');
+      // Fades the prompt out with the seal rather than leaving it hanging
+      // over an opened envelope.
+      hero.classList.add('is-revealing');
       music.start();
       musicBtn.hidden = false;
 
-      var delay = reducedMotion ? 0 : 1500;
+      // Long enough for the seal to lift, the flap to fall and the card to
+      // clear the pocket. Shorter and the hero leaves mid-open.
+      var delay = reducedMotion ? 0 : 1900;
 
-      // Akshata thrown as the cloth comes down — the moment of savadhan.
+      // Akshata thrown as the seal breaks.
       if (!reducedMotion) {
         setTimeout(function () {
-          var box = antarpat.getBoundingClientRect();
-          petals.burst(box.left + box.width / 2, box.top + box.height * 0.42, 70);
-        }, 360);
+          var box = envelope.getBoundingClientRect();
+          petals.burst(box.left + box.width / 2, box.top + box.height * 0.5, 70);
+        }, 300);
       }
 
       setTimeout(function () {
@@ -903,7 +908,7 @@
         var lines = [
           'BEGIN:VCALENDAR',
           'VERSION:2.0',
-          'PRODID:-//Pooja and Nagesh//Wedding//EN',
+          'PRODID:-//Pooja and Sagar//Wedding//EN',
           'BEGIN:VEVENT',
           'UID:wedding-2026-12-12@pooja-weds-nagesh',
           'DTSTAMP:' + icsStamp(new Date()),
@@ -1161,10 +1166,10 @@
     }, { passive: true });
 
     // Gentle pointer parallax on the hero backdrop, plus the lamp light and
-    // the antarpat's tilt — all driven from one throttled handler (desktop).
+    // the envelope's tilt — all driven from one throttled handler (desktop).
     var hero = $('#hero');
     if (hero && window.matchMedia('(hover: hover)').matches) {
-      var antarpat = $('#antarpat');
+      var envelope = $('#envelope');
       var pending = false;
       var px = 0, py = 0;
 
@@ -1178,9 +1183,9 @@
         hero.style.setProperty('--gx', ((dx + 0.5) * 100).toFixed(1) + '%');
         hero.style.setProperty('--gy', ((dy + 0.5) * 100).toFixed(1) + '%');
 
-        if (antarpat) {
-          antarpat.style.setProperty('--env-y', (dx * 12).toFixed(2) + 'deg');
-          antarpat.style.setProperty('--env-x', (-dy * 9).toFixed(2) + 'deg');
+        if (envelope) {
+          envelope.style.setProperty('--env-y', (dx * 12).toFixed(2) + 'deg');
+          envelope.style.setProperty('--env-x', (-dy * 9).toFixed(2) + 'deg');
         }
       }
 
@@ -1192,13 +1197,13 @@
         requestAnimationFrame(paint);
       }, { passive: true });
 
-      // Settle back to the resting state: light centred, cloth square on.
+      // Settle back to the resting state: light centred, envelope square on.
       hero.addEventListener('pointerleave', function () {
         hero.style.setProperty('--gx', '50%');
         hero.style.setProperty('--gy', '44%');
-        if (antarpat) {
-          antarpat.style.setProperty('--env-x', '0deg');
-          antarpat.style.setProperty('--env-y', '0deg');
+        if (envelope) {
+          envelope.style.setProperty('--env-x', '0deg');
+          envelope.style.setProperty('--env-y', '0deg');
         }
       });
     }

@@ -1,5 +1,5 @@
 /* ============================================================
-   Pooja & Nagesh — Wedding Invitation
+   Pooja & Sagar — Wedding Invitation
    Palette: ivory · cream · champagne gold · blush · marigold
    ============================================================ */
 
@@ -71,7 +71,7 @@
    letter-spacing pulls apart the conjuncts and the connecting headline —
    so both are switched off wherever the Latin design applies them. */
 :root[data-lang="mr"] :is(
-  .btn, .topnav a, .hero__eyebrow, .antarpat__date,
+  .btn, .topnav a, .hero__eyebrow, .envelope__card-date,
   .section__sub, .card h3, .couple__date, .quote cite, .countdown__lbl,
   .timeline__when, .field label, .field__opt,
   .share__label, .share__qr-note, .copy, .footer__made, .skip-link,
@@ -107,7 +107,7 @@
    in Devanagari at the same size, so those all move up a step. */
 :root[data-lang="mr"] :is(
   .countdown__lbl, .hero__eyebrow, .quote cite, .couple__date,
-  .timeline__when, .share__qr-note, .footer__made, .antarpat__date,
+  .timeline__when, .share__qr-note, .footer__made, .envelope__card-date,
   .copy, .field__opt
 ) {
   font-size: 0.86rem;
@@ -456,7 +456,7 @@ h1, h2, h3 {
   text-align: center;
 }
 
-/* The couple, held just out of focus behind the antarpat. The blur is light
+/* The couple, held just out of focus behind the envelope. The blur is light
    enough that they are recognisable but not competing with the type on top.
    The floral illustration is layered underneath as a fallback, so a missing
    or slow photo still leaves a finished-looking cover.
@@ -546,170 +546,247 @@ h1, h2, h3 {
   animation: fadeUp 1.2s 0.9s var(--ease) both;
 }
 
-/* ---------- Antarpat (अंतरपाट) ---------- */
-/* The stage owns the entrance animation; `floatIn` fills forwards, so an
-   animated transform on the cloth itself would outrank the pointer tilt. */
-.antarpat-stage {
-  width: min(88vw, 360px);
-  perspective: 1400px;
+/* ---------- Envelope ---------- */
+/* Deep maroon hand-made paper with an ivory wax seal. The maroon is a
+   darker, dustier relative of --kunku so the envelope reads as part of the
+   same Marathi palette rather than a generic burgundy. */
+.envelope-stage {
+  --env-maroon:    #7e3a3c;
+  --env-maroon-dk: #5d272b;
+  --env-maroon-lt: #97504e;
+  --wax:           #ece2d1;
+  --wax-dk:        #c3b49b;
+  --wax-ink:       #8d7a5f;
+
+  /* Hand-made paper: fibre flecks over a soft mottle. Cheaper than an image
+     and it scales with the envelope instead of pixelating.
+
+     The two fibre layers are set at coprime spacings (7px / 11px) and steep
+     opposing angles. Even spacings beat against each other at render size
+     and the paper turns into visible diagonal corduroy. */
+  --env-grain:
+    repeating-linear-gradient(63deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-27deg, rgba(0, 0, 0, 0.028) 0 1px, transparent 1px 11px),
+    radial-gradient(120% 90% at 22% 18%, rgba(255, 255, 255, 0.1), transparent 58%),
+    radial-gradient(100% 80% at 78% 88%, rgba(0, 0, 0, 0.16), transparent 62%);
+
+  width: min(88vw, 380px);
+  perspective: 1500px;
   animation: floatIn 1.4s 0.3s var(--ease) both;
 }
 
-.antarpat {
+/* The stage owns the entrance animation; `floatIn` fills forwards, so an
+   animated transform on the envelope itself would outrank the pointer tilt. */
+.envelope {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 2;
   transform-style: preserve-3d;
   transform: rotateX(var(--env-x, 0deg)) rotateY(var(--env-y, 0deg));
   transition: transform 0.5s var(--ease);
+  filter: drop-shadow(0 26px 40px rgba(50, 20, 22, 0.45));
 }
 
-/* The rod the cloth hangs from, held by two relatives out of frame. */
-.antarpat__rod {
+/* ---- the card inside ---- */
+.envelope__card {
   position: absolute;
-  top: 0; left: -6%; right: -6%;
-  height: 5px;
-  z-index: 4;
+  inset: 6% 5% auto;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 1rem 0.9rem;
   border-radius: 3px;
-  background: linear-gradient(180deg, var(--gold-soft), var(--gold-deep));
-  box-shadow: 0 2px 6px rgba(59, 48, 43, 0.4);
-  transition: opacity 0.5s 0.5s var(--ease);
+  background: linear-gradient(168deg, #fffdf8, #f6e9d6 60%, #efdcc2);
+  box-shadow: 0 10px 24px -12px rgba(50, 20, 22, 0.55);
+  transition: transform 0.9s 0.45s var(--ease);
 }
-
-/* ---- the cloth itself ---- */
-.antarpat__cloth {
-  position: absolute;
-  inset: 4px 0 0;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  overflow: hidden;
-  border-radius: 2px 2px 6px 6px;
-  color: var(--kunku);
-  transform-origin: top center;
-  /* Silk: a warm cream with a soft sheen running across it. */
-  background:
-    linear-gradient(104deg, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0) 66%),
-    linear-gradient(168deg, #fffdf8, #f6e9d6 60%, #efdcc2);
-  background-size: 260% 100%, 100% 100%;
-  background-position: 150% 0, 0 0;
-  box-shadow: var(--shadow-lg), inset 0 -18px 30px -20px rgba(140, 104, 60, 0.5);
-  animation: clothShine 5s 1.4s ease-in-out infinite;
-  transition: transform 1s var(--ease), opacity 0.6s 0.45s var(--ease);
-}
-
-/* Zari borders, woven in gold thread top and bottom. */
-.antarpat__zari {
-  position: absolute;
-  left: 0; right: 0;
-  height: 16px;
-  background:
-    repeating-linear-gradient(90deg,
-      var(--gold) 0 4px, var(--gold-soft) 4px 8px, var(--haldi) 8px 12px, var(--gold-soft) 12px 16px);
-  opacity: 0.85;
-}
-.antarpat__zari--top { top: 0; box-shadow: 0 1px 0 rgba(140, 104, 60, 0.35); }
-.antarpat__zari--bottom { bottom: 0; box-shadow: 0 -1px 0 rgba(140, 104, 60, 0.35); }
-
-.antarpat__motif {
-  width: 84px; height: 84px;
-  color: var(--kunku);
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
-}
-
-.antarpat__label {
+.envelope__card-mono {
   font-family: var(--serif-mr);
-  font-size: 1.15rem;
-  letter-spacing: 0.02em;
-  color: var(--kunku);
-}
-
-/* ---- what the cloth is hiding ---- */
-.antarpat__behind {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  border-radius: 10px;
-  background: radial-gradient(70% 70% at 50% 45%, rgba(255, 250, 240, 0.22), transparent 72%);
-  opacity: 0;
-  transition: opacity 0.7s 0.35s var(--ease);
-}
-.antarpat__monogram {
-  font-family: var(--serif-mr);
-  font-size: 2.1rem;
+  font-size: 1.7rem;
   line-height: 1.2;
-  color: #fff;
-  text-shadow: 0 2px 18px rgba(59, 48, 43, 0.6);
+  color: var(--kunku);
 }
-.antarpat__monogram span { color: var(--haldi-soft); }
-.antarpat__rule {
+.envelope__card-mono span { color: var(--gold); }
+.envelope__card-rule {
   width: 60px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--haldi-soft), transparent);
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
-.antarpat__savadhan {
+.envelope__card-line {
   font-family: var(--serif-mr);
   font-size: 0.95rem;
-  color: var(--haldi-soft);
-  text-shadow: 0 1px 12px rgba(59, 48, 43, 0.7);
+  color: var(--kunku);
 }
-.antarpat__date {
+.envelope__card-date {
   font-family: var(--serif);
   font-size: 0.9rem;
   letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--gold-deep);
 }
 
-@keyframes clothShine {
-  0%, 55%, 100% { background-position: 150% 0, 0 0; }
-  80%           { background-position: -50% 0, 0 0; }
+/* ---- front pocket ---- */
+/* One face, clipped so the side panels rise to a point and the bottom panel
+   meets them in a single seam — the way a real envelope folds. */
+.envelope__front {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 3px;
+  background: var(--env-grain), linear-gradient(168deg, var(--env-maroon-lt), var(--env-maroon) 42%, var(--env-maroon-dk));
+  box-shadow: inset 0 -30px 40px -30px rgba(0, 0, 0, 0.5);
 }
 
-/* Reveal: the cloth is lowered away, as it is at the muhurt. */
-.antarpat.is-open .antarpat__cloth {
+/* The two diagonal folds, caught by the light. */
+.envelope__seam {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 52%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 70%);
+}
+.envelope__seam--left  { left: 0;  clip-path: polygon(0 0, 100% 100%, 0 100%); }
+.envelope__seam--right { right: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+/* ---- flap ---- */
+.envelope__flap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 62%;
+  z-index: 4;
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transform-style: preserve-3d;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: 3px 3px 0 0;
+  background: var(--env-grain), linear-gradient(184deg, var(--env-maroon-lt), var(--env-maroon) 55%, var(--env-maroon-dk));
+  transition: transform 0.85s var(--ease), z-index 0s 0.42s;
+}
+/* A lighter hairline along the fold, so the flap reads as a separate sheet
+   of paper rather than a painted triangle. */
+.envelope__flap-edge {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(184deg, rgba(255, 255, 255, 0.14), transparent 12%);
+}
+
+/* ---- wax seal ---- */
+.seal {
+  position: absolute;
+  top: 52%; left: 50%;
+  z-index: 6;
+  width: 34%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--wax-ink);
+  /* Poured wax: a domed ivory disc, brightest where it pooled thinnest. */
+  background:
+    radial-gradient(58% 58% at 38% 32%, #fdf8ee, transparent 70%),
+    radial-gradient(100% 100% at 50% 50%, var(--wax) 58%, var(--wax-dk));
+  /* Never a true circle — the blob is nudged out of round on each edge. */
+  border-radius: 47% 53% 51% 49% / 52% 48% 52% 48%;
+  box-shadow:
+    0 6px 14px -4px rgba(50, 20, 22, 0.6),
+    inset 0 -3px 6px -2px rgba(120, 100, 70, 0.5),
+    inset 0 3px 5px -2px rgba(255, 255, 255, 0.75);
+  animation: fadeIn 1s 1.1s var(--ease) both, pulse 2.8s 2.2s ease-in-out infinite;
+  transition: transform 0.5s var(--ease);
+}
+.seal:hover, .seal:focus-visible { animation-play-state: running, paused; }
+.seal:hover { transform: translate(-50%, -50%) scale(1.04); }
+
+.seal__ring {
+  position: absolute;
+  inset: 8%;
+  width: 84%; height: 84%;
+  fill: none;
+  stroke: currentColor;
+  opacity: 0.55;
+}
+.seal__rim    { stroke-width: 1.4; opacity: 0.5; }
+.seal__inner  { stroke-width: 1; opacity: 0.7; }
+.seal__dots   { stroke-width: 2.4; stroke-dasharray: 0.6 5.2; stroke-linecap: round; }
+.seal__keris  { stroke-width: 1.3; opacity: 0.8; }
+.seal__seed   { fill: currentColor; stroke: none; opacity: 0.55; }
+
+.seal__names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  font-family: var(--serif);
+  /* Tracks the seal, which is a percentage of the envelope. */
+  font-size: clamp(0.62rem, 3.4vw, 0.9rem);
+  color: var(--wax-ink);
+  /* Embossed: pressed into the wax, so the highlight sits below the mark. */
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.seal__amp {
+  font-style: italic;
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin: 0.08em 0;
+}
+
+/* ---- the prompt above the envelope ---- */
+.envelope__prompt {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.1rem, 4vw, 1.45rem);
+  letter-spacing: 0.02em;
+  color: var(--gold-soft);
+  text-shadow: 0 2px 16px rgba(59, 48, 43, 0.6);
+  animation: fadeUp 1.2s 0.7s var(--ease) both;
+  transition: opacity 0.4s var(--ease);
+}
+
+/* ---- reveal ---- */
+/* The seal lifts and tumbles off, the flap swings open, the card rises. */
+.envelope.is-open .seal {
   animation: none;
-  transform: translateY(112%) rotateX(14deg);
+  transform: translate(-50%, -140%) rotate(-24deg) scale(0.9);
   opacity: 0;
+  pointer-events: none;
+  transition: transform 0.6s var(--ease), opacity 0.5s 0.1s var(--ease);
 }
-.antarpat.is-open .antarpat__rod { opacity: 0; }
-.antarpat.is-open .antarpat__behind { opacity: 1; }
+.envelope.is-open .envelope__flap {
+  z-index: 1;
+  transform: rotateX(-168deg);
+  transition: transform 0.85s 0.18s var(--ease), z-index 0s 0.42s;
+}
+/* Stops short of fully out — the pocket still holds the bottom of the card,
+   which is what makes it read as being drawn from the envelope rather than
+   floating above it. Far enough that all four lines clear the front edge. */
+.envelope.is-open .envelope__card { transform: translateY(-105%); }
+
+.is-revealing .envelope__prompt { opacity: 0; }
 
 .hero.is-leaving { opacity: 0; transition: opacity 0.85s var(--ease); }
 .hero.is-leaving .hero__inner { animation: heroOut 0.9s var(--ease) forwards; }
 .hero.is-gone { display: none; }
 
-/* ---------- Reveal button ---------- */
-.btn--reveal {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.75);
-  background: rgba(255, 255, 255, 0.13);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  animation: fadeUp 1.2s 0.7s var(--ease) both, pulse 2.6s 2s ease-in-out infinite;
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
-}
-.btn--reveal:hover, .btn--reveal:focus-visible { animation-play-state: running, paused; }
-
-/* `animation: none` is required, not cosmetic: fadeUp runs with
-   `fill-mode: both`, and a filling animation's opacity would otherwise win
-   over this rule and keep the button visible through the reveal. */
-.btn--reveal[disabled] {
-  animation: none;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s var(--ease);
-}
-
+/* The halo that invites the tap. Rides on top of the wax's own inset
+   shading, so the disc keeps its poured-and-set look while it breathes. */
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.42), 0 0 22px rgba(226, 205, 164, 0.28); }
-  50%      { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0), 0 0 34px rgba(226, 205, 164, 0.5); }
+  0%, 100% {
+    box-shadow: 0 6px 14px -4px rgba(50, 20, 22, 0.6),
+                inset 0 -3px 6px -2px rgba(120, 100, 70, 0.5),
+                inset 0 3px 5px -2px rgba(255, 255, 255, 0.75),
+                0 0 0 0 rgba(255, 245, 225, 0.45);
+  }
+  50% {
+    box-shadow: 0 6px 14px -4px rgba(50, 20, 22, 0.6),
+                inset 0 -3px 6px -2px rgba(120, 100, 70, 0.5),
+                inset 0 3px 5px -2px rgba(255, 255, 255, 0.75),
+                0 0 0 18px rgba(255, 245, 225, 0);
+  }
 }
 @keyframes fadeUp   { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
 @keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: none; } }
@@ -1924,7 +2001,7 @@ h1, h2, h3 {
 @property --gy { syntax: "<percentage>"; inherits: true; initial-value: 44%; }
 .hero { transition: --gx 0.28s linear, --gy 0.28s linear; }
 
-/* Always lit, so there is a warm pool of light behind the antarpat from the
+/* Always lit, so there is a warm pool of light behind the envelope from the
    moment the cover loads; the pointer only carries it around. `screen` is
    what makes it read as light rather than a wash — where it is unsupported
    the declaration is dropped and normal compositing still looks right. */

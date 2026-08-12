@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pooja &amp; Nagesh — Wedding Invitation</title>
+<title>Pooja &amp; Sagar — Wedding Invitation</title>
 
-<meta name="description" content="Pooja &amp; Nagesh invite you to celebrate their wedding on 12 December 2026 at 36 Gun Lawns, Waluj, Chhatrapati Sambhajinagar. Engagement, Mehendi, Haldi and wedding ceremonies.">
+<meta name="description" content="Pooja &amp; Sagar invite you to celebrate their wedding on 12 December 2026 at 36 Gun Lawns, Waluj, Chhatrapati Sambhajinagar. Engagement, Mehendi, Haldi and wedding ceremonies.">
 <meta name="theme-color" content="#f7f1e8">
-<meta name="author" content="Pooja &amp; Nagesh">
+<meta name="author" content="Pooja &amp; Sagar">
 <link rel="canonical" href="https://pooja-weds-nagesh.vercel.app/">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Pooja &amp; Nagesh — Wedding Invitation">
+<meta property="og:title" content="Pooja &amp; Sagar — Wedding Invitation">
 <meta property="og:description" content="Join us as we say “I do” — 12 December 2026, 36 Gun Lawns, Chhatrapati Sambhajinagar.">
 <meta property="og:image" content="https://pooja-weds-nagesh.vercel.app/images/og-cover.jpg">
 <meta property="og:url" content="https://pooja-weds-nagesh.vercel.app/">
 <meta property="og:locale" content="en_IN">
 <meta property="og:locale:alternate" content="mr_IN">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Pooja &amp; Nagesh — Wedding Invitation">
+<meta name="twitter:title" content="Pooja &amp; Sagar — Wedding Invitation">
 <meta name="twitter:description" content="Join us as we say “I do” — 12 December 2026, 36 Gun Lawns, Chhatrapati Sambhajinagar.">
 
 <!-- The nath — the Maharashtrian nose ring. Drawn bold and open so the
@@ -35,18 +35,18 @@
 <!-- ?v= is a cache buster. css/ and js/ now revalidate on every load (see
      vercel.json), so a forgotten bump no longer hides a change from guests —
      but bumping it still saves them the conditional request. -->
-<link rel="stylesheet" href="css/styles.css?v=8">
+<link rel="stylesheet" href="css/styles.css?v=9">
 
 <!-- Without JavaScript there is no language picker and no reveal, so show
      English and the full invitation straight away. -->
 <noscript>
   <style>
     body.is-locked { overflow: auto !important; height: auto !important; }
-    .langgate, .hero__inner .btn--reveal, .langswitch, .progress { display: none !important; }
+    .langgate, .envelope__prompt, .seal, .langswitch, .progress { display: none !important; }
     .invitation[hidden] { display: block !important; }
     .invitation { opacity: 1 !important; }
     .reveal { opacity: 1 !important; transform: none !important; }
-    .antarpat-stage, .antarpat__cloth { animation: none !important; }
+    .envelope-stage, .envelope__front { animation: none !important; }
     .ganesh__line path, .ganesh__halo { stroke-dashoffset: 0 !important; }
     .rangoli * { stroke-dashoffset: 0 !important; opacity: 1 !important; }
     .letter, .word { opacity: 1 !important; transform: none !important; }
@@ -57,7 +57,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Event",
-  "name": "Wedding of Pooja & Nagesh",
+  "name": "Wedding of Pooja & Sagar",
   "startDate": "2026-12-12T16:30:00+05:30",
   "endDate": "2026-12-12T23:00:00+05:30",
   "eventStatus": "https://schema.org/EventScheduled",
@@ -74,7 +74,7 @@
       "addressCountry": "IN"
     }
   },
-  "organizer": { "@type": "Person", "name": "Pooja & Nagesh" }
+  "organizer": { "@type": "Person", "name": "Pooja & Sagar" }
 }
 </script>
 </head>
@@ -94,7 +94,7 @@
 
     <p class="langgate__om" lang="sa" aria-hidden="true">&#2384;</p>
 
-    <p class="langgate__names">पूजा <span>&amp;</span> नागेश</p>
+    <p class="langgate__names">पूजा <span>&amp;</span> सागर</p>
 
     <h1 class="langgate__title" id="langGateTitle">
       <span lang="en">Choose your language</span>
@@ -135,56 +135,80 @@
   <div class="hero__inner">
     <p class="hero__eyebrow" data-i18n="hero.eyebrow">Together with their families</p>
 
-    <!-- ANTARPAT (अंतरपाट) — the cloth held between bride and groom, lowered
-         at the muhurt as the mangalashtakas end on "शुभमंगल सावधान". It is
-         the reveal gesture of a Maharashtrian wedding, so it is the reveal
-         gesture of this invitation.
+    <!-- ENVELOPE — a hand-made paper envelope closed with a wax seal. Press
+         the seal and it lifts away, the flap falls open and the card rises
+         out of the pocket.
 
-         The stage carries the entrance animation so the cloth itself is free
-         to tilt toward the pointer. -->
-    <div class="antarpat-stage">
-    <div class="antarpat" id="antarpat">
+         The prompt is the button's accessible name (aria-labelledby), so the
+         seal reads as "Tap to Reveal" without repeating the text inside it.
+         setRevealLabel() in main.js swaps tap/click by input type.
 
-      <!-- What the cloth is hiding. -->
-      <div class="antarpat__behind" aria-hidden="true">
-        <span class="antarpat__monogram">प<span>&amp;</span>ना</span>
-        <span class="antarpat__rule"></span>
-        <span class="antarpat__savadhan" lang="mr">॥ शुभमंगल सावधान ॥</span>
-        <span class="antarpat__date" data-i18n="hero.card.date">12 · 12 · 2026</span>
+         The stage carries the entrance animation so the envelope itself is
+         free to tilt toward the pointer. -->
+    <p class="envelope__prompt"><span id="revealBtnLabel">Tap to Reveal</span></p>
+
+    <div class="envelope-stage">
+    <div class="envelope" id="envelope">
+
+      <!-- The card inside. Sits behind the front pocket until it slides up. -->
+      <div class="envelope__card" aria-hidden="true">
+        <span class="envelope__card-mono">प<span>&amp;</span>सा</span>
+        <span class="envelope__card-rule"></span>
+        <span class="envelope__card-line" lang="mr">॥ शुभमंगल सावधान ॥</span>
+        <span class="envelope__card-date" data-i18n="hero.card.date">12 · 12 · 2026</span>
       </div>
 
-      <!-- The cloth, held on a rod, with a zari border and a swastik. -->
-      <div class="antarpat__rod" aria-hidden="true"></div>
-      <div class="antarpat__cloth" aria-hidden="true">
-        <span class="antarpat__zari antarpat__zari--top"></span>
-        <span class="antarpat__zari antarpat__zari--bottom"></span>
+      <!-- Front pocket: the two side panels and the bottom panel, drawn as
+           one clipped face so the seams meet in a single point. -->
+      <div class="envelope__front" aria-hidden="true">
+        <span class="envelope__seam envelope__seam--left"></span>
+        <span class="envelope__seam envelope__seam--right"></span>
+      </div>
 
-        <!-- Swastik. The arms turn clockwise: top to the right, right down,
-             bottom to the left, left up. Getting that wrong is not a
-             stylistic slip — it is a different symbol. -->
-        <svg class="antarpat__motif" viewBox="0 0 64 64" fill="none" focusable="false">
-          <g stroke="currentColor" stroke-width="4" stroke-linecap="square">
-            <path d="M32 12V52"/>
-            <path d="M12 32H52"/>
-            <path d="M32 12H48"/>
-            <path d="M52 32V48"/>
-            <path d="M32 52H16"/>
-            <path d="M12 32V16"/>
-          </g>
-          <!-- the four dots of kunku placed in the quadrants -->
-          <g fill="currentColor">
-            <circle cx="22" cy="22" r="2.2"/><circle cx="42" cy="42" r="2.2"/>
+      <!-- The flap, hinged along the top edge. -->
+      <div class="envelope__flap" aria-hidden="true">
+        <span class="envelope__flap-edge"></span>
+      </div>
+
+      <button class="seal" id="revealBtn" type="button"
+              aria-controls="invitation" aria-labelledby="revealBtnLabel">
+        <!-- Wax seal: a keri (paisley) ring around the couple's names, the
+             same motif that borders a Paithani. The blob is deliberately
+             off-round — poured wax never sets to a true circle. -->
+        <svg class="seal__ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <defs>
+            <!-- Keri: pointed at the tip, full at the base, with a seed
+                 inside — the mango the motif is named for. Drawn as an
+                 outline, not a silhouette; at seal size a solid fill turns
+                 into an anonymous dark oval. -->
+            <g id="keri">
+              <path d="M0 -8c4.5 2.5 6.5 6 6.5 9.5C6.5 5.5 3.5 8 0 8s-6.5-2.5-6.5-6.5C-6.5 -2-4.5 -5.5 0 -8Z"/>
+              <circle cx="0" cy="2.2" r="1.7" class="seal__seed"/>
+            </g>
+          </defs>
+          <circle class="seal__rim" cx="50" cy="50" r="45"/>
+          <circle class="seal__inner" cx="50" cy="50" r="30"/>
+          <circle class="seal__dots" cx="50" cy="50" r="34.5"/>
+          <g class="seal__keris">
+            <use href="#keri" transform="translate(50 12)"/>
+            <use href="#keri" transform="translate(76.9 23.1) rotate(45)"/>
+            <use href="#keri" transform="translate(88 50) rotate(90)"/>
+            <use href="#keri" transform="translate(76.9 76.9) rotate(135)"/>
+            <use href="#keri" transform="translate(50 88) rotate(180)"/>
+            <use href="#keri" transform="translate(23.1 76.9) rotate(225)"/>
+            <use href="#keri" transform="translate(12 50) rotate(270)"/>
+            <use href="#keri" transform="translate(23.1 23.1) rotate(315)"/>
           </g>
         </svg>
 
-        <span class="antarpat__label" lang="mr">शुभविवाह</span>
-      </div>
+        <span class="seal__names" aria-hidden="true">
+          <span class="seal__name" data-i18n="couple.bride">Pooja</span>
+          <span class="seal__amp">&amp;</span>
+          <span class="seal__name" data-i18n="couple.groom">Sagar</span>
+        </span>
+      </button>
     </div>
     </div>
-
-    <button class="btn btn--reveal" id="revealBtn" type="button" aria-controls="invitation">
-      <span class="btn__label" id="revealBtnLabel">Click to Reveal</span>
-    </button>
 
     <p class="hero__invited" data-i18n="hero.invited">You&rsquo;re Invited</p>
   </div>
@@ -364,7 +388,7 @@
       <h1 class="couple__names reveal">
         <span class="couple__name" data-letters data-i18n="couple.bride">Pooja</span>
         <span class="couple__amp">&amp;</span>
-        <span class="couple__name" data-letters data-i18n="couple.groom">Nagesh</span>
+        <span class="couple__name" data-letters data-i18n="couple.groom">Sagar</span>
       </h1>
 
       <!-- PAITHANI border. Paithan, where the weave comes from, is about 50 km
@@ -424,7 +448,7 @@
 
       <blockquote class="quote reveal">
         <p data-words data-i18n="couple.quote">“Some stories are written by chance, and ours was written by serendipity.”</p>
-        <cite data-i18n="couple.quoteCite">— Pooja &amp; Nagesh</cite>
+        <cite data-i18n="couple.quoteCite">— Pooja &amp; Sagar</cite>
       </blockquote>
 
       <p class="couple__date reveal" data-i18n="couple.date">Saturday, 12 December 2026 · Chhatrapati Sambhajinagar</p>
@@ -676,21 +700,21 @@
         <figure class="masonry__item reveal">
           <button type="button" class="masonry__btn" data-i18n-caption="gallery.cap1" data-caption="That look">
             <img src="images/IMG-20260705-WA0023.jpg" data-i18n-alt="gallery.alt1"
-                 alt="Pooja smiling at Nagesh during their pre-wedding shoot"
+                 alt="Pooja smiling at Sagar during their pre-wedding shoot"
                  loading="lazy" decoding="async" width="1066" height="1600">
           </button>
         </figure>
         <figure class="masonry__item reveal">
           <button type="button" class="masonry__btn" data-i18n-caption="gallery.cap2" data-caption="Just the two of us">
             <img src="images/IMG-20260705-WA0024.jpg" data-i18n-alt="gallery.alt2"
-                 alt="Pooja and Nagesh sitting together on the steps"
+                 alt="Pooja and Sagar sitting together on the steps"
                  loading="lazy" decoding="async" width="1600" height="1066">
           </button>
         </figure>
         <figure class="masonry__item reveal">
           <button type="button" class="masonry__btn" data-i18n-caption="gallery.cap3" data-caption="Together">
             <img src="images/IMG-20260705-WA0025.jpg" data-i18n-alt="gallery.alt3"
-                 alt="Portrait of Pooja and Nagesh side by side"
+                 alt="Portrait of Pooja and Sagar side by side"
                  loading="lazy" decoding="async" width="1066" height="1600">
           </button>
         </figure>
@@ -831,7 +855,7 @@
         </svg>
       </div>
       <p class="footer__thanks" data-i18n="footer.thanks">Thank you for being part of our story.</p>
-      <p class="footer__names" data-i18n="footer.names">Pooja &amp; Nagesh</p>
+      <p class="footer__names" data-i18n="footer.names">Pooja &amp; Sagar</p>
       <p class="footer__made"><span data-i18n="footer.made">Made with</span>
         <span aria-hidden="true">&#10084;&#65039;</span><span class="sr-only" data-i18n="footer.love">love</span></p>
     </div>
@@ -863,8 +887,8 @@
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/i18n.js?v=8" defer></script>
-<script src="js/qr.js?v=8" defer></script>
-<script src="js/main.js?v=8" defer></script>
+<script src="js/i18n.js?v=9" defer></script>
+<script src="js/qr.js?v=9" defer></script>
+<script src="js/main.js?v=9" defer></script>
 </body>
 </html>

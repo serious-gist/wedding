@@ -1,4 +1,4 @@
-# Pooja & Nagesh — Wedding Invitation
+# Pooja & Sagar — Wedding Invitation
 
 A bilingual (English / मराठी) single-page Indian wedding invitation. Guests pick
 a language, open an envelope, and land on the invitation: a Ganesh invocation,
@@ -65,7 +65,7 @@ of language.
 
 Copy lives in [`js/i18n.js`](js/i18n.js), with the English text also mirrored in
 `index.html` as the no-JavaScript default. To change the names, replace `Pooja` /
-`Nagesh` (and `पूजा` / `नागेश`) in **both** files, plus the `<title>`, the meta
+`Sagar` (and `पूजा` / `सागर`) in **both** files, plus the `<title>`, the meta
 description, the Open Graph tags and the JSON-LD block in `<head>`, the `P & N`
 monogram on the envelope, and the names on the language gate.
 
