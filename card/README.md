@@ -46,7 +46,7 @@ traditional elements are missing because nobody has supplied them:
 - **Never use `letter-spacing` on the Devanagari text.** It splits conjuncts —
   `आग्रहाचे` renders as `आ ग्र हा चे`. Use `word-spacing` for a tracked-out
   look. `../css/styles.css` carries the same rule for the website.
-- The QR encodes `https://pooja-weds-nagesh.vercel.app/` and is drawn by the
+- The QR encodes `https://pooja-weds-sagar.vercel.app/` and is drawn by the
   site's own `../js/qr.js`, upscaled ×12 with smoothing off so it stays
   scannable at A5.
 - Dates and times are in Devanagari numerals, as Marathi convention expects.

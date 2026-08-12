@@ -910,6 +910,10 @@
           'VERSION:2.0',
           'PRODID:-//Pooja and Sagar//Wedding//EN',
           'BEGIN:VEVENT',
+          /* Deliberately still says nagesh. A UID is an opaque identity, not
+             an address: calendars treat a changed UID as a different event,
+             so renaming it would give every guest who already saved the date
+             a second copy instead of an update. It must outlive the domain. */
           'UID:wedding-2026-12-12@pooja-weds-nagesh',
           'DTSTAMP:' + icsStamp(new Date()),
           'DTSTART:' + icsStamp(start),

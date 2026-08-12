@@ -86,7 +86,7 @@ window.I18N = {
     'calendar.add': 'Add to calendar',
     'calendar.google': 'Google Calendar',
     'calendar.event': 'Wedding of Pooja & Sagar',
-    'calendar.details': 'Ceremony begins at 4:30 PM. Full invitation: https://pooja-weds-nagesh.vercel.app/',
+    'calendar.details': 'Ceremony begins at 4:30 PM. Full invitation: https://pooja-weds-sagar.vercel.app/',
     'calendar.saved': 'Calendar file downloaded',
 
     'events.title': 'Ceremonies',
@@ -251,7 +251,7 @@ window.I18N = {
     'calendar.add': 'कॅलेंडरमध्ये जोडा',
     'calendar.google': 'गूगल कॅलेंडर',
     'calendar.event': 'पूजा व सागर यांचा विवाह सोहळा',
-    'calendar.details': 'विवाह मुहूर्त सायं. ४:३० वाजता. संपूर्ण निमंत्रण: https://pooja-weds-nagesh.vercel.app/',
+    'calendar.details': 'विवाह मुहूर्त सायं. ४:३० वाजता. संपूर्ण निमंत्रण: https://pooja-weds-sagar.vercel.app/',
     'calendar.saved': 'कॅलेंडर फाइल डाउनलोड झाली',
 
     'events.title': 'विवाह विधी',

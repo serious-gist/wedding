@@ -148,14 +148,26 @@ The site is static — no build step, no framework.
 **GitHub: done.** The code lives at `github.com/serious-gist/wedding` and
 `main` is pushed. Keep pushing as you make changes.
 
-**Vercel:** the project should be named **pooja-weds-nagesh**. The GitHub repo
+**Vercel:** the project should be named **pooja-weds-sagar**. The GitHub repo
 is named `wedding`, so Vercel will suggest "wedding" as the project name —
 you have to change that field, or the URL will be wrong.
+
+> **Renaming an existing project.** The project was originally created as
+> `pooja-weds-nagesh`, and the code now points at `pooja-weds-sagar`. Until
+> the Vercel project is renamed to match, the canonical link, `og:url`,
+> `og:image` and the card QR code all point at a domain that does not exist.
+> Rename it under **Project → Settings → General → Project Name**; the new
+> `.vercel.app` URL takes effect immediately.
+>
+> Vercel does **not** keep the old subdomain alive, so any link already given
+> to a guest — including a printed or forwarded QR code — stops working.
+> Re-share the new link and rebuild the card artifacts (see `card/README.md`)
+> before sending anything else out.
 
 Dashboard (easiest):
 
 1. <https://vercel.com/new> → import `serious-gist/wedding`
-2. **Set Project Name to `pooja-weds-nagesh`** (it defaults to the repo name)
+2. **Set Project Name to `pooja-weds-sagar`** (it defaults to the repo name)
 3. Framework Preset: **Other**; leave build command and output directory empty
 4. Deploy
 
@@ -164,16 +176,16 @@ Or from the terminal:
 ```sh
 npm i -g vercel
 vercel login
-vercel link --project pooja-weds-nagesh --yes
+vercel link --project pooja-weds-sagar --yes
 vercel --prod
 ```
 
 Every later `git push` redeploys automatically.
 
-The site lands at `https://pooja-weds-nagesh.vercel.app` — assuming that
+The site lands at `https://pooja-weds-sagar.vercel.app` — assuming that
 subdomain is free. Vercel names are global, so if it is taken you will get a
 suffixed URL. `og:url`, `og:image` and the canonical link in `index.html` are
-already set to `pooja-weds-nagesh.vercel.app`; if your final URL differs,
+already set to `pooja-weds-sagar.vercel.app`; if your final URL differs,
 update those three lines or link previews will point at the wrong place.
 
 **Before you share the link, note that the site is public.** Anyone with the
