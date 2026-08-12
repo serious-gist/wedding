@@ -300,14 +300,21 @@
     var raf = null;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = 0, h = 0;
-    // Blush rose petals plus marigold — the flower of an Indian wedding.
+    /* Blush rose petals plus marigold — the flower of an Indian wedding —
+       with the odd leaf carried along. Listed by frequency, not by variety:
+       the array is sampled uniformly, so repeating an entry is how a kind is
+       made common. Rose petals should dominate; a sky of marigolds reads as
+       confetti. */
     var KINDS = [
+      { color: 'rgba(232,200,196,', shape: 'petal' },
       { color: 'rgba(232,200,196,', shape: 'petal' },
       { color: 'rgba(213,154,149,', shape: 'petal' },
       { color: 'rgba(255,250,244,', shape: 'petal' },
+      { color: 'rgba(255,250,244,', shape: 'petal' },
+      { color: 'rgba(244,222,214,', shape: 'petal' },
       { color: 'rgba(231,154,46,',  shape: 'marigold' },
       { color: 'rgba(243,183,87,',  shape: 'marigold' },
-      { color: 'rgba(226,205,164,', shape: 'marigold' }
+      { color: 'rgba(142,164,114,', shape: 'leaf' }
     ];
 
     /* Akshata — whole rice grains coloured with haldi and kunku, thrown over
@@ -332,7 +339,7 @@
     }
 
     function seed() {
-      var count = Math.round(Math.min(34, Math.max(14, w / 46)));
+      var count = Math.round(Math.min(46, Math.max(18, w / 34)));
       petals = [];
       for (var i = 0; i < count; i++) petals.push(make(true));
     }
@@ -342,16 +349,22 @@
       return {
         x: Math.random() * w,
         y: anywhere ? Math.random() * h : -30,
-        size: 6 + Math.random() * 12,
-        speed: 0.18 + Math.random() * 0.5,
-        drift: (Math.random() - 0.5) * 0.5,
+        size: 11 + Math.random() * 20,
+        speed: 0.14 + Math.random() * 0.38,
+        drift: (Math.random() - 0.5) * 0.4,
         angle: Math.random() * Math.PI * 2,
-        spin: (Math.random() - 0.5) * 0.012,
-        sway: 0.4 + Math.random() * 1.1,
+        spin: (Math.random() - 0.5) * 0.009,
+        sway: 0.5 + Math.random() * 1.3,
         phase: Math.random() * Math.PI * 2,
-        alpha: 0.35 + Math.random() * 0.45,
+        /* Rotation about the petal's own long axis. A real petal spends most
+           of its fall broadside and flicks through edge-on quickly, which is
+           what sells it as a petal rather than a drifting sticker. */
+        flip: Math.random() * Math.PI * 2,
+        flipSpeed: (0.006 + Math.random() * 0.017) * (Math.random() < 0.5 ? -1 : 1),
+        alpha: 0.45 + Math.random() * 0.42,
         color: kind.color,
         shape: kind.shape,
+        grad: null,
         vx: 0,
         vy: 0,
         temp: false
@@ -388,10 +401,35 @@
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(p.angle);
-      ctx.globalAlpha = p.alpha;
-      ctx.fillStyle = p.color + '1)';
+
+      /* The tumble. Squashing the width by cos(flip) is the whole 3D effect:
+         at cos = ±1 the petal is broadside, near 0 it is edge-on. Clamped
+         away from a true zero because scale(0, 1) is a singular matrix and
+         Canvas drops the path entirely, which shows up as a flicker. */
+      if (p.shape !== 'grain') {
+        var tilt = Math.cos(p.flip);
+        var mag = Math.abs(tilt);
+        ctx.scale(mag < 0.08 ? (tilt < 0 ? -0.08 : 0.08) : tilt, 1);
+        // Edge-on catches less light, so it reads slightly dimmer.
+        ctx.globalAlpha = p.alpha * (0.6 + 0.4 * mag);
+      } else {
+        ctx.globalAlpha = p.alpha;
+      }
+
+      /* Shading, built once per petal and reused. Gradient coordinates are
+         resolved against the transform at fill time, not at creation, so a
+         cached gradient in local space still follows the petal around. */
+      if (!p.grad) {
+        var g = ctx.createLinearGradient(0, -s * 0.5, 0, s * 0.5);
+        g.addColorStop(0, p.color + '0.98)');
+        g.addColorStop(0.55, p.color + '0.78)');
+        g.addColorStop(1, p.color + '0.42)');
+        p.grad = g;
+      }
+      ctx.fillStyle = p.grad;
 
       if (p.shape === 'grain') {
+        ctx.fillStyle = p.color + '1)';
         // A rice grain: a short, blunt-ended ellipse.
         ctx.beginPath();
         ctx.ellipse(0, 0, s * 0.19, s * 0.42, 0, 0, Math.PI * 2);
@@ -408,11 +446,23 @@
         ctx.beginPath();
         ctx.arc(0, 0, s * 0.3, 0, Math.PI * 2);
         ctx.fill();
-      } else {
+      } else if (p.shape === 'leaf') {
+        // A pointed ellipse with a midrib — enough to read as a leaf.
         ctx.beginPath();
-        ctx.moveTo(0, -s / 2);
-        ctx.bezierCurveTo(s / 2, -s / 2, s / 2, s / 2, 0, s / 2);
-        ctx.bezierCurveTo(-s / 2, s / 2, -s / 2, -s / 2, 0, -s / 2);
+        ctx.moveTo(0, -s * 0.5);
+        ctx.quadraticCurveTo(s * 0.34, 0, 0, s * 0.5);
+        ctx.quadraticCurveTo(-s * 0.34, 0, 0, -s * 0.5);
+        ctx.fill();
+      } else {
+        /* A rose petal: broad and rounded at the top, narrowing to the point
+           where it met the stem, with a shallow dip in the top edge. The old
+           shape was a symmetric lens, which fell like a seed rather than a
+           petal. */
+        ctx.beginPath();
+        ctx.moveTo(0, s * 0.48);
+        ctx.bezierCurveTo(-s * 0.66, s * 0.14, -s * 0.54, -s * 0.46, -s * 0.07, -s * 0.34);
+        ctx.quadraticCurveTo(0, -s * 0.28, s * 0.07, -s * 0.34);
+        ctx.bezierCurveTo(s * 0.54, -s * 0.46, s * 0.66, s * 0.14, 0, s * 0.48);
         ctx.fill();
       }
       ctx.restore();
@@ -427,9 +477,10 @@
       for (var i = 0; i < petals.length; i++) {
         var p = petals[i];
         p.y += p.speed * dt;
-        p.phase += 0.012 * dt;
+        p.phase += 0.011 * dt;
         p.x += (p.drift + Math.sin(p.phase) * p.sway * 0.4) * dt;
         p.angle += p.spin * dt;
+        p.flip += p.flipSpeed * dt;
 
         if (p.vx || p.vy) {
           p.x += p.vx * dt;
