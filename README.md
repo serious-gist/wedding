@@ -78,7 +78,8 @@ Each needs updating in **both** languages in `js/i18n.js`:
   replace it. See "Shared photo folder" below.
 - **Ceremony dates and times** — **Engagement on Sunday 15 November 2026**,
   **Mehendi on 10 December** and the **wedding on Saturday 12 December 2026**
-  were given. The engagement time and venue, Haldi (11 Dec, 10:00 AM),
+  were given, and the engagement is at **Sanskruti Pure Veg, Nagar Road,
+  Waluj**. The engagement time, Haldi (11 Dec, 10:00 AM),
   Mehendi's 5:00 PM start and the wedding's 4:30 PM start are still guesses.
 - **Our Story** — the "first meet" and "families met" entries and their dates.
 - **Dress code** — currently "Traditional Indian · blush, ivory & gold".
