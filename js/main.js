@@ -928,7 +928,7 @@
         var url = URL.createObjectURL(new Blob([lines], { type: 'text/calendar' }));
         var link = document.createElement('a');
         link.href = url;
-        link.download = 'pooja-nagesh-wedding.ics';
+        link.download = 'pooja-sagar-wedding.ics';
         document.body.appendChild(link);
         link.click();
         link.remove();
