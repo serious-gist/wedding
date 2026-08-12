@@ -508,10 +508,16 @@ h1, h2, h3 {
     linear-gradient(to bottom, rgba(48, 31, 26, 0.42), rgba(48, 31, 26, 0.2) 45%, rgba(48, 31, 26, 0.5));
 }
 
+/* Fixed to the viewport and above the page, not scoped to the cover: the
+   fall carries on over the invitation. It has to be above the content rather
+   than behind it because the sections paint opaque backgrounds, which would
+   otherwise bury it. 30 clears the content and stays under the chrome — the
+   topbar starts at 40. pointer-events is what keeps it decorative: every
+   click, tap and drag passes straight through to what's underneath. */
 .petals {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 30;
   width: 100%;
   height: 100%;
   pointer-events: none;

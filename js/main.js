@@ -298,6 +298,7 @@
     var ctx = canvas.getContext('2d');
     var petals = [];
     var raf = null;
+    var paused = false;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = 0, h = 0;
     /* Blush rose petals plus marigold — the flower of an Indian wedding —
@@ -502,6 +503,19 @@
       raf = requestAnimationFrame(frame);
     }
 
+    /* The fall now runs for the whole visit rather than just the cover, so a
+       backgrounded tab would otherwise animate a canvas nobody is looking at.
+       Browsers throttle rAF when hidden but do not reliably stop it. */
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        if (raf !== null) { cancelAnimationFrame(raf); raf = null; paused = true; }
+      } else if (paused) {
+        paused = false;
+        last = 0;
+        raf = requestAnimationFrame(frame);
+      }
+    });
+
     return {
       start: function () {
         if (reducedMotion || raf !== null) return;
@@ -517,6 +531,9 @@
       stop: function () {
         if (raf !== null) cancelAnimationFrame(raf);
         raf = null;
+        // Clear the pause flag too, or coming back to the tab would restart
+        // a fall that was deliberately stopped.
+        paused = false;
         ctx.clearRect(0, 0, w, h);
       },
       resize: function () {
@@ -842,7 +859,9 @@
 
       setTimeout(function () {
         hero.classList.add('is-gone');
-        petals.stop();
+        // The fall deliberately survives the reveal and carries on over the
+        // invitation; the canvas is fixed and body-level, so it outlives the
+        // hero being taken out of the layout.
         document.body.classList.remove('is-locked');
         invitation.hidden = false;
 
@@ -1774,10 +1793,11 @@
     petals.start();
 
     window.addEventListener('resize', function () { petals.resize(); });
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) petals.stop();
-      else if (!$('#hero').classList.contains('is-gone')) petals.start();
-    });
+    /* Hiding and re-showing the tab is handled inside Petals, which suspends
+       and resumes in place. The old handler here stopped and restarted, which
+       reseeded the field; worse, it only restarted while the cover was up, so
+       now that the fall outlives the reveal it would have been a one-way trip
+       the first time a guest switched tabs. */
 
     setupReveal(petals, Music());
     setupCountdown();
