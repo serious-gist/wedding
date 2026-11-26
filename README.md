@@ -76,11 +76,9 @@ Each needs updating in **both** languages in `js/i18n.js`:
 - **The shared photo folder link** — `CONFIG.photoDriveUrl` in `js/main.js` is a
   placeholder. The QR encodes it, so guests will scan a dead link until you
   replace it. See "Shared photo folder" below.
-- **Ceremony dates and times** — **Engagement on Sunday 15 November 2026**,
-  **Mehendi on 10 December** and the **wedding on Saturday 12 December 2026**
-  were given, and the engagement is at **Sanskruti Pure Veg, Nagar Road,
-  Waluj**. The engagement time, Haldi (11 Dec, 10:00 AM),
-  Mehendi's 5:00 PM start and the wedding's 4:30 PM start are still guesses.
+- **Ceremony dates and times** — **Mehendi on 10 December**, **Haldi on 11
+  December at 5:00 PM**, and the **wedding on Saturday 12 December 2026 at
+  5:45 PM**.
 - **Our Story** — the "first meet" and "families met" entries and their dates.
 - **Dress code** — currently "Traditional Indian · blush, ivory & gold".
 - **RSVP deadline** — set to 20 November 2026 (three weeks before the wedding).

@@ -11,16 +11,12 @@
 
 ## Photos
 
-The gallery uses these three, in this order:
+The gallery uses these two, in this order:
 
 ```
-IMG-20260705-WA0023.jpg   portrait   1066 × 1600
-IMG-20260705-WA0024.jpg   landscape  1600 × 1066
-IMG-20260705-WA0025.jpg   portrait   1066 × 1600
+1000278199.jpg   portrait   1066 × 1600
+1000278202.jpg   portrait   1066 × 1600
 ```
-
-`IMG-20260705-WA0026.jpg`, `…0027.jpg` and `…0028.jpg` are kept in this folder
-but no longer shown on the site.
 
 If a file is ever missing the gallery falls back to generated gradient
 placeholders, so the page never looks broken.

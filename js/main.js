@@ -12,11 +12,11 @@
      CONFIG — edit this block to personalise the invitation
      ============================================================ */
   var CONFIG = {
-    // Saturday, 12 December 2026, ceremony at 4:30 PM IST.
+    // Saturday, 12 December 2026, ceremony at 5:45 PM IST.
     // Written with the +05:30 offset rather than as local components: this is
     // one absolute moment, so the countdown and the calendar file agree for a
     // guest reading from anywhere in the world.
-    weddingDate: new Date('2026-12-12T16:30:00+05:30'),
+    weddingDate: new Date('2026-12-12T17:45:00+05:30'),
     weddingEnd: new Date('2026-12-12T23:00:00+05:30'),
 
     // Venue used for the embedded map and the "Open in Google Maps" button.
