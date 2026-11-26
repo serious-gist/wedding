@@ -26,17 +26,12 @@
     // Shared folder where guests upload their photos and videos from the
     // ceremonies. Encoded into the QR code in the "Share Your Photos" section.
     photoDriveUrl: 'https://drive.google.com/drive/folders/1nt1CxaEnTo1CQYjWppIci37Z7CGA76zo?usp=drive_link',
-    rsvpEmail: 'poojawedsnagesh@gmail.com',
 
     // Optional: drop an mp3 you have the rights to at this path and it will
     // be used as the background music. If the file is missing, a shehnai
     // mangalvadya piece is synthesised instead — see Music() below for why
     // it is synthesised rather than a recording.
-    musicSrc: 'audio/ambience.mp3',
-
-    // Optional form endpoint (Formspree, Getform, your own API…).
-    // When null, the form opens a prefilled email draft instead.
-    rsvpEndpoint: null
+    musicSrc: 'audio/ambience.mp3'
   };
 
   /* ============================================================
@@ -1499,234 +1494,7 @@
   }
 
   /* ============================================================
-     10 · Confetti
-     ============================================================ */
-  function burstConfetti() {
-    if (reducedMotion) return;
-    var canvas = $('#confetti');
-    if (!canvas) return;
-
-    var ctx = canvas.getContext('2d');
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    canvas.classList.add('is-active');
-
-        // Akshata again, so the RSVP celebration matches the reveal.
-    var GRAINS = ['#fffcf6', '#faf4e6', '#e5b125', '#f2d98a', '#b4232a', '#d4696b'];
-    var PETALS = ['#e8c8c4', '#d59a95', '#e79a2e', '#f3b757'];
-    var pieces = [];
-    var w = window.innerWidth, h = window.innerHeight;
-
-    // Flower petals rather than paper — the same shapes as the cover, so the
-    // celebration reads as one idea from the first screen to the last.
-    function piece(from) {
-      var thrown = from === 'burst';
-      var grain = Math.random() < 0.72;
-      return {
-        x: thrown ? w * (0.2 + Math.random() * 0.6) : Math.random() * w,
-        y: thrown ? h * 0.42 + (Math.random() - 0.5) * 60 : -40 - Math.random() * h * 0.6,
-        vx: thrown ? (Math.random() - 0.5) * 9 : (Math.random() - 0.5) * 1.6,
-        vy: thrown ? -7 - Math.random() * 9 : 1.5 + Math.random() * 2.5,
-        gravity: thrown ? 0.24 : 0.02,
-        size: 6 + Math.random() * 9,
-        angle: Math.random() * Math.PI,
-        spin: (Math.random() - 0.5) * 0.18,
-        sway: 0.6 + Math.random() * 1.4,
-        phase: Math.random() * Math.PI * 2,
-        // Mostly rice, with a scattering of flowers through it.
-        grain: grain,
-        color: grain
-          ? GRAINS[(Math.random() * GRAINS.length) | 0]
-          : PETALS[(Math.random() * PETALS.length) | 0],
-        life: 1
-      };
-    }
-
-    for (var i = 0; i < 110; i++) pieces.push(piece('burst'));
-    for (var j = 0; j < 70; j++) pieces.push(piece('shower'));
-
-    function draw(p) {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.angle);
-      ctx.globalAlpha = p.life;
-      ctx.fillStyle = p.color;
-
-      if (p.grain) {
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.size * 0.19, p.size * 0.42, 0, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        var s = p.size;
-        ctx.beginPath();
-        ctx.moveTo(0, -s / 2);
-        ctx.bezierCurveTo(s / 2, -s / 2, s / 2, s / 2, 0, s / 2);
-        ctx.bezierCurveTo(-s / 2, s / 2, -s / 2, -s / 2, 0, -s / 2);
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-
-    var started = performance.now();
-    (function frame(now) {
-      var elapsed = now - started;
-      ctx.clearRect(0, 0, w, h);
-
-      pieces.forEach(function (p) {
-        p.vy += p.gravity;
-        p.vx *= 0.992;                          // drag
-        p.phase += 0.04;
-        p.x += p.vx + Math.sin(p.phase) * p.sway * 0.35;
-        p.y += p.vy;
-        p.angle += p.spin;
-        // Hold full opacity while the shower is still arriving, then fade.
-        p.life = Math.max(0, Math.min(1, (5200 - elapsed) / 1600));
-        draw(p);
-      });
-
-      if (elapsed < 5200) requestAnimationFrame(frame);
-      else {
-        ctx.clearRect(0, 0, w, h);
-        canvas.classList.remove('is-active');
-      }
-    })(started);
-  }
-
-  /* ============================================================
-     11 · RSVP
-     ============================================================ */
-  function setupRsvp() {
-    var form = $('#rsvpForm');
-    if (!form) return;
-
-    var status = $('#rsvpStatus');
-    var submit = $('#rsvpSubmit');
-    var attend = $('#rsvpAttend');
-    var eventsField = $('#eventsField');
-    var guests = $('#rsvpGuests');
-
-    // Headcount and ceremony choices are only relevant if attending.
-    function syncAttendance() {
-      var coming = attend.value === 'yes';
-      eventsField.hidden = !coming;
-      guests.closest('.field').hidden = !coming;
-    }
-    attend.addEventListener('change', syncAttendance);
-    syncAttendance();
-
-    function setError(input, show) {
-      var field = input.closest('.field');
-      var msg = $('[data-error-for="' + input.id + '"]', field);
-      field.classList.toggle('has-error', show);
-      if (msg) msg.hidden = !show;
-      input.setAttribute('aria-invalid', show ? 'true' : 'false');
-    }
-
-    function validate() {
-      var ok = true;
-      var name = $('#rsvpName');
-
-      var nameBad = name.value.trim().length < 2;
-      setError(name, nameBad);
-      if (nameBad) ok = false;
-
-      if (attend.value === 'yes') {
-        var n = parseInt(guests.value, 10);
-        var guestsBad = !(n >= 1 && n <= 10);
-        setError(guests, guestsBad);
-        if (guestsBad) ok = false;
-
-        // Nothing is ticked by default, so an attending guest who ticks
-        // nothing would tell us they are coming to no ceremony at all.
-        var chosen = $$('input[name="events"]:checked', form).length;
-        var eventsMsg = $('[data-error-for="eventsField"]', form);
-        eventsField.classList.toggle('has-error', chosen === 0);
-        if (eventsMsg) eventsMsg.hidden = chosen > 0;
-        if (chosen === 0) ok = false;
-      } else {
-        setError(guests, false);
-      }
-      return ok;
-    }
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (!validate()) {
-        status.textContent = t('rsvp.checkFields');
-        var firstBad = $('.has-error input, .has-error select', form);
-        if (firstBad) firstBad.focus();
-        return;
-      }
-
-      var coming = attend.value === 'yes';
-      var payload = {
-        name: $('#rsvpName').value.trim(),
-        guests: coming ? parseInt(guests.value, 10) : 0,
-        attending: attend.value,
-        events: coming
-          ? $$('input[name="events"]:checked', form).map(function (c) { return c.value; })
-          : [],
-        message: $('#rsvpMessage').value.trim(),
-        submittedAt: new Date().toISOString()
-      };
-
-      submit.disabled = true;
-      status.textContent = t('rsvp.sending');
-
-      function done(delivered) {
-        // Always keep a local copy so nothing is lost if the network fails.
-        try {
-          var saved = JSON.parse(localStorage.getItem('rsvps') || '[]');
-          saved.push(payload);
-          localStorage.setItem('rsvps', JSON.stringify(saved));
-        } catch (err) { /* private mode — ignore */ }
-
-        form.classList.add('is-sent');
-        status.textContent = payload.attending === 'yes'
-          ? t('rsvp.thanksYes', { name: payload.name.split(' ')[0] })
-          : t('rsvp.thanksNo');
-
-        if (payload.attending === 'yes') burstConfetti();
-        if (!delivered && CONFIG.rsvpEndpoint) toast(t('rsvp.offline'));
-
-        // The button now shows a confirmation, so stop translating its label.
-        submit.removeAttribute('data-i18n');
-        submit.textContent = t('rsvp.received');
-      }
-
-      if (CONFIG.rsvpEndpoint) {
-        fetch(CONFIG.rsvpEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(payload)
-        }).then(function (res) { done(res.ok); })
-          .catch(function () { done(false); });
-      } else {
-        submit.disabled = false;
-        var eventNames = payload.events.map(function (event) {
-          return t('events.' + event + 'Name');
-        });
-        var body = [
-          'Name: ' + payload.name,
-          'Attending: ' + t(payload.attending === 'yes' ? 'rsvp.yes' : 'rsvp.no'),
-          'Guests: ' + payload.guests,
-          'Ceremonies: ' + (eventNames.length ? eventNames.join(', ') : '—'),
-          'Message: ' + (payload.message || '—')
-        ].join('\n');
-        var subject = 'Wedding RSVP — ' + payload.name;
-
-        status.textContent = t('rsvp.emailReady');
-        window.location.href = 'mailto:' + encodeURIComponent(CONFIG.rsvpEmail) +
-          '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(body);
-      }
-    });
-  }
-
-  /* ============================================================
-     12 · Shared photo folder — QR, link and copy button
+     10 · Shared photo folder — QR, link and copy button
      ============================================================ */
   function copyText(value) {
     var fallback = function () {
@@ -1818,7 +1586,6 @@
     setupNavAndScroll();
     setupParallax();
     setupGallery();
-    setupRsvp();
     setupPhotoFolder();
     setupGanesh();
     setupRangoli();

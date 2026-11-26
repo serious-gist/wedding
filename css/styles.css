@@ -73,10 +73,10 @@
 :root[data-lang="mr"] :is(
   .btn, .topnav a, .hero__eyebrow, .envelope__card-date,
   .section__sub, .card h3, .couple__date, .quote cite, .countdown__lbl,
-  .timeline__when, .field label, .field__opt,
+  .timeline__when,
   .share__label, .share__qr-note, .copy, .footer__made, .skip-link,
   .langswitch__btn, .map__placeholder p,
-  .ganesh__blessing, .event__native, .event__time, .field--check legend
+  .ganesh__blessing, .event__native, .event__time
 ) {
   text-transform: none;
   letter-spacing: 0.01em;
@@ -86,7 +86,7 @@
    languages — only the surrounding copy needs the Marathi treatment. */
 :root[data-lang="mr"] .event__where { font-style: normal; font-size: 0.95rem; }
 
-:root[data-lang="mr"] :is(.event__text, .shloka__meaning, .check) {
+:root[data-lang="mr"] :is(.event__text, .shloka__meaning) {
   font-size: 1rem;
   line-height: 1.85;
 }
@@ -100,7 +100,6 @@
 }
 :root[data-lang="mr"] .btn { font-size: 0.9rem; }
 :root[data-lang="mr"] .topnav a { font-size: 0.86rem; }
-:root[data-lang="mr"] .field label { font-size: 0.82rem; }
 :root[data-lang="mr"] :is(.share__label, .share__note) { font-size: 0.9rem; }
 
 /* Anything the Latin design sets in small tracked-out caps becomes illegible
@@ -108,7 +107,7 @@
 :root[data-lang="mr"] :is(
   .countdown__lbl, .hero__eyebrow, .quote cite, .couple__date,
   .timeline__when, .share__qr-note, .footer__made, .envelope__card-date,
-  .copy, .field__opt
+  .copy
 ) {
   font-size: 0.86rem;
 }
@@ -1294,123 +1293,19 @@ h1, h2, h3 {
 @media (max-width: 560px) { .map { aspect-ratio: 4 / 5; } }
 
 /* ---------- Form ---------- */
-.form { padding: clamp(1.6rem, 4vw, 2.6rem); }
-.field { margin-bottom: 1.15rem; }
-.field-row { display: grid; gap: 1.15rem; grid-template-columns: 1fr; }
-@media (min-width: 560px) { .field-row { grid-template-columns: 1fr 1fr; } }
-
-/* `:not(.check)` matters: the ceremony pills are <label>s inside a .field too,
-   and the tracked-out caps treatment is wrong for them. */
-.field label:not(.check) {
+.google-form {
+  overflow: hidden;
+  padding: 0.65rem;
+}
+.google-form iframe {
   display: block;
-  margin-bottom: 0.45rem;
-  font-size: 0.68rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-.field__opt { text-transform: none; letter-spacing: 0.04em; color: var(--ink-faint); }
-
-/* Checkboxes must be excluded, or they inherit the full-width, padded,
-   appearance:none treatment meant for text inputs and render as huge ovals. */
-.field input:not([type="checkbox"]):not([type="radio"]),
-.field select,
-.field textarea {
   width: 100%;
-  padding: 0.85rem 1rem;
-  font-family: var(--sans);
-  font-size: 0.95rem;
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(201, 166, 107, 0.35);
-  border-radius: 12px;
-  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease);
-  -webkit-appearance: none;
-  appearance: none;
-}
-.field select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23b28c4d' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 12px;
-  padding-right: 2.4rem;
-}
-.field textarea { resize: vertical; min-height: 6rem; }
-
-/* Ceremony checkboxes */
-.field--check {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  height: 1800px;
   border: 0;
-  margin: 0 0 1.15rem;
-  padding: 0;
-}
-.field--check legend {
-  flex: 1 0 100%;
-  padding: 0;
-  margin-bottom: 0.55rem;
-  font-size: 0.68rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-.check {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-  padding: 0.5rem 0.9rem;
-  border: 1px solid rgba(201, 166, 107, 0.35);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.6);
-  font-size: 0.86rem;
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
-}
-.check:hover { border-color: var(--champagne); }
-.check input {
-  width: 15px; height: 15px;
-  margin: 0;
-  accent-color: var(--gold);
-  cursor: pointer;
-}
-/* The fieldset is a flex row, so the error has to claim a line of its own. */
-.field--check .field__error { flex: 1 0 100%; }
-.field--check.has-error .check { border-color: var(--blush-deep); }
-
-.check:has(input:checked) {
-  background: rgba(201, 166, 107, 0.14);
-  border-color: var(--champagne);
-  color: var(--ink);
-}
-
-.field input:not([type="checkbox"]):focus, .field select:focus, .field textarea:focus {
-  outline: none;
+  border-radius: calc(var(--radius) - 8px);
   background: #fff;
-  border-color: var(--champagne);
-  box-shadow: 0 0 0 3px rgba(201, 166, 107, 0.18);
 }
-.field input::placeholder, .field textarea::placeholder { color: var(--ink-faint); }
-.field.has-error input, .field.has-error select { border-color: var(--blush-deep); }
-.field__error {
-  margin: 0.4rem 0 0;
-  font-size: 0.78rem;
-  color: #b4635e;
-}
-
-.form__status {
-  margin: 1rem 0 0;
-  text-align: center;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.15rem;
-  color: var(--gold);
-  min-height: 1.6rem;
-}
-.form.is-sent { text-align: center; }
-
+@media (max-width: 560px) { .google-form iframe { height: 3200px; } }
 /* ---------- Shared photo folder ---------- */
 .share {
   display: grid;
@@ -1613,17 +1508,7 @@ h1, h2, h3 {
 .lightbox__nav--prev { left: 1rem; top: 50%; margin-top: -23px; }
 .lightbox__nav--next { right: 1rem; top: 50%; margin-top: -23px; }
 
-/* ---------- Confetti + toast ---------- */
-.confetti {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s var(--ease);
-}
-.confetti.is-active { opacity: 1; }
-
+/* ---------- Toast ---------- */
 .toast {
   position: fixed;
   left: 50%; bottom: 2rem;
@@ -2209,7 +2094,7 @@ h1, h2, h3 {
     transition-duration: 0.001ms !important;
   }
   .reveal { opacity: 1; transform: none; }
-  .petals, .confetti { display: none; }
+  .petals { display: none; }
 
   /* Show the finished state of anything that would otherwise start hidden
      and only become visible through an animation. */
@@ -2237,7 +2122,7 @@ h1, h2, h3 {
 
 @media print {
   .hero, .topbar, .toran, .progress, .music, .totop, .lightbox,
-  .confetti, .toast, .map, .langgate { display: none !important; }
+  .toast, .map, .langgate { display: none !important; }
   .invitation { opacity: 1 !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
   .letter, .word { opacity: 1 !important; transform: none !important; }

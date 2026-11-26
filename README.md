@@ -88,9 +88,7 @@ var CONFIG = {
   weddingDate: new Date('2026-12-12T17:45:00+05:30'),
   venueQuery: '36 Gun Celebration, Gut No. 118, Highway, opposite Southcity, near AS Club Bridge, CIDCO Waluj Mahanagar 2, Waluj, Tisgaon, Chhatrapati Sambhajinagar, Maharashtra 431136',
   photoDriveUrl: 'https://drive.google.com/drive/folders/1nt1CxaEnTo1CQYjWppIci37Z7CGA76zo?usp=drive_link',
-  rsvpEmail: 'poojawedsnagesh@gmail.com',
-  musicSrc: 'audio/ambience.mp3',
-  rsvpEndpoint: null
+  musicSrc: 'audio/ambience.mp3'
 };
 ```
 
@@ -122,20 +120,12 @@ Music never autoplays before the guest interacts — browsers block that.
 
 ### 5. RSVP responses
 
-By default, submitting the RSVP form opens the guest's email app with a
-pre-filled message to `CONFIG.rsvpEmail`. The guest must send that message to
-complete their RSVP. A direct email link is also shown below the form.
-
-To send responses to an online form service instead, set `rsvpEndpoint` to a
-form service URL:
-
-```js
-rsvpEndpoint: 'https://formspree.io/f/your-form-id'
-```
-
-The form POSTs JSON (`name`, `guests`, `attending`, `events`, `message`,
-`submittedAt`), where `events` lists which ceremonies the guest will join. If
-the request fails, a local copy is saved in that guest's browser.
+The RSVP section embeds the public Google Form:
+<https://forms.gle/caeEUWEcdosoCTrJ9>. Responses are stored in that form's
+Google account. To receive email alerts at
+`poojawedsnagesh@gmail.com`, create or own the form in that account and enable
+**Responses → More → Get email notifications for new responses**. A direct
+email contact link is also shown below the embedded form.
 
 ## Deploying
 
@@ -198,7 +188,7 @@ already been lost once from local disk.
 Fade-in on scroll, floating rose petals and marigolds on the cover, a swaying
 marigold toran, a reading-progress bar, per-letter name reveal, a gold shimmer
 across headings, pointer-tilt on cards, a pulse as countdown digits change, the
-envelope reveal, confetti on RSVP, and the **Ganesh line art drawing itself
+envelope reveal, and the **Ganesh line art drawing itself
 stroke by stroke** when it scrolls into view.
 
 Everything is disabled or shown in its finished state under
