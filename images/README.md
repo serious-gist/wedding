@@ -26,8 +26,8 @@ To swap or add a photo, edit the `src` values in the gallery section of
 pixel dimensions. Those attributes reserve the masonry tile's shape while the
 image loads — a wrong ratio makes the layout jump.
 
-## Still to add
+## Open Graph preview
 
 `og-cover.jpg` (1200×630) is referenced by the Open Graph tags as the link
-preview image for WhatsApp, iMessage and social sharing. Until it exists those
-previews show no image.
+preview image for WhatsApp, iMessage and social sharing. Rebuild it alongside
+the invitation card with `node card/build.mjs`.

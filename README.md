@@ -1,4 +1,4 @@
-# Pooja & Sagar — Wedding Invitation
+# Pooja & Nagesh — Wedding Invitation
 
 A bilingual (English / मराठी) single-page Indian wedding invitation. Guests pick
 a language, open an envelope, and land on the invitation: a Ganesh invocation,
@@ -65,23 +65,19 @@ of language.
 
 Copy lives in [`js/i18n.js`](js/i18n.js), with the English text also mirrored in
 `index.html` as the no-JavaScript default. To change the names, replace `Pooja` /
-`Sagar` (and `पूजा` / `सागर`) in **both** files, plus the `<title>`, the meta
+`Nagesh` (and `पूजा` / `नागेश`) in **both** files, plus the `<title>`, the meta
 description, the Open Graph tags and the JSON-LD block in `<head>`, the `P & N`
 monogram on the envelope, and the names on the language gate.
 
-### 2. Still placeholder — replace before sending
+### 2. Invitation details
 
 Each needs updating in **both** languages in `js/i18n.js`:
 
-- **The shared photo folder link** — `CONFIG.photoDriveUrl` in `js/main.js` is a
-  placeholder. The QR encodes it, so guests will scan a dead link until you
-  replace it. See "Shared photo folder" below.
-- **Ceremony dates and times** — **Mehendi on 10 December**, **Haldi on 11
-  December at 5:00 PM**, and the **wedding on Saturday 12 December 2026 at
-  5:45 PM**.
-- **Our Story** — the "first meet" and "families met" entries and their dates.
-- **Dress code** — currently "Traditional Indian · blush, ivory & gold".
-- **RSVP deadline** — set to 20 November 2026 (three weeks before the wedding).
+- **Ceremonies** — Mehendi on 10 December, Haldi on 11 December at 5:00 PM,
+  and the wedding on Saturday 12 December 2026 at 5:45 PM.
+- **Wedding venue** — 36 Gun Celebration, with its full address in the venue
+  section and wedding event card.
+- **RSVP deadline** — 10 December 2026.
 
 ### 3. Date, venue, photo folder
 
@@ -89,9 +85,10 @@ Edit the `CONFIG` block at the top of [`js/main.js`](js/main.js):
 
 ```js
 var CONFIG = {
-  weddingDate: new Date(2026, 11, 12, 16, 30, 0),  // month is 0-indexed: 11 = December
-  venueQuery: '36 Gun Lawns, Gut No. 118, Highway, opp. Southcity, ...',
-  photoDriveUrl: 'https://drive.google.com/drive/folders/REPLACE-WITH-FOLDER-ID',
+  weddingDate: new Date('2026-12-12T17:45:00+05:30'),
+  venueQuery: '36 Gun Celebration, Gut No. 118, Highway, opposite Southcity, near AS Club Bridge, CIDCO Waluj Mahanagar 2, Waluj, Tisgaon, Chhatrapati Sambhajinagar, Maharashtra 431136',
+  photoDriveUrl: 'https://drive.google.com/drive/folders/1nt1CxaEnTo1CQYjWppIci37Z7CGA76zo?usp=drive_link',
+  rsvpEmail: 'poojawedsnagesh@gmail.com',
   musicSrc: 'audio/ambience.mp3',
   rsvpEndpoint: null
 };
@@ -110,7 +107,7 @@ shoot across the three days, via a QR code and a link.
 1. Create a folder in Google Drive (or a shared Google Photos album).
 2. Share it so that **anyone with the link can upload**, not just view. In Drive:
    *Share → General access → Anyone with the link → Editor*.
-3. Paste that link into `CONFIG.photoDriveUrl`.
+3. The current folder link is set in `CONFIG.photoDriveUrl`.
 
 Keep the link short. The QR generator handles up to 106 characters; a normal
 Drive folder URL is about 70. If it overflows, the QR is hidden automatically
@@ -125,19 +122,20 @@ Music never autoplays before the guest interacts — browsers block that.
 
 ### 5. RSVP responses
 
-By default submissions are stored in the browser's `localStorage` under the key
-`rsvps` — fine for testing, but **each guest's response stays on their own
-phone**, so you will not receive them.
+By default, submitting the RSVP form opens the guest's email app with a
+pre-filled message to `CONFIG.rsvpEmail`. The guest must send that message to
+complete their RSVP. A direct email link is also shown below the form.
 
-To collect responses, set `rsvpEndpoint` to a form service URL:
+To send responses to an online form service instead, set `rsvpEndpoint` to a
+form service URL:
 
 ```js
 rsvpEndpoint: 'https://formspree.io/f/your-form-id'
 ```
 
 The form POSTs JSON (`name`, `guests`, `attending`, `events`, `message`,
-`submittedAt`), where `events` lists which ceremonies the guest will join. A
-local copy is always kept as a fallback if the request fails.
+`submittedAt`), where `events` lists which ceremonies the guest will join. If
+the request fails, a local copy is saved in that guest's browser.
 
 ## Deploying
 

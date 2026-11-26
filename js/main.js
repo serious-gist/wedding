@@ -1,5 +1,5 @@
 /* ============================================================
-   Pooja & Sagar — Wedding Invitation
+   Pooja & Nagesh — Wedding Invitation
    Vanilla JS, no dependencies. Progressive enhancement:
    without JS the invitation is still readable (see the no-JS
    fallback in index.html).
@@ -20,16 +20,13 @@
     weddingEnd: new Date('2026-12-12T23:00:00+05:30'),
 
     // Venue used for the embedded map and the "Open in Google Maps" button.
-    venueQuery: '36 Gun Lawns, Gut No. 118, Highway, opp. Southcity, near AS Club Bridge, ' +
+    venueQuery: '36 Gun Celebration, Gut No. 118, Highway, opposite Southcity, near AS Club Bridge, ' +
                 'CIDCO Waluj Mahanagar 2, Waluj, Tisgaon, Chhatrapati Sambhajinagar, Maharashtra 431136',
 
     // Shared folder where guests upload their photos and videos from the
     // ceremonies. Encoded into the QR code in the "Share Your Photos" section.
-    // REPLACE THIS with your own Google Drive (or Photos) folder link, shared
-    // with "Anyone with the link can add/upload".
-    // Keep it short — a link over ~100 characters will not fit in the QR, and
-    // the section falls back to showing just the link.
-    photoDriveUrl: 'https://drive.google.com/drive/folders/REPLACE-WITH-FOLDER-ID',
+    photoDriveUrl: 'https://drive.google.com/drive/folders/1nt1CxaEnTo1CQYjWppIci37Z7CGA76zo?usp=drive_link',
+    rsvpEmail: 'poojawedsnagesh@gmail.com',
 
     // Optional: drop an mp3 you have the rights to at this path and it will
     // be used as the background music. If the file is missing, a shehnai
@@ -37,8 +34,8 @@
     // it is synthesised rather than a recording.
     musicSrc: 'audio/ambience.mp3',
 
-    // Optional: a form endpoint (Formspree, Getform, your own API…).
-    // Leave null to store RSVPs in localStorage only.
+    // Optional form endpoint (Formspree, Getform, your own API…).
+    // When null, the form opens a prefilled email draft instead.
     rsvpEndpoint: null
   };
 
@@ -978,7 +975,7 @@
         var lines = [
           'BEGIN:VCALENDAR',
           'VERSION:2.0',
-          'PRODID:-//Pooja and Sagar//Wedding//EN',
+          'PRODID:-//Pooja and Nagesh//Wedding//EN',
           'BEGIN:VEVENT',
           /* Deliberately still says nagesh. A UID is an opaque identity, not
              an address: calendars treat a changed UID as a different event,
@@ -998,7 +995,7 @@
         var url = URL.createObjectURL(new Blob([lines], { type: 'text/calendar' }));
         var link = document.createElement('a');
         link.href = url;
-        link.download = 'pooja-sagar-wedding.ics';
+        link.download = 'pooja-nagesh-wedding.ics';
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -1707,7 +1704,23 @@
         }).then(function (res) { done(res.ok); })
           .catch(function () { done(false); });
       } else {
-        setTimeout(function () { done(true); }, 500);
+        submit.disabled = false;
+        var eventNames = payload.events.map(function (event) {
+          return t('events.' + event + 'Name');
+        });
+        var body = [
+          'Name: ' + payload.name,
+          'Attending: ' + t(payload.attending === 'yes' ? 'rsvp.yes' : 'rsvp.no'),
+          'Guests: ' + payload.guests,
+          'Ceremonies: ' + (eventNames.length ? eventNames.join(', ') : '—'),
+          'Message: ' + (payload.message || '—')
+        ].join('\n');
+        var subject = 'Wedding RSVP — ' + payload.name;
+
+        status.textContent = t('rsvp.emailReady');
+        window.location.href = 'mailto:' + encodeURIComponent(CONFIG.rsvpEmail) +
+          '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
       }
     });
   }

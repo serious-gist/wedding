@@ -23,8 +23,8 @@ window.I18N = {
   en: {
     'lang.name': 'English',
 
-    'meta.title': 'Pooja & Sagar — Wedding Invitation',
-    'meta.description': 'Pooja & Sagar invite you to celebrate their wedding on 12 December 2026 at 36 Gun Lawns, Waluj, Chhatrapati Sambhajinagar.',
+    'meta.title': 'Pooja & Nagesh — Wedding Invitation',
+    'meta.description': 'Pooja & Nagesh invite you to celebrate their wedding on 12 December 2026 at 36 Gun Celebration, Waluj, Chhatrapati Sambhajinagar.',
 
     'a11y.skip': 'Skip to invitation',
     'a11y.sections': 'Sections',
@@ -59,9 +59,9 @@ window.I18N = {
 
     'couple.intro': 'We invite you to celebrate our wedding',
     'couple.bride': 'Pooja',
-    'couple.groom': 'Sagar',
+    'couple.groom': 'Nagesh',
     'couple.quote': '“Some stories are written by chance, and ours was written by serendipity.”',
-    'couple.quoteCite': '— Pooja & Sagar',
+    'couple.quoteCite': '— Pooja & Nagesh',
     'couple.date': 'Saturday, 12 December 2026 · Chhatrapati Sambhajinagar',
 
     'details.title': 'Wedding Details',
@@ -71,7 +71,7 @@ window.I18N = {
     'details.time': 'Time',
     'details.timeValue': 'Ceremony begins<br>5:45 PM sharp',
     'details.venue': 'Venue',
-    'details.venueValue': '36 Gun Lawns<br>Waluj, Chhatrapati Sambhajinagar',
+    'details.venueValue': '36 Gun Celebration<br>Waluj, Chhatrapati Sambhajinagar',
     'details.dress': 'Dress Code',
     'details.dressValue': 'Traditional Indian<br>Blush, ivory &amp; gold',
 
@@ -85,7 +85,7 @@ window.I18N = {
 
     'calendar.add': 'Add to calendar',
     'calendar.google': 'Google Calendar',
-    'calendar.event': 'Wedding of Pooja & Sagar',
+    'calendar.event': 'Wedding of Pooja & Nagesh',
     'calendar.details': 'Ceremony begins at 5:45 PM. Full invitation: https://pooja-weds-sagar.vercel.app/',
     'calendar.saved': 'Calendar file downloaded',
 
@@ -107,7 +107,7 @@ window.I18N = {
     'events.weddingNative': 'विवाह सोहळा',
     'events.weddingWhen': 'Saturday, 12 December 2026',
     'events.weddingTime': '5:45 PM sharp',
-    'events.weddingWhere': '36 Gun Lawns, Waluj',
+    'events.weddingWhere': '36 Gun Celebration, Gut No. 118, Highway, opposite Southcity, near AS Club Bridge, CIDCO Waluj Mahanagar 2, Waluj, Tisgaon, Chhatrapati Sambhajinagar, Maharashtra 431136',
     'events.weddingText': 'The moment we have been waiting for, followed by dinner on the main lawn.',
 
     'story.title': 'Our Story',
@@ -125,20 +125,20 @@ window.I18N = {
     'gallery.title': 'Moments',
     'gallery.sub': 'A few of our favourites',
     'gallery.cap1': 'That look',
-    'gallery.alt1': 'Pooja smiling at Sagar during their pre-wedding shoot',
+    'gallery.alt1': 'Pooja smiling at Nagesh during their pre-wedding shoot',
     'gallery.cap2': 'Just the two of us',
-    'gallery.alt2': 'Pooja and Sagar sitting together on the steps',
+    'gallery.alt2': 'Pooja and Nagesh sitting together on the steps',
     'gallery.cap3': 'Together',
-    'gallery.alt3': 'Portrait of Pooja and Sagar side by side',
+    'gallery.alt3': 'Portrait of Pooja and Nagesh side by side',
 
     'venue.title': 'Wedding Venue',
-    'venue.address': '36 Gun Lawns · Gut No. 118, Highway, opp. Southcity, near AS Club Bridge, CIDCO Waluj Mahanagar 2, Waluj, Tisgaon, Chhatrapati Sambhajinagar, Maharashtra 431136',
+    'venue.address': '36 Gun Celebration · Gut No. 118, Highway, opposite Southcity, near AS Club Bridge, CIDCO Waluj Mahanagar 2, Waluj, Tisgaon, Chhatrapati Sambhajinagar, Maharashtra 431136',
     'venue.loading': 'Loading map…',
     'venue.unavailable': 'Map unavailable — please use the button below.',
     'venue.open': 'Open in Google Maps',
 
     'rsvp.title': 'RSVP',
-    'rsvp.sub': 'Kindly respond by 20 November 2026',
+    'rsvp.sub': 'Kindly respond by 10 December 2026',
     'rsvp.name': 'Full name',
     'rsvp.namePlaceholder': 'Your name',
     'rsvp.nameError': 'Please tell us your name.',
@@ -158,6 +158,8 @@ window.I18N = {
     'rsvp.thanksYes': 'Thank you, {name}! We can’t wait to celebrate with you.',
     'rsvp.thanksNo': 'Thank you for letting us know — you will be missed.',
     'rsvp.received': 'RSVP Received',
+    'rsvp.emailContact': 'Or email your RSVP directly:',
+    'rsvp.emailReady': 'Your email app should open with the RSVP details. Send the message to confirm.',
     'rsvp.offline': 'Saved locally — we could not reach the server.',
 
     'photos.title': 'Share Your Photos',
@@ -172,7 +174,7 @@ window.I18N = {
     'photos.note': 'No account needed to upload — the link works for everyone.',
 
     'footer.thanks': 'Thank you for being part of our story.',
-    'footer.names': 'Pooja & Sagar',
+    'footer.names': 'Pooja & Nagesh',
     'footer.made': 'Made with',
     'footer.love': 'love',
 
@@ -183,8 +185,8 @@ window.I18N = {
   mr: {
     'lang.name': 'मराठी',
 
-    'meta.title': 'पूजा आणि सागर — विवाह निमंत्रण',
-    'meta.description': 'पूजा आणि सागर यांच्या विवाहसोहळ्याचे सप्रेम निमंत्रण — १२ डिसेंबर २०२६, ३६ गन लॉन्स, वाळूज, छत्रपती संभाजीनगर.',
+    'meta.title': 'पूजा आणि नागेश — विवाह निमंत्रण',
+    'meta.description': 'पूजा आणि नागेश यांच्या विवाहसोहळ्याचे सप्रेम निमंत्रण — १२ डिसेंबर २०२६, ३६ गन सेलिब्रेशन, वाळूज, छत्रपती संभाजीनगर.',
 
     'a11y.skip': 'निमंत्रणाकडे जा',
     'a11y.sections': 'विभाग',
@@ -219,9 +221,9 @@ window.I18N = {
 
     'couple.intro': 'आमच्या विवाहसोहळ्यास आपण उपस्थित राहावे, ही सप्रेम विनंती',
     'couple.bride': 'पूजा',
-    'couple.groom': 'सागर',
+    'couple.groom': 'नागेश',
     'couple.quote': '“काही कथा योगायोगाने लिहिल्या जातात; आमची कथा मात्र एका सुंदर योगायोगाने लिहिली गेली.”',
-    'couple.quoteCite': '— पूजा आणि सागर',
+    'couple.quoteCite': '— पूजा आणि नागेश',
     'couple.date': 'शनिवार, १२ डिसेंबर २०२६ · छत्रपती संभाजीनगर',
 
     'details.title': 'विवाह तपशील',
@@ -231,7 +233,7 @@ window.I18N = {
     'details.time': 'वेळ',
     'details.timeValue': 'विवाह मुहूर्त<br>सायं. ५:४५ वाजता',
     'details.venue': 'स्थळ',
-    'details.venueValue': '३६ गन लॉन्स<br>वाळूज, छत्रपती संभाजीनगर',
+    'details.venueValue': '३६ गन सेलिब्रेशन<br>वाळूज, छत्रपती संभाजीनगर',
     'details.dress': 'पेहराव',
     'details.dressValue': 'भारतीय पारंपरिक<br>गुलाबी, हस्तिदंती व सोनेरी',
 
@@ -245,7 +247,7 @@ window.I18N = {
 
     'calendar.add': 'कॅलेंडरमध्ये जोडा',
     'calendar.google': 'गूगल कॅलेंडर',
-    'calendar.event': 'पूजा व सागर यांचा विवाह सोहळा',
+    'calendar.event': 'पूजा व नागेश यांचा विवाह सोहळा',
     'calendar.details': 'विवाह मुहूर्त सायं. ५:४५ वाजता. संपूर्ण निमंत्रण: https://pooja-weds-sagar.vercel.app/',
     'calendar.saved': 'कॅलेंडर फाइल डाउनलोड झाली',
 
@@ -267,7 +269,7 @@ window.I18N = {
     'events.weddingNative': 'Wedding',
     'events.weddingWhen': 'शनिवार, १२ डिसेंबर २०२६',
     'events.weddingTime': 'सायं. ५:४५ वाजता',
-    'events.weddingWhere': '३६ गन लॉन्स, वाळूज',
+    'events.weddingWhere': '३६ गन सेलिब्रेशन, गट क्र. ११८, महामार्ग, साउथसिटी समोर, ए.एस. क्लब पुलाजवळ, सिडको वाळूज महानगर २, वाळूज, टिसगाव, छत्रपती संभाजीनगर, महाराष्ट्र ४३११३६',
     'events.weddingText': 'ज्या क्षणाची आम्ही वाट पाहत होतो तो क्षण, त्यानंतर मुख्य लॉनवर भोजन.',
 
     'story.title': 'आमची कहाणी',
@@ -285,20 +287,20 @@ window.I18N = {
     'gallery.title': 'क्षणचित्रे',
     'gallery.sub': 'आमचे काही आवडते क्षण',
     'gallery.cap1': 'ती नजर',
-    'gallery.alt1': 'विवाहपूर्व छायाचित्रणात सागरकडे पाहून हसणारी पूजा',
+    'gallery.alt1': 'विवाहपूर्व छायाचित्रणात नागेशकडे पाहून हसणारी पूजा',
     'gallery.cap2': 'फक्त आपण दोघं',
-    'gallery.alt2': 'पायऱ्यांवर एकत्र बसलेले पूजा आणि सागर',
+    'gallery.alt2': 'पायऱ्यांवर एकत्र बसलेले पूजा आणि नागेश',
     'gallery.cap3': 'सोबत',
-    'gallery.alt3': 'शेजारी उभे असलेले पूजा आणि सागर',
+    'gallery.alt3': 'शेजारी उभे असलेले पूजा आणि नागेश',
 
     'venue.title': 'विवाह स्थळ',
-    'venue.address': '३६ गन लॉन्स · गट क्र. ११८, महामार्ग, साउथसिटी समोर, ए.एस. क्लब पुलाजवळ, सिडको वाळूज महानगर २, वाळूज, टिसगाव, छत्रपती संभाजीनगर, महाराष्ट्र ४३११३६',
+    'venue.address': '३६ गन सेलिब्रेशन · गट क्र. ११८, महामार्ग, साउथसिटी समोर, ए.एस. क्लब पुलाजवळ, सिडको वाळूज महानगर २, वाळूज, टिसगाव, छत्रपती संभाजीनगर, महाराष्ट्र ४३११३६',
     'venue.loading': 'नकाशा उघडत आहे…',
     'venue.unavailable': 'नकाशा उपलब्ध नाही — कृपया खालील बटण वापरा.',
     'venue.open': 'गुगल मॅप्सवर उघडा',
 
     'rsvp.title': 'उपस्थिती कळवा',
-    'rsvp.sub': 'कृपया २० नोव्हेंबर २०२६ पर्यंत कळवावे',
+    'rsvp.sub': 'कृपया १० डिसेंबर २०२६ पर्यंत कळवावे',
     'rsvp.name': 'पूर्ण नाव',
     'rsvp.namePlaceholder': 'आपले नाव',
     'rsvp.nameError': 'कृपया आपले नाव लिहा.',
@@ -318,6 +320,8 @@ window.I18N = {
     'rsvp.thanksYes': 'धन्यवाद, {name}! आपल्यासोबत हा आनंद साजरा करण्यास आम्ही उत्सुक आहोत.',
     'rsvp.thanksNo': 'कळवल्याबद्दल धन्यवाद — आपली आठवण येईल.',
     'rsvp.received': 'उपस्थिती नोंदवली',
+    'rsvp.emailContact': 'किंवा ईमेलद्वारे उपस्थिती कळवा:',
+    'rsvp.emailReady': 'आपल्या ईमेल अॅपमध्ये उपस्थितीचा मसुदा उघडेल. कृपया उपस्थिती निश्चित करण्यासाठी तो पाठवा.',
     'rsvp.offline': 'स्थानिक पातळीवर जतन केले — सर्व्हरशी संपर्क होऊ शकला नाही.',
 
     'photos.title': 'आपले फोटो शेअर करा',
@@ -332,7 +336,7 @@ window.I18N = {
     'photos.note': 'अपलोड करण्यासाठी खात्याची गरज नाही — ही लिंक सर्वांसाठी चालेल.',
 
     'footer.thanks': 'आमच्या कहाणीचा भाग असल्याबद्दल मनःपूर्वक धन्यवाद.',
-    'footer.names': 'पूजा आणि सागर',
+    'footer.names': 'पूजा आणि नागेश',
     'footer.made': 'प्रेमाने तयार केले',
     'footer.love': 'प्रेम',
 
