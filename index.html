@@ -35,7 +35,7 @@
 <!-- ?v= is a cache buster. css/ and js/ now revalidate on every load (see
      vercel.json), so a forgotten bump no longer hides a change from guests —
      but bumping it still saves them the conditional request. -->
-<link rel="stylesheet" href="css/styles.css?v=15">
+<link rel="stylesheet" href="css/styles.css?v=16">
 
 <!-- Without JavaScript there is no language picker and no reveal, so show
      English and the full invitation straight away. -->
@@ -738,20 +738,15 @@
       <h2 class="section__title reveal" data-i18n="rsvp.title">RSVP</h2>
       <p class="section__sub reveal" data-i18n="rsvp.sub">Kindly respond by 10 December 2026</p>
 
-      <div class="google-form glass reveal">
-        <iframe
-          src="https://docs.google.com/forms/d/e/1FAIpQLSdGKxzWxO8RLIOJdkSf_xqWFBLYL11BkSlus4NmaMmvnMHD7A/viewform?embedded=true"
-          title="Pooja and Nagesh wedding RSVP form / पूजा आणि नागेश विवाह उपस्थिती फॉर्म"
-          loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <div class="rsvp__actions glass reveal">
+        <a class="btn btn--ghost" href="https://forms.gle/caeEUWEcdosoCTrJ9"
+           target="_blank" rel="noopener" data-i18n="rsvp.openForm">Open the RSVP form in a new tab</a>
+        <p data-i18n="rsvp.afterSubmit">Submit the form in the new tab, then return here to share your photos.</p>
+        <p>
+          <span data-i18n="rsvp.emailContact">Need help? Email us:</span>
+          <a href="mailto:poojawedsnagesh@gmail.com">poojawedsnagesh@gmail.com</a>
+        </p>
       </div>
-      <p class="center">
-        <a href="https://forms.gle/caeEUWEcdosoCTrJ9" target="_blank" rel="noopener"
-           data-i18n="rsvp.openForm">Open the RSVP form in a new tab</a>
-        <span aria-hidden="true"> · </span>
-        <span data-i18n="rsvp.emailContact">Need help? Email us:</span>
-        <a href="mailto:poojawedsnagesh@gmail.com">poojawedsnagesh@gmail.com</a>
-      </p>
     </div>
   </section>
 
@@ -837,8 +832,8 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/i18n.js?v=15" defer></script>
-<script src="js/qr.js?v=15" defer></script>
-<script src="js/main.js?v=15" defer></script>
+<script src="js/i18n.js?v=16" defer></script>
+<script src="js/qr.js?v=16" defer></script>
+<script src="js/main.js?v=16" defer></script>
 </body>
 </html>

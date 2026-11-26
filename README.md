@@ -120,12 +120,13 @@ Music never autoplays before the guest interacts — browsers block that.
 
 ### 5. RSVP responses
 
-The RSVP section embeds the public Google Form:
-<https://forms.gle/caeEUWEcdosoCTrJ9>. Responses are stored in that form's
-Google account. To receive email alerts at
+The RSVP section links to the public Google Form in a new tab:
+<https://forms.gle/caeEUWEcdosoCTrJ9>. This keeps the invitation page compact
+so guests can return to the photo-sharing section after submitting. Responses
+are stored in that form's Google account. To receive email alerts at
 `poojawedsnagesh@gmail.com`, create or own the form in that account and enable
 **Responses → More → Get email notifications for new responses**. A direct
-email contact link is also shown below the embedded form.
+email contact link is also shown below the RSVP button.
 
 ## Deploying
 

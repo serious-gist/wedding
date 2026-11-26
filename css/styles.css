@@ -1292,20 +1292,16 @@ h1, h2, h3 {
 .map__placeholder p { margin: 0; font-size: 0.85rem; letter-spacing: 0.1em; }
 @media (max-width: 560px) { .map { aspect-ratio: 4 / 5; } }
 
-/* ---------- Form ---------- */
-.google-form {
-  overflow: hidden;
-  padding: 0.65rem;
+/* ---------- RSVP ---------- */
+.rsvp__actions {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: clamp(1.6rem, 4vw, 2.6rem);
+  text-align: center;
 }
-.google-form iframe {
-  display: block;
-  width: 100%;
-  height: 1800px;
-  border: 0;
-  border-radius: calc(var(--radius) - 8px);
-  background: #fff;
-}
-@media (max-width: 560px) { .google-form iframe { height: 3200px; } }
+.rsvp__actions p { margin: 0; }
+
 /* ---------- Shared photo folder ---------- */
 .share {
   display: grid;

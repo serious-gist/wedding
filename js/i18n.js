@@ -140,6 +140,7 @@ window.I18N = {
     'rsvp.title': 'RSVP',
     'rsvp.sub': 'Kindly respond by 10 December 2026',
     'rsvp.openForm': 'Open the RSVP form in a new tab',
+    'rsvp.afterSubmit': 'Submit the form in the new tab, then return here to share your photos.',
     'rsvp.emailContact': 'Need help? Email us:',
 
     'photos.title': 'Share Your Photos',
@@ -282,6 +283,7 @@ window.I18N = {
     'rsvp.title': 'उपस्थिती कळवा',
     'rsvp.sub': 'कृपया १० डिसेंबर २०२६ पर्यंत कळवावे',
     'rsvp.openForm': 'नवीन टॅबमध्ये उपस्थितीचा फॉर्म उघडा',
+    'rsvp.afterSubmit': 'नवीन टॅबमध्ये फॉर्म सबमिट करा, मग फोटो शेअर करण्यासाठी येथे परत या.',
     'rsvp.emailContact': 'मदत हवी आहे? ईमेल करा:',
 
     'photos.title': 'आपले फोटो शेअर करा',
